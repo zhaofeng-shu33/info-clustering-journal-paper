@@ -135,7 +135,18 @@ This method is suitable for problems which XXX.
 Besides the hierarchical methods mentioned above, there is a specific branch which brings information theory into clustering. This branch is based on the observation that metrics in hierarchical clusterings
 are mostly empirically inspired and may not reflect the true underlining probalistic model of the data.
 Either variants of mutual information or some other kind of information-theoretic metric \citep{ic2002}  is used in the past literature. For the former method, the metric of mutual information is used and an agglomerative scheme is adopted \citep{mim}. The mutual information between samples and cluster labels is estimated using Parzen' window, which is a kind of Gaussian mixture model. Such adoption
-has some theoretical benefits but suffers from sub-optimization of mutual information cost in the agglomerative approximation. It is until the proposal of multivariate information metric in clustering that there is some breakthrough \citep{ic2016}.
+has some theoretical benefits but suffers from sub-optimization of mutual information cost in the agglomerative approximation. It is until the proposal of multivariate mutual information metric in clustering that there is some breakthrough \citep{ic2016}.
+
+Multivariate mutual information, as its name suggests, is an extension of mutual information for multiple
+random variables. Using such metric as the thresholds, \citet{ic2016} shows that we can get a clustering
+tree for random variables. The theory sounds good but it is nearly impossible to compute such metric
+in practice. Similar issues exist for Bayesian probabilistic approach. For these probablistic methods, we
+are unable to estimate precisely the distribution from data. While prametric model is used in Bayesian
+method, we will propose a graph model to apply multivariate mutual information for clustering.
+
+Reducing from abstract probablistic space to graph model is not a crazy idea but origins from the local regime assumption of distributions. It's known that estimation of mutual information between $X$ and $Y$ from data is a hard task but when $X$ and $Y$ are nearly indepedent, \citet{huang2017information} shows that the estimation can be simplied to do some kind of alternative conditional expectation, which is much easier
+than estimating probabilty distribution function. In this paper, we will extend this local regime result to multivariate case and show how it is equivalent to a graph model.
+
 
 \section{Section title}
 \label{sec:1}
