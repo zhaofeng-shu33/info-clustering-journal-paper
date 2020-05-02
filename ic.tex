@@ -46,6 +46,7 @@ grestore
 \smartqed  % flush right qed marks, e.g. at end of proof
 %
 \usepackage{graphicx}
+\usepackage{natbib}
 %
 % \usepackage{mathptmx}      % use Times fonts if available on your TeX system
 %
@@ -114,26 +115,27 @@ sources within a community and assist for the model of natural disasters with ob
 There are many different methods for clustering analysis. One of them is called
 hierarchical clustering. The classical method uses the Euclid distance between samples
 as the metric to merge the most similar pairs until all the samples are merged into a clustering
-tree \cite{slink}. Compared with other clustering method, hierarchical clustering can better describe the relationship between different clusters. Still, the classical hierarchical clustering method has some
+tree \citep{slink}. Compared with other clustering method, hierarchical clustering can better describe the relationship between different clusters. Still, the classical hierarchical clustering method has some
 drawbacks. One of them is pairwise merging, which is not optimal since it does not consider information shared among more than two clusters. Besides, the criterion to split the clustering tree into a flat clustering structure is arbitrary set and lacks explanations, which bring some mysteries in practical
 usage.
 
 In recent 20 years, there are many emerging hierarchical clustering methods which brought new insights into this area. These new methods arise from combination of different domain knowledge and
-subject branch. To name but a few, hierarchical density estimation \cite{hde}, Bayesian hierarchical clustering \cite{bhc},
-clusterpath based on convex optimization \cite{hocking2011clusterpath},
-graph partition based on Dasgupta's cost \cite{dasgupta2016cost},
-Gradient-based Hierarchical Clustering based on hyperbolic gemetry \cite{hyperbolic} etc.
+subject branch. To name but a few, hierarchical density estimation \citep{hde}, Bayesian hierarchical clustering \citep{bhc},
+clusterpath based on convex optimization \citep{hocking2011clusterpath},
+graph partition based on Dasgupta's cost \citep{dasgupta2016cost},
+Gradient-based Hierarchical Clustering based on hyperbolic gemetry \citep{hyperbolic} etc.
 These methods have both advantages and disadvantages.
 In practice researchers need to choose the proper method according to the specific problem.
 For example, an extension called Bayesian Rose Trees of Bayesian clustering
 can produce non-binary hierarchical tree
-under a given probabilistic model \cite{blundell2011discovering} and have XXX advantages.
+under a given probabilistic model \citep{blundell2011discovering} and have XXX advantages.
 But Bayesian model has many hyper-parameters to tune and the clustering results between different runs vary greatly because of its intrinsic randomness.
 This method is suitable for problems which XXX.
 
 Besides the hierarchical methods mentioned above, there is a specific branch which brings information theory into clustering. This branch is based on the observation that metrics in hierarchical clusterings
 are mostly empirically inspired and may not reflect the true underlining probalistic model of the data.
-For such method, the metric of mutual information is used and an agglomerative scheme is adopted \cite{mim}. The mutual information between samples and cluster labels is estimated using Parzen' window, which is a kind of Gaussian mixture model.
+Either variants of mutual information or some other kind of information-theoretic metric \citep{ic2002}  is used in the past literature. For the former method, the metric of mutual information is used and an agglomerative scheme is adopted \citep{mim}. The mutual information between samples and cluster labels is estimated using Parzen' window, which is a kind of Gaussian mixture model. Such adoption
+has some theoretical benefits but suffers from sub-optimization of mutual information cost in the agglomerative approximation. It is until the proposal of multivariate information metric in clustering that there is some breakthrough \citep{ic2016}.
 
 \section{Section title}
 \label{sec:1}
