@@ -114,7 +114,13 @@ sources within a community and assist for the model of natural disasters with ob
 There are many different methods for clustering analysis. One of them is called
 hierarchical clustering. The classical method uses the Euclid distance between samples
 as the metric to merge the most similar pairs until all the samples are merged into a clustering
-tree \cite{slink}. Compared with other clustering method, hierarchical clustering can better describe the relationship between different clusters.
+tree \cite{slink}. Compared with other clustering method, hierarchical clustering can better describe the relationship between different clusters. Still, the classical hierarchical clustering method has some
+drawbacks. One of them is pairwise merging, which is not optimal since it does not consider information shared among more than two clusters. Besides, the criterion to split the clustering tree into a flat clustering structure is arbitrary set and lacks explanations, which bring some mysteries in practical
+usage.
+
+In recent 20 years, there are many emerging hierarchical clustering methods which brought new insights into this area. These new methods arise from combination of different domain knowledge and
+subject branch. To name but a few, hierarchical density estimation \cite{hde}, Bayesian hierarchical clustering \cite{bhc},
+clusterpath based on convex optimization \cite{hocking2011clusterpath}, graph partition based on Dasgupta's cost \cite{dasgupta2016cost}, Gradient-based Hierarchical Clustering based on hyperbolic gemetry \cite{hyperbolic} etc.
 
 \section{Section title}
 \label{sec:1}
@@ -138,14 +144,14 @@ a^2+b^2=c^2
 % \end{figure}
 %
 % For two-column wide figures use
-\begin{figure*}
+% \begin{figure*}
 % Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
-  \includegraphics[width=0.75\textwidth]{example.eps}
+ % \includegraphics[width=0.75\textwidth]{example.eps}
 % figure caption is below the figure
-\caption{Please write your figure caption here}
-\label{fig:2}       % Give a unique label
-\end{figure*}
+% \caption{Please write your figure caption here}
+%\label{fig:2}       % Give a unique label
+%\end{figure*}
 %
 % For tables use
 \begin{table}
