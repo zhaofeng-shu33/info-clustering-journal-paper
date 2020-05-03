@@ -148,8 +148,10 @@ method, we will propose a graph model to apply multivariate mutual information f
 Reducing from abstract probablistic space to graph model is not a crazy idea but origins from the local regime assumption of distributions. It's known that estimation of mutual information between $X$ and $Y$ from data is a hard task but when $X$ and $Y$ are nearly indepedent, \citet{huang2017information} shows that the estimation can be simplied to do some kind of alternative conditional expectation, which is much easier
 than estimating probabilty distribution function. In this paper, we will extend this local regime result to multivariate case and show how it is equivalent to a graph model.
 
-To compute the hierarchical structure within the graph model, the original algorithm proposed by
-\citet{narayanan}, which is used directly by \citet{mac} has a high time complexity to fit the practice. There has been some improvement
+Many problems in graph model are NP-Hard and only allows approximation solutions. Quite surprisingly, our proposed graph-based clustering method is polynomial-time efficient solvable exactly.
+This result has been established by using a special graph partition structure called "Principal Lattice", which is equivalent to our divisive approach. The compution of "Principal Lattice" allows a polynomial time algorithm.
+However, the original algorithm proposed by
+\citet{narayanan}, which is used directly by \citet{mac}, has a high time complexity to fit the practice. There has been some improvement
 using parametric maximal flow techniques \citep{kolmogorov}, which is later adopted for graph model
 by \citet{pin}.
 
