@@ -96,8 +96,9 @@ grestore
 \begin{abstract}
 We propose a graph-based hierarchical clustering method based on a multivariate information metric.
 The proposed method can generate non-binary hierarchical tree that reveals the intrinsic structures in the data, with no hyper-parameter to tune. 
-The hierarchical tree can be computed efficiently by 
-our improved algorithm.
+The hierarchical tree can be computed efficiently using
+our improved algorithm. Besides clustering task, we show that our method can be adopted and
+used in outlier detection and community discovery problems.
 Experiments show that the clustering result outperforms
 other hierarchical clustering techniques and is very suitable to find the complex community structure.
 \keywords{First keyword \and Second keyword \and More}
@@ -147,17 +148,13 @@ method, we will propose a graph model to apply multivariate mutual information f
 Reducing from abstract probablistic space to graph model is not a crazy idea but origins from the local regime assumption of distributions. It's known that estimation of mutual information between $X$ and $Y$ from data is a hard task but when $X$ and $Y$ are nearly indepedent, \citet{huang2017information} shows that the estimation can be simplied to do some kind of alternative conditional expectation, which is much easier
 than estimating probabilty distribution function. In this paper, we will extend this local regime result to multivariate case and show how it is equivalent to a graph model.
 
+To compute the hierarchical structure within the graph model, the original algorithm proposed by
+\citet{narayanan}, which is used directly by \citet{mac} has a high time complexity to fit the practice. There has been some improvement
+using parametric maximal flow techniques \citep{kolmogorov}, which is later adopted for graph model
+by \citet{pin}.
 
-\section{Section title}
-\label{sec:1}
-\subsection{Subsection title}
-\label{sec:2}
-as required. Don't forget to give each section
-and subsection a unique label (see Sect.~\ref{sec:1}).
-\paragraph{Paragraph headings} Use paragraph headings as needed.
-\begin{equation}
-a^2+b^2=c^2
-\end{equation}
+\section{Formulation of graph-based info-clustering}
+
 
 % For one-column wide figures use
 % \begin{figure}
