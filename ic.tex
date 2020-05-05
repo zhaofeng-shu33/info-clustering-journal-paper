@@ -155,18 +155,27 @@ However, the original algorithm proposed by
 using parametric maximal flow techniques \citep{kolmogorov}, which is later adopted for graph model
 by \citet{pin}. Though these two improvements share the same time complexity, we will show that our improvement runs almost an order of magnitude faster than the parametric approach under a fair implementation environment.
 
+There has been little prior work on applying Info-Clustering methods to data engineering problems except for some proof-of-concept experiment \citet{mac}. In this paper, we will consider the application
+of our graph-based Info-Clustering.
+
 \section{Formulation of graph-based info-clustering}
 
-
+General model of Info-Clustering is not very useful since we know little about the joint distribution.
+We need to do some kind of model reduction to get some useful model. In particular, it has been shown
+by \cite{ic2016} that when $Z_1, \dots, Z_n$ forms a Markov chain, then we can get a model called Mutual Information Relevance Network \cite{butte1999mutual}. In the following section we will show
+that the general model reduces to our graph-based Info-Clustering when $Z_1, \dots, Z_n$ are weakly
+independent. The relationship of these two special models, together with their parent model, are shown
+in the Vienn diagram in Fig. \ref{fig:relationship}.
 % For one-column wide figures use
-% \begin{figure}
+\begin{figure}
+\centering
 % Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
-%  \includegraphics{example.eps}
+  \includegraphics[width=6cm]{relationship.eps}
 % figure caption is below the figure
-% \caption{Please write your figure caption here}
-% \label{fig:1}       % Give a unique label
-% \end{figure}
+\caption{General Info clustering models reduces to GBIC or MIRN model respectively under different assumptions for the joint distribution}
+\label{fig:relationship}       % Give a unique label
+\end{figure}
 %
 % For two-column wide figures use
 % \begin{figure*}
