@@ -46,6 +46,7 @@ grestore
 \smartqed  % flush right qed marks, e.g. at end of proof
 %
 \usepackage{graphicx}
+\usepackage{natbib}
 %
 % \usepackage{mathptmx}      % use Times fonts if available on your TeX system
 %
@@ -95,8 +96,9 @@ grestore
 \begin{abstract}
 We propose a graph-based hierarchical clustering method based on a multivariate information metric.
 The proposed method can generate non-binary hierarchical tree that reveals the intrinsic structures in the data, with no hyper-parameter to tune. 
-The hierarchical tree can be computed efficiently by 
-our improved algorithm.
+The hierarchical tree can be computed efficiently using
+our improved algorithm. Besides clustering task, we show that our method can be adopted and
+used in outlier detection and community discovery problems.
 Experiments show that the clustering result outperforms
 other hierarchical clustering techniques and is very suitable to find the complex community structure.
 \keywords{First keyword \and Second keyword \and More}
@@ -114,43 +116,78 @@ sources within a community and assist for the model of natural disasters with ob
 There are many different methods for clustering analysis. One of them is called
 hierarchical clustering. The classical method uses the Euclid distance between samples
 as the metric to merge the most similar pairs until all the samples are merged into a clustering
-tree \cite{slink}. Compared with other clustering method, hierarchical clustering can better describe the relationship between different clusters. Still, the classical hierarchical clustering method has some
+tree \citep{slink}. Compared with other clustering method, hierarchical clustering can better describe the relationship between different clusters. Still, the classical hierarchical clustering method has some
 drawbacks. One of them is pairwise merging, which is not optimal since it does not consider information shared among more than two clusters. Besides, the criterion to split the clustering tree into a flat clustering structure is arbitrary set and lacks explanations, which bring some mysteries in practical
 usage.
 
 In recent 20 years, there are many emerging hierarchical clustering methods which brought new insights into this area. These new methods arise from combination of different domain knowledge and
-subject branch. To name but a few, hierarchical density estimation \cite{hde}, Bayesian hierarchical clustering \cite{bhc},
-clusterpath based on convex optimization \cite{hocking2011clusterpath},
-graph partition based on Dasgupta's cost \cite{dasgupta2016cost},
-Gradient-based Hierarchical Clustering based on hyperbolic gemetry \cite{hyperbolic} etc.
+subject branch. To name but a few, hierarchical density estimation \citep{hde}, Bayesian hierarchical clustering \citep{bhc},
+clusterpath based on convex optimization \citep{hocking2011clusterpath},
+graph partition based on Dasgupta's cost \citep{dasgupta2016cost},
+Gradient-based Hierarchical Clustering based on hyperbolic gemetry \citep{hyperbolic} etc.
 These methods have both advantages and disadvantages.
 In practice researchers need to choose the proper method according to the specific problem.
 For example, an extension called Bayesian Rose Trees of Bayesian clustering
 can produce non-binary hierarchical tree
-under a given probabilistic model \cite{blundell2011discovering} and have XXX advantages.
+under a given probabilistic model \citep{blundell2011discovering} and have XXX advantages.
 But Bayesian model has many hyper-parameters to tune and the clustering results between different runs vary greatly because of its intrinsic randomness.
 This method is suitable for problems which XXX.
 
-\section{Section title}
-\label{sec:1}
-\subsection{Subsection title}
-\label{sec:2}
-as required. Don't forget to give each section
-and subsection a unique label (see Sect.~\ref{sec:1}).
-\paragraph{Paragraph headings} Use paragraph headings as needed.
-\begin{equation}
-a^2+b^2=c^2
-\end{equation}
+Besides the hierarchical methods mentioned above, there is a specific branch which brings information theory into clustering. This branch is based on the observation that metrics in hierarchical clusterings
+are mostly empirically inspired and may not reflect the true underlining probalistic model of the data.
+Either variants of mutual information or some other kind of information-theoretic metric \citep{ic2002}  is used in the past literature. For the former method, the metric of mutual information is used and an agglomerative scheme is adopted \citep{mim}. The mutual information between samples and cluster labels is estimated using Parzen' window, which is a kind of Gaussian mixture model. Such adoption
+has some theoretical benefits but suffers from sub-optimization of mutual information cost in the agglomerative approximation. It is until the proposal of multivariate mutual information metric in clustering that there is some breakthrough \citep{ic2016}.
 
+Multivariate mutual information, as its name suggests, is an extension of mutual information for multiple
+random variables. Using such metric as the thresholds, \citet{ic2016} shows that we can get a clustering
+tree for random variables. The theory sounds good but it is nearly impossible to compute such metric
+in practice. Similar issues exist for Bayesian probabilistic approach. For these probablistic methods, we
+are unable to estimate precisely the distribution from data. While prametric model is used in Bayesian
+method, we will propose a graph model to apply multivariate mutual information for clustering.
+
+Reducing from abstract probablistic space to graph model is not a crazy idea but origins from the local regime assumption of distributions. It's known that estimation of mutual information between $X$ and $Y$ from data is a hard task but when $X$ and $Y$ are nearly indepedent, \citet{huang2017information} shows that the estimation can be simplied to do some kind of alternative conditional expectation, which is much easier
+than estimating probabilty distribution function. In this paper, we will extend this local regime result to multivariate case and show how it is equivalent to a graph model.
+
+Many problems in graph model are NP-Hard and only allows approximation solutions. Quite surprisingly, our proposed graph-based clustering method is polynomial-time efficient solvable exactly.
+This result has been established by using a special graph partition structure called "Principal Lattice", which is equivalent to our divisive approach. The compution of "Principal Lattice" allows a polynomial time algorithm.
+However, the original algorithm proposed by
+\citet{narayanan}, which is used directly by \citet{mac}, has a high time complexity to fit the practice. There has been some improvement
+using parametric maximal flow techniques \citep{kolmogorov}, which is later adopted for graph model
+by \citet{pin}. Though these two improvements share the same time complexity, we will show that our improvement runs almost an order of magnitude faster than the parametric approach under a fair implementation environment.
+
+There has been little prior work on applying Info-Clustering methods to data engineering problems except for some proof-of-concept experiment \citep{mac}. In this paper, we will consider the application
+of our graph-based Info-Clustering to different unsupervised learning problems. Specifically
+we will not only consider data clustering problems, in which our proposed method can be directly applied, but also for outlier detection and community discovery problems we will propose new promising
+method adopted from graph-based Info-Clustering. We will conduct empirical experiments on both artificially generated data and some real-world dataset and show the feasibility of our method in
+data engineering problems.
+
+The paper is organized as follows: In Section \ref{sec:bk} we introduce the backgrond knowledge of the theorical Info-Clustering and its relationship with PSP structure. In Section \ref{sec:GBIC} our formulation of graph-based Info-Clustering and important properties of our model are given.
+
+\section{Background Knowledge}\ref{sec:bk}
+Before proceeding to introduce our theoretical and algorithmic results, it is necessary to review some prior results from minimal technical aspect. We split this section into three parts, first we introduce
+the local information geometry theory and the concept of weak dependency of two random variables;
+next is the general info-clustering model and its relationship with principal sequence of partitions (PSP) of submodular function;
+the final part is about the original algorithm used to solve PSP problem when the submodular function
+is graph cut function.
+
+\section{Formulation of graph-based Info-clustering}\ref{sec:GBIC}
+
+General model of Info-Clustering is not very useful since we know little about the joint distribution.
+We need to do some kind of model reduction to get some useful model. In particular, it has been shown
+by \cite{ic2016} that when $Z_1, \dots, Z_n$ forms a Markov chain, then we can get a model called Mutual Information Relevance Network \cite{butte1999mutual}. In the following section we will show
+that the general model reduces to our graph-based Info-Clustering when $Z_1, \dots, Z_n$ are weakly
+independent. The relationship of these two special models, together with their parent model, are shown
+in the Vienn diagram in Fig. \ref{fig:relationship} 
 % For one-column wide figures use
-% \begin{figure}
+\begin{figure}
+\centering
 % Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
-%  \includegraphics{example.eps}
+  \includegraphics[width=6cm]{relationship.eps}
 % figure caption is below the figure
-% \caption{Please write your figure caption here}
-% \label{fig:1}       % Give a unique label
-% \end{figure}
+\caption{General Info clustering models reduces to GBIC or MIRN model respectively under different assumptions for the joint distribution}
+\label{fig:relationship}       % Give a unique label
+\end{figure}
 %
 % For two-column wide figures use
 % \begin{figure*}
@@ -163,21 +200,26 @@ a^2+b^2=c^2
 %\end{figure*}
 %
 % For tables use
-\begin{table}
+% \begin{table}
 % table caption is above the table
-\caption{Please write your table caption here}
-\label{tab:1}       % Give a unique label
+% \caption{Please write your table caption here}
+% \label{tab:1}       % Give a unique label
 % For LaTeX tables use
-\begin{tabular}{lll}
-\hline\noalign{\smallskip}
-first & second & third  \\
-\noalign{\smallskip}\hline\noalign{\smallskip}
-number & number & number \\
-number & number & number \\
-\noalign{\smallskip}\hline
-\end{tabular}
-\end{table}
-
+% \begin{tabular}{lll}
+% \hline\noalign{\smallskip}
+% first & second & third  \\
+% \noalign{\smallskip}\hline\noalign{\smallskip}
+% number & number & number \\
+% number & number & number \\
+% \noalign{\smallskip}\hline
+% \end{tabular}
+% \end{table}
+\section{Improved PSP Algorithms}\label{sec:alg}
+\section{Empirical Study of GBIC}\label{sec:es}
+\subsection{Data Clustering Scenario}\label{subsec:dc}
+\subsection{Info-Detection for Outlier Detection}\label{subsec:od}
+\subsection{Community Detection Field}\label{subsec:cd}
+\section{Conclusion}\label{sec:conc}
 
 %\begin{acknowledgements}
 %If you'd like to thank anyone, place your comments here
