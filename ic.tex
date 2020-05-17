@@ -46,7 +46,9 @@ grestore
 \smartqed  % flush right qed marks, e.g. at end of proof
 %
 \usepackage{graphicx}
+\usepackage{amsmath}
 \usepackage{natbib}
+\usepackage{bm}
 %
 % \usepackage{mathptmx}      % use Times fonts if available on your TeX system
 %
@@ -149,7 +151,7 @@ Reducing from abstract probablistic space to graph model is not a crazy idea but
 than estimating probabilty distribution function. In this paper, we will extend this local regime result to multivariate case and show how it is equivalent to a graph model.
 
 Many problems in graph model are NP-Hard and only allows approximation solutions. Quite surprisingly, our proposed graph-based clustering method is polynomial-time efficient solvable exactly.
-This result has been established by using a special graph partition structure called "Principal Lattice", which is equivalent to our divisive approach. The compution of "Principal Lattice" allows a polynomial time algorithm.
+This result has been established by using a special graph partition structure called "Principal Sequence of Partition"(PSP), which is equivalent to our divisive approach. The compution of "Principal Lattice" allows a polynomial time algorithm.
 However, the original algorithm proposed by
 \citet{narayanan}, which is used directly by \citet{mac}, has a high time complexity to fit the practice. There has been some improvement
 using parametric maximal flow techniques \citep{kolmogorov}, which is later adopted for graph model
@@ -161,24 +163,44 @@ we will not only consider data clustering problems, in which our proposed method
 method adopted from graph-based Info-Clustering. We will conduct empirical experiments on both artificially generated data and some real-world dataset and show the feasibility of our method in
 data engineering problems.
 
-The paper is organized as follows: In Section \ref{sec:bk} we introduce the backgrond knowledge of the theorical Info-Clustering and its relationship with PSP structure. In Section \ref{sec:GBIC} our formulation of graph-based Info-Clustering and important properties of our model are given.
+The paper is organized as follows: In Section \ref{sec:bk} we introduce the backgrond knowledge of the theorical Info-Clustering, its relationship with PSP structure and theory of local geometry information. In Section \ref{sec:GBIC} our formulation of graph-based Info-Clustering(GBIC) and important properties of our model are given. In Section \ref{sec:alg}, we propose an improved algorithm to compute the PSP structure of graph. Then in Section \ref{sec:es} we conduction empirical study of GBIC on data clustering, outlier detection and community discovery. Finally we give the conclusion in Section \ref{sec:conc}.
 
-\section{Background Knowledge}\ref{sec:bk}
+
+\section{Background Knowledge}\label{sec:bk}
 Before proceeding to introduce our theoretical and algorithmic results, it is necessary to review some prior results from minimal technical aspect. We split this section into three parts, first we introduce
 the local information geometry theory and the concept of weak dependency of two random variables;
 next is the general info-clustering model and its relationship with principal sequence of partitions (PSP) of submodular function;
 the final part is about the original algorithm used to solve PSP problem when the submodular function
 is graph cut function.
+\subsection{Local Information Geometry}
+It is well known that KL-Divengence can be used to measure the distance of two probabistic distributions. When the two distributions are quite "near", that is, both of them are within a neighborhood of a distribution $P$, we can simplify the expression of KL-Divergence as the Euclid distance \citep{huang2017information}. To be more specific, we use the example of discrete distribution and use $P_0$ to represent a distribution on alphabet $\mathcal{X}$. We say $P$ is in a $\epsilon$-Neighborhood $N^{(\epsilon)}(P_0)$ of $P_0$ if
+\begin{equation}
+P \in N^{(\epsilon)}(P_0) \iff \sum_{x \in \mathcal{X}} \frac{(P(x) - P_0(x))^2}{P(x)} < \epsilon^2
+\end{equation}
+The above equation can be expressed in concise form if we write $P(x) = P_0(x) + \epsilon
+\sqrt{P_0(x)} \phi(x)$, in which $\phi(x)$ is treated as feature vector. Then we have $||\phi || < 1$.
+If both $P_1, P_2 \in N^{(\epsilon)}(P_0)$ we have
+\begin{equation}
+D(P_1 || P_2) = \frac{\epsilon^2}{2} ||\phi_1 - \phi_2||^2 + o(\epsilon^2)
+\end{equation}
+In addition, the above result can be used when two random variables are weakly independent \citep{huang2019universal}. That is, we say $X$ and $Y$ are weakly dependent if the conditional distribution $Y|X(\cdot |x) \in N^{(\epsilon)}(Y)$ for all $x \in \mathcal{X}$. Under the assumption of
+weak dependence the mutual information, which is defined by $D(P_{XY}||P_XP_Y)$ can be expressed
+in concise form:
+\begin{equation}\label{eq:Ixy}
+I(X;Y) = \frac{1}{2}\sum_{x\in \mathcal{X}, y\in \mathcal{Y}} B^2(x,y) + o(\epsilon^2) \textrm{ where }  B(x,y)=\frac{P_{X,Y}(x,y) - P_X(x) P_Y(y)}{\sqrt{P_X(x)}{P_Y(y)}}
+\end{equation}
+To simplify the notation, the term $\sum_{x\in \mathcal{X}, y\in \mathcal{Y}} B^2(x,y)$ can be regarded as the square of Frobenious norm for matrix $\bm{B}$. Equation \eqref{eq:Ixy} gives the domaint term
+of the mutual information when the random variables are weakly dependent.
 
-\section{Formulation of graph-based Info-clustering}\ref{sec:GBIC}
+\subsection{Theoretical Info-Clustering}
+\section{Formulation of graph-based Info-clustering}\label{sec:GBIC}
 
 General model of Info-Clustering is not very useful since we know little about the joint distribution.
 We need to do some kind of model reduction to get some useful model. In particular, it has been shown
 by \cite{ic2016} that when $Z_1, \dots, Z_n$ forms a Markov chain, then we can get a model called Mutual Information Relevance Network \cite{butte1999mutual}. In the following section we will show
 that the general model reduces to our graph-based Info-Clustering when $Z_1, \dots, Z_n$ are weakly
 independent. The relationship of these two special models, together with their parent model, are shown
-in the Vienn diagram in Fig. \ref{fig:relationship} 
-% For one-column wide figures use
+in the Vienn diagram in Fig. \ref{fig:relationship} % For one-column wide figures use
 \begin{figure}
 \centering
 % Use the relevant command to insert your figure file.
@@ -199,21 +221,6 @@ in the Vienn diagram in Fig. \ref{fig:relationship}
 %\label{fig:2}       % Give a unique label
 %\end{figure*}
 %
-% For tables use
-% \begin{table}
-% table caption is above the table
-% \caption{Please write your table caption here}
-% \label{tab:1}       % Give a unique label
-% For LaTeX tables use
-% \begin{tabular}{lll}
-% \hline\noalign{\smallskip}
-% first & second & third  \\
-% \noalign{\smallskip}\hline\noalign{\smallskip}
-% number & number & number \\
-% number & number & number \\
-% \noalign{\smallskip}\hline
-% \end{tabular}
-% \end{table}
 \section{Improved PSP Algorithms}\label{sec:alg}
 \section{Empirical Study of GBIC}\label{sec:es}
 \subsection{Data Clustering Scenario}\label{subsec:dc}
