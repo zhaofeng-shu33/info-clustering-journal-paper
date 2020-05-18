@@ -193,9 +193,10 @@ To simplify the notation, the term $\sum_{x\in \mathcal{X}, y\in \mathcal{Y}} B^
 of the mutual information when the random variables are weakly dependent.
 
 \subsection{Theoretical Info-Clustering}
-There are many ways to extend mutual information for multiple random variables. \cite{ic2016} gives one based on partition of set $V$. All partitions of $V$ except for $\{V\}$ consists the non-trivial partition collection $\Pi'(V)$ and the multivariate mutual information(MMI) is defined as:
+There are many ways to extend mutual information for multiple random variables. \cite{ic2016} gives one based on partition of set $V$. All partitions of $V$ except for $\{V\}$ consists the non-trivial partition collection $\Pi'(V)$ and the multivariate mutual information(MMI) of $\{Z_i | i \in V\}$ is defined as:
 \begin{align}
-I(Z_V) &:= \\
+I(Z_V) &:= \min_{P \in \Pi'(V)} I_{P}(Z_V) \textrm{ where} \\
+I_P(Z_V) &:= \frac{1}{|P| - 1}D(P_{Z_V} || \prod_{C\in P} P_{Z_C})
 \end{align}
 
 \section{Formulation of graph-based Info-clustering}\label{sec:GBIC}
