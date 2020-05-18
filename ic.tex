@@ -47,6 +47,7 @@ grestore
 %
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{natbib}
 \usepackage{bm}
 %
@@ -198,7 +199,31 @@ There are many ways to extend mutual information for multiple random variables. 
 I(Z_V) &:= \min_{P \in \Pi'(V)} I_{P}(Z_V) \textrm{ where} \\
 I_P(Z_V) &:= \frac{1}{|P| - 1}D(P_{Z_V} || \prod_{C\in P} P_{Z_C})
 \end{align}
+Based on the definition of MMI, the cluster can be obtained by considering all maximal subsets $B$ such that $I(Z_B) > \gamma$ for a certain threshold $\gamma$. All such $B$ consists of $\mathcal{C}(Z_V)$.
+This is the theoretical definition of clusters, which is equivalent to the algorithmic one:
 
+\begin{equation}\label{eq:CZV}
+C(Z_V) = \{ V\} \cup \bigcup_{B \in \mathcal{C}_{\gamma_1}} \mathcal{C}(Z_B) \textrm{ where } \gamma_1 = I(Z_V)
+\end{equation}
+
+Equation \eqref{eq:CZV} gives a divisive approach to obtain all clusters and threshold values from
+the largest set $V$ and smallest threshold value $\gamma_1$. However, we cannot get a feasible algorithm
+to compute the clusters since it is unknown how to compute $I(Z_V)$.
+To get over this difficulty a relationship between $I(Z_V)$ and a special kind of submodular function minimization problem is established \citep{mac}: All threshold values and clusters are the same as those of
+the following optimization problem with $f[P]=D(P_{Z_V} || \prod_{C\in P}P_{Z_C})$:
+\begin{align}\label{eq:hPLambda}
+h_{P}(\lambda) &= f[P] - |P| \lambda \notag\\
+h(\lambda) &= \min_{P \in \Pi'(V)}h_P(\lambda)
+\end{align}
+In the above equation, $h(\lambda)$ is a piecewise linear function about $\lambda$ with turning points
+$\lambda_1, \dots, \lambda_{k}$. The general solution for \eqref{eq:hPLambda} can be written as
+\begin{equation}
+h(\lambda) = \begin{cases} h_{P_0}(\lambda) & \lambda < \lambda_1 \\
+h_{P_i}(\lambda) & \lambda_i \leq \lambda < \lambda_{i+1} \textrm{ for } i = 1, \dots, k-1 \\
+h_{P_k}(\lambda) & \lambda \geq \lambda_k
+\end{cases}
+\end{equation}
+Furthermore, we have $P_0 \succeq P_1 \dots \succeq P_k$ \citep{narayanan}. That is, partition $P_{i+1}$ is a refinement of $P_i$.
 \section{Formulation of graph-based Info-clustering}\label{sec:GBIC}
 
 General model of Info-Clustering is not very useful since we know little about the joint distribution.
