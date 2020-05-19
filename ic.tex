@@ -50,6 +50,7 @@ grestore
 \usepackage{amssymb}
 \usepackage{natbib}
 \usepackage{bm}
+\input{macros.tex}
 %
 % \usepackage{mathptmx}      % use Times fonts if available on your TeX system
 %
@@ -210,10 +211,10 @@ Equation \eqref{eq:CZV} gives a divisive approach to obtain all clusters and thr
 the largest set $V$ and smallest threshold value $\gamma_1$. However, we cannot get a feasible algorithm
 to compute the clusters since it is unknown how to compute $I(Z_V)$.
 To get over this difficulty a relationship between $I(Z_V)$ and a special kind of submodular function minimization problem is established \citep{mac}: All threshold values and clusters are the same as those of
-the following optimization problem with $f[P]=D(P_{Z_V} || \prod_{C\in P}P_{Z_C})$:
+the following optimization problem with $f[\mathcal{P}]=D(P_{Z_V} || \prod_{C\in P}P_{Z_C})$:
 \begin{align}\label{eq:hPLambda}
-h_{P}(\lambda) &= f[P] - |P| \lambda \notag\\
-h(\lambda) &= \min_{P \in \Pi'(V)}h_P(\lambda)
+h_{\mathcal{P}}(\lambda) &= f[\mathcal{P}] - |\mathcal{P}| \lambda \notag\\
+h(\lambda) &= \min_{\mathcal{P} \in \Pi'(V)}h_{\mathcal{P}}(\lambda)
 \end{align}
 In the above equation, $h(\lambda)$ is a piecewise linear function about $\lambda$ with turning points
 $\lambda_1, \dots, \lambda_{k}$. The general solution for \eqref{eq:hPLambda} can be written as
@@ -224,6 +225,38 @@ h_{P_k}(\lambda) & \lambda \geq \lambda_k
 \end{cases}
 \end{equation}
 Furthermore, we have $P_0 \succeq P_1 \dots \succeq P_k$ \citep{narayanan}. That is, partition $P_{i+1}$ is a refinement of $P_i$.
+
+\subsection{Efficient Algorithm to solve PSP structure}
+\cite{narayanan} proposes a divide and conquer approach to solve the PSP structure from equation \eqref{eq:hPLambda} for a general submodular function. Since the optimal partition is $P_0 = \{V\}$ when $\lambda=0$ and the partition is $P_k=\{\{1\}, \{2\}, \dots, \{|V|\}\}$ when $\lambda$ is quite large,
+his method starts from two endpoints $\lambda_i = 0, \lambda_j = +\infty$ and find the intersection of 
+$h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$. Then we compute a partition $P'$ such that $h(\lambda') = h_{P'}(\lambda')$. By definition $h(\lambda') \leq h'$ and when the strict inequality is taken we can repeat the process within $(\lambda_i, \lambda')$ and $(\lambda', \lambda_j)$ respectively. The technique procedure is documented in Algorithm \ref{alg:psp}.
+\begin{algorithm}
+\caption{PSP algorithm}\label{alg:psp}
+\begin{algorithmic}[1]
+\REQUIRE Statistics of $Z_V$ sufficient for calculating $f(B)$ for all $B \subseteq V$
+\ENSURE A sorted critical value array \textbf{L} and a reverse ordered array \textbf{PSP} containing $\P_1,\dots, P_k$.
+\STATE \textbf{L}  $\leftarrow$ empty list.
+\STATE $Q\leftarrow \{V\}, P \leftarrow \{ \{i \} | i \in V\}$
+\STATE $\mathbf{PSP}= [Q, P]$
+\STATE \texttt{Split}$(Q,P)$
+\STATE sort $L$ and sort $\mathbf{PSP}$ with respect to $\succeq$ 
+\FUNCTION{\texttt{Split}$(Q,P)$}
+ \STATE\label{alg:gamma} $\gamma' = {1 \over \abs{P} - \abs{Q}} (f(P)-f(Q))$
+ \STATE $h' = {1 \over \abs{P} - \abs{Q}}(\abs{P} f(Q) - \abs{Q} f(P))$
+ \STATE $(\tilde{h}, P') = \texttt{DT}(f,\gamma')$ \footnotemark
+ \IF{$\tilde{h} = h'$}
+ 	\STATE insert $\gamma'$ to $\mathbf{L}$
+ \ELSE
+ 	\STATE insert $P'$ to $\mathbf{PSP}$
+ 	\STATE \texttt{Split}$(Q, P')$
+ 	\STATE \texttt{Split}$(P',P)$
+ \ENDIF
+\ENDFUNCTION
+\end{algorithmic}
+\end{algorithm}
+
+In Algorithm For general submodular function $f[\mathcal{P}]$ there has been some practical algorithms to optimize it \citep{chakrabarty2014provable} but it is infeasible to apply such kind of algorithms to .
+
 \section{Formulation of graph-based Info-clustering}\label{sec:GBIC}
 
 General model of Info-Clustering is not very useful since we know little about the joint distribution.
@@ -241,6 +274,7 @@ in the Vienn diagram in Fig. \ref{fig:relationship} % For one-column wide figure
 \caption{General Info clustering models reduces to GBIC or MIRN model respectively under different assumptions for the joint distribution}
 \label{fig:relationship}       % Give a unique label
 \end{figure}
+
 %
 % For two-column wide figures use
 % \begin{figure*}
