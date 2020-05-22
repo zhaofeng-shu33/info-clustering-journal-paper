@@ -291,12 +291,13 @@ on $U$.
 \end{definition}
 
 Let $\Pi$ be the partition of $V=\{1,2,\dots, n\}$. We claim:
-\begin{theorem}
+\begin{theorem}\label{thm:wd_multiple}
 If $X_1, \dots, X_n$ are weakly dependent, then
 \begin{equation}
 D(P_{X_V} || \prod_{C\in \Pi} P_{X_{C}}) = {1 \over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \Pi}} \norm{B_{ij}}_F^2 + o(\epsilon^2)
 \end{equation}
 \end{theorem}
+We can see that Theorem \ref{thm:wd_multiple} is an extension of the approximation of mutual equation in Equation \eqref{eq:Ixy} to the case of multiple random variables.
 %
 % For two-column wide figures use
 % \begin{figure*}
