@@ -309,7 +309,9 @@ Theorem \ref{thm:wd_multiple} inspires us to get a simpler model
 called Graph-Based Info-Clustering from
 Equation \eqref{eq:IZV}.
 
-Consider a graph $G(V, E)$ where the edge weight $w$ is nonnegative and represents pairwise similarity of nodes. For a subset $C$ of $V$, $f(\cdot)$ is graph cut function, that is $f(C) = \sum_{i\not\in C, j\in C, (i,j) \in E} w_{ij}$. To measure the similarity shared by multiple nodes, we use the following metric.
+Consider a directed graph
+\footnotetext{without loss of generality we only consider directly graph to reduce computing complexity in algorithm part}
+$G(V, E)$ where the edge weight $w$ is nonnegative and represents pairwise similarity of nodes. For a subset $C$ of $V$, $f(\cdot)$ is graph cut function, that is $f(C) = \sum_{i\not\in C, j\in C, (i,j) \in E} w_{ij}$. To measure the similarity shared by multiple nodes, we use the following metric.
 \begin{definition}[multivariate similarity]\label{def:ms}
 \begin{align}
 I_{\P}(Z_V) & := \frac{ f[\P] }{  \abs{\mathcal{P}} - 1 } \textrm{ where } f[\P] = \sum_{C\in \P}f(C)\\
@@ -371,6 +373,7 @@ Let $w_{ij}=0$ if $(i,j)\not\in E$. If $w_{ij} + w_{jk} \geq w_{ki}$ for any dif
 
 Proposition \ref{prop:triangle} inspires us in order to separate different clusters, we need small magnitude of inter-cluster weights and large similar intra-cluster weight.
 
+Besides considering static graph $G$.
 \section{Improved PSP Algorithms}\label{sec:alg}
 \section{Empirical Study of GBIC}\label{sec:es}
 \subsection{Data Clustering Scenario}\label{subsec:dc}
