@@ -196,7 +196,7 @@ of the mutual information when the random variables are weakly dependent.
 
 \subsection{Theoretical Info-Clustering}
 There are many ways to extend mutual information for multiple random variables. \cite{ic2016} gives one based on partition of set $V$. All partitions of $V$ except for $\{V\}$ consists the non-trivial partition collection $\Pi'(V)$ and the multivariate mutual information(MMI) of $\{Z_i | i \in V\}$ is defined as:
-\begin{align}
+\begin{align}\label{eq:IZV}
 I(Z_V) &:= \min_{P \in \Pi'(V)} I_{P}(Z_V) \textrm{ where} \\
 I_P(Z_V) &:= \frac{1}{|P| - 1}D(P_{Z_V} || \prod_{C\in P} P_{Z_C})
 \end{align}
@@ -271,7 +271,7 @@ in the Vienn diagram in Fig. \ref{fig:relationship} % For one-column wide figure
 % Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
   \includegraphics[width=6cm]{relationship.eps}
-% figure caption is below the figure
+% figure caption is below the figuregit
 \caption{General Info clustering models reduces to GBIC or MIRN model respectively under different assumptions for the joint distribution}
 \label{fig:relationship}       % Give a unique label
 \end{figure}
@@ -297,18 +297,25 @@ If $X_1, \dots, X_n$ are weakly dependent, then
 D(P_{X_V} || \prod_{C\in \Pi} P_{X_{C}}) = {1 \over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \Pi}} \norm{B_{ij}}_F^2 + o(\epsilon^2)
 \end{equation}
 \end{theorem}
-We can see that Theorem \ref{thm:wd_multiple} is an extension of the approximation of mutual equation in Equation \eqref{eq:Ixy} to the case of multiple random variables.
-%
-% For two-column wide figures use
-% \begin{figure*}
-% Use the relevant command to insert your figure file.
-% For example, with the graphicx package use
- % \includegraphics[width=0.75\textwidth]{example.eps}
-% figure caption is below the figure
-% \caption{Please write your figure caption here}
-%\label{fig:2}       % Give a unique label
-%\end{figure*}
-%
+We can see that Theorem \ref{thm:wd_multiple} is an extension of the approximation of mutual equation in Equation \eqref{eq:Ixy} to the case of multiple random variables. We can treat the B matrix term ${1 \over 2} \norm{B_{ij}}_F^2$
+as the capacity weight for a graph. To get the required KL-Divergence under a given partition, we only need to make a
+summation of these weight terms.
+
+Theorem \ref{thm:wd_multiple} inspires us to get a simpler model
+called Graph-Based Info-Clustering from
+Equation \eqref{eq:IZV}.
+
+Consider a graph $G(V, E)$ where the edge weight $w$ is nonnegative and represents pairwise similarity of nodes. For a subset $C$ of $V$, $f(\cdot)$ is graph cut function, that is $f(C) = \sum_{i\not\in C, j\in C, (i,j) \in E} w_{ij}$. To measure the similarity shared by multiple nodes, we use the following metric.
+\begin{definition}[multivariate similarity]\label{def:ms}
+\begin{align}
+I_{\P}(Z_V) & := \frac{ f[\P] }{  \abs{\mathcal{P}} - 1 } \textrm{ where } f[\P] = \sum_{C\in \P}f(C)\\
+I(Z_V) & := \min_{\mathcal{P} \in \Pi'(V)} I_{\mathcal{P}}(Z_V)  \label{eq:ms}
+\end{align}
+\end{definition}
+The quantity $I(Z_V)$ in equation \eqref{eq:ms} is called \textbf{multivariate similarity} of $G$. We can also compute multivariate similarity for subgraph $G'(V',E')$ of $G$, denoted by $I(Z_{V'})$. Multivariate similarity is an extension of pairwise similarity. When $V'=\{i,j\}$, we have $I(Z_{V'})=w_{ij}$ from above definition.
+
+
+
 \section{Improved PSP Algorithms}\label{sec:alg}
 \section{Empirical Study of GBIC}\label{sec:es}
 \subsection{Data Clustering Scenario}\label{subsec:dc}
