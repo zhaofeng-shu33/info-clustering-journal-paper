@@ -182,7 +182,7 @@ P \in N^{(\epsilon)}(P_0) \iff \sum_{x \in \mathcal{X}} \frac{(P(x) - P_0(x))^2}
 The above equation can be expressed in concise form if we write $P(x) = P_0(x) + \epsilon
 \sqrt{P_0(x)} \phi(x)$, in which $\phi(x)$ is treated as feature vector. Then we have $||\phi || < 1$.
 If both $P_1, P_2 \in N^{(\epsilon)}(P_0)$ we have
-\begin{equation}
+\begin{equation}\label{eq:approx:ig}
 D(P_1 || P_2) = \frac{\epsilon^2}{2} ||\phi_1 - \phi_2||^2 + o(\epsilon^2)
 \end{equation}
 In addition, the above result can be used when two random variables are weakly independent \citep{huang2019universal}. That is, we say $X$ and $Y$ are weakly dependent if the conditional distribution $Y|X(\cdot |x) \in N^{(\epsilon)}(Y)$ for all $x \in \mathcal{X}$. Under the assumption of
@@ -289,23 +289,23 @@ where $\norm{\phi_x}\leq 1$.
 For multiple random variables we give:
 
 \begin{definition}\label{def:general}
-$X_1, \dots, X_n$ are weakly dependent if there exist a random variable $U$ such that
+$X_1, \dots, X_n (n\geq 3)$ are weakly dependent if there exist a random variable $U$ such that
 $(X_1, \dots, X_n)$ is weakly dependent with $U$ and $X_1, \dots X_n$ are independent conditioned
 on $U$.
 \end{definition}
 
-Let $\Pi$ be the partition of $V=\{1,2,\dots, n\}$. We claim:
+Let $\P$ be the partition of $V=\{1,2,\dots, n\}$. We claim:
 \begin{theorem}\label{thm:DPX}
 If $X_1, \dots, X_n$ are weakly dependent, then
 \begin{equation}
-D(P_{X_V} || \prod_{C\in \Pi} P_{X_{C}}) = {1 \over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \Pi}} \norm{B_{ij}}_F^2 + o(\epsilon^2)
+D(P_{X_V} || \prod_{C\in \P} P_{X_{C}}) = {1 \over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \P}} \norm{B_{ij}}_F^2 + o(\epsilon^2)
 \end{equation}
 \end{theorem}
-We can see that Theorem \ref{thm:wd_multiple} is an extension of the approximation of mutual equation in Equation \eqref{eq:Ixy} to the case of multiple random variables. We can treat the B matrix term ${1 \over 2} \norm{B_{ij}}_F^2$
+We can see that Theorem \ref{thm:DPX} is an extension of the approximation of mutual equation in Equation \eqref{eq:Ixy} to the case of multiple random variables. We can treat the B matrix term ${1 \over 2} \norm{B_{ij}}_F^2$
 as the capacity weight for a graph. To get the required KL-Divergence under a given partition, we only need to make a
 summation of these weight terms.
 
-Theorem \ref{thm:wd_multiple} inspires us to get a simpler model
+Theorem \ref{thm:DPX} inspires us to get a simpler model
 called Graph-Based Info-Clustering from
 Equation \eqref{eq:IZV}.
 
@@ -418,12 +418,22 @@ Besides considering static graph $G$.
 %\end{thebibliography}
 \appendix
 \section{Proofs}
-\begin{lemma}
+\begin{lemma}\label{lem:xyz}
 If $(X,Y)$ is weakly dependent with $Z$, then $X$ is weakly dependent with $Z$.
 \end{lemma}
+\begin{proof}
+From the definition of weakly dependence for two random variables, we have
+\begin{equation}
+P_{X,Y|Z=z}(x,y) = P_{X,Y}(x,y)(1+\epsilon \frac{\phi_z(x,y)}{\sqrt{P_{X,Y}(x,y)}}), z \in \mathcal{Z}
+\end{equation}
+Summing the above equation over $y\in \mathcal{Y}$ we have
+\begin{equation}
+P_{X|Z=z}(x) = P_X(x)(1+\epsilon\frac{\tilde{\phi}_z(x)}{\sqrt{P_X(x)}}),
+\textrm{ where } \tilde{\phi}_z(x) = \frac{\sum_{y\in Y} \sqrt{P_{X,Y}(x,y) }\phi_z(x,y)}{\sqrt{P_X(x)}}
+\end{equation}
+\end{proof}
 \begin{proof}[Proof of Theorem \ref{thm:DPX}]
-Suppose $U$ is a discrete distribution over $\{1, 2,\dots, K\}$, $X_1, \dots, X_n$ are independent conditioned on $U$.
-Further suppose that each $X_i$ is weakly dependent with $U$.  That is, 
+From the definition of weak dependence for more than 2 random variables, we can find a discrete distribution $U$ over $\{1, 2,\dots, K\}$, such that $X_1, \dots, X_n$ are independent conditioned on $U$. Since $(X_1, \dots, X_n)$ is weakly dependent with $U$, from Lemma \ref{lem:xyz}, it follows that $X_i$ is weakly dependent with $U$.  That is, 
 \begin{equation}\label{XUk}
 P_{X_i | U=k}(x) = P_{X_i} (x)( 1 + \epsilon {\phi^{(k,i)}(x ) \over \sqrt{P_{X_i}(x)}} )
 \end{equation}
@@ -473,20 +483,24 @@ let $\widetilde{B}_{ij}(x_i, x_j)={P_{X_i, X_j}(x_i,x_j) - P_{X_i}(x_i)P_{X_j}(x
 & = {\widetilde{B}_{ij}(x_i, x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }
 \end{align*}
 Therefore, we have 
-\begin{equation}
+\begin{equation}\label{eq:sep}
 P_{X_1,\dots,X_n}(x_1,\dots,x_n) =  (\prod_{i=1}^n  P_{X_i} (x_i))\left ( 1 + \sum_{i\neq j}{\widetilde{B}_{ij}(x_i, x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right) +o(\epsilon^2)
 \end{equation}
 Then $P_{X_1,\dots, X_n}$ is in the neighborhood of $P_{X_1}\dots P_{X_n}$ with $$\phi(x_1,\dots, x_n)=
 \sqrt{P_{X_1}(x_1)\dots P_{X_n}(x_n)}\left(\sum_{i\neq j}{\widetilde{B}_{ij}(x_i, x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right)+o(\epsilon^2)$$
 
-Using the conclusion from information geometry:
+Using Equation \eqref{eq:approx:ig} from information geometry:
 \begin{align*}
 D(P_{X_1,\dots, X_n}|| P_{X_1}\dots P_{X_n}) & ={1 \over 2} \sum_{x_1,\dots,x_n}\phi^2(x_1,\dots, x_n) \\
 & = {1\over 2}\sum_{x_1,\dots,x_n} (\prod_{i=1}^n  P_{X_i} (x_i)) \left(\sum_{i\neq j}{\widetilde{B}_{ij}(x_i, x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right)^2 +o(\epsilon^2) 
 \end{align*}
-From the definition of $\widetilde{B}_{ij}$, the above is the summation over $\norm{\widetilde{B}_{ij}}^2_F$(the coupling item is zero). Therefore we get the second order approximation:
+From the definition of $\widetilde{B}_{ij}$, the above is the summation over $\norm{\widetilde{B}_{ij}}^2_F$(the coupling item is zero). Therefore we get the second order approximation for a total partition:
 \begin{equation}
 D(P_{X_1,\dots, X_n}|| P_{X_1}\dots P_{X_n}) \approx  {1 \over 2} \sum_{i\neq j} \norm{\widetilde{B}_{ij}}^2_F
+\end{equation}
+For an arbitrary partition $\P$, using Equation \eqref{eq:sep} for each $C\in \P$, we have
+\begin{equation}
+P_{X_C}(x_C) = \prod_{i\in C} P_{X_i}(x_i)(1+\sum_{i\neq j})
 \end{equation}
 \end{proof}
 \section{Experiment Setup}
