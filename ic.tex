@@ -218,7 +218,7 @@ h(\lambda) &= \min_{\mathcal{P} \in \Pi'(V)}h_{\mathcal{P}}(\lambda)
 \end{align}
 In the above equation, $h(\lambda)$ is a piecewise linear function about $\lambda$ with turning points
 $\lambda_1, \dots, \lambda_{k}$. The general solution for \eqref{eq:hPLambda} can be written as
-\begin{equation}
+\begin{equation}\label{eq:PSP_structure}
 h(\lambda) = \begin{cases} h_{P_0}(\lambda) & \lambda < \lambda_1 \\
 h_{P_i}(\lambda) & \lambda_i \leq \lambda < \lambda_{i+1} \textrm{ for } i = 1, \dots, k-1 \\
 h_{P_k}(\lambda) & \lambda \geq \lambda_k
@@ -395,6 +395,62 @@ Let $V'=B \cup \{i'\}$, we can compute $\gamma'_N$ for the new graph $G(V', E(V'
 \end{proposition}
 Proposition \ref{prop:main} gave a method to check whether the newly added node destroys the outermost structure of the original clustering tree.  In later part we will show how this result can be used to build our Info-Detection method for outlier detection problem.
 \section{Improved PSP Algorithms}\label{sec:alg}
+To compute the clusters in GBIC, we use an indrect method. That is, we first compute the PSP structure defined in Equation \eqref{eq:PSP_structure}. Then from the established equivalence of the nested partition and the clustering tree, the hierarchical
+clustering results are obtained.
+
+Compared with Algorithm \ref{alg:psp}, we will give an improved algorithm in this Section using the same \texttt{DT} routine. We notice that different invocation of DT is independent and does not utilize the intrinsic hierarchical structure in the original version of PSP algorithm \cite{RN3}. If the hierarchical tree structure is used, we can invoke DT on smaller graph in later computation and make the total computation one order of magnitude faster than previous.
+
+To be more specific, suppose we get $P_i = {C_1, \dots, C_t}$ for the first invocation of DT. Then we can compute PSP for each $C_i(i=1,\dots, t)$ respectively and construct those $P_j(j>i)$ from the subgraph computation. For $P_j(j<i)$, we can contract the graph $G$  to $G^t$ which has $t$ nodes by contracting each $C_i$ to a single node. By applying DT to $G^t$ can we get $P_j(j<i)$. We summarize our improved version (PSPI) in Algorithm \ref{alg:psp_i_simplified}.
+
+\begin{algorithm}
+	\caption{An Improved Principal Sequence of Partition Algorithm}\label{alg:psp_i_simplified}
+	\begin{algorithmic}[1]
+		\REQUIRE a directed graph $G(V, E)$; edge weight map $c(e)$ for $e\in E$
+		\ENSURE a hierarchical tree $\mathcal{T}(K, E)$ where $K \subseteq 2^{V}$ is node set and $E$ is edge set
+		\STATE initialize tree $\mathcal{T}$ with $V$ as root node, $\{j\}(j \in V)$ as leaf node and no stem node
+		\STATE \texttt{Split}($G, V$)
+		\FUNCTION{\texttt{Split}($\widetilde{G}, \widetilde{V}$)}
+		\STATE $w$ is the summation of all edge weights of $\widetilde{G}$ 
+		\STATE $\gamma' = \frac{w}{\abs{V(\widetilde{G})}-1}$ where $V(\widetilde{G})$ is the node set of graph $\widetilde{G}$ \label{alg:gamma_apostrophe}
+		\STATE $(\tilde{h}, P') = \texttt{DT}(\widetilde{G}, \gamma')$ where $\P'$ is minimizer of $h(\gamma')$ in equation \eqref{eq:hPLambda} and $\tilde{h}$ is the corresponding minimum value  \label{line:DT}
+		\IF{$\tilde{h} = - \gamma'$}
+		\STATE add edge weight $\gamma'$ in $\mathcal{T}$ starting from $\widetilde{V}$ to its children
+		\ELSE
+		\FOR{$S$ in $P'$ and $\abs{S}>1$}
+		\STATE make each children of $\widetilde{V}$ in $\mathcal{T}$ have new parent $S$		
+		\STATE make the parent of $S$ be $\widetilde{V}$
+		\STATE \texttt{Split}($\widetilde{G}[S], S$) where $\widetilde{G}[S]$ is the subgraph of $\widetilde{G}$ restricted on $S$
+		\STATE contract $S$ to a single node in $\widetilde{G}$ % graph \widetilde{G} is modified
+		\ENDFOR 
+		\STATE \texttt{Split}($\widetilde{G}, \widetilde{V}$)		
+		\ENDIF
+		\ENDFUNCTION
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{improved_alg.png}
+\caption{Illustration of PSPI: The intermediate state is achieved first by Line \ref{line:DT} in Algorithm \ref{alg:psp_i_simplified};
+Then the larger ''ellipse'' is divided further and the tree ``ellipses'' are clustered upwards in a prescribed order to formal the final state.}\label{fig:pspi}
+\end{figure}
+
+We analyze the time complexity of Algorithm \ref{alg:psp_i_simplified} for dense graphs. That is, we suppose $\abs{V} = n, \abs{E} = O(n^2)$. For sparse graphs our algorithm is faster. The highest-relabel preflow algorithm is used to solve the maximum flow problem. Then \texttt{DT} routine has $O(n^4)$ time complexity. The time complexity for Algorithm \ref{alg:psp} is $O(n^5)$.
+We use $T(n)$ to represent the time complexity of \texttt{Split} when the graph has $n$ nodes.
+
+The recursive relationship for $T(n)$ is
+\begin{equation}\label{eq:Tn}
+T(n) = \max \{ C n^4 + \sum_{i=1}^k T(n_i) + T(k)\delta_{k<n} | \sum_{i=1}^k n_i = n, n_i \in \mathbb{Z}_{+} \}
+\end{equation}	
+In \eqref{eq:Tn}, $Cn^4$ is the time complexity of \texttt{DT} when $\abs{E} = O(n^2)$. $\delta_{k<n} = 1$ when $k<n$ otherwise $\delta_{k<n}=0$. We have the following proposition:
+\begin{proposition}\label{prop:alg_complexity}
+	 If $n_i \leq \frac{n}{2}, \textrm{ for } i=1,\dots,k$ and $ k \leq \frac{n}{2}$  hold in equation \eqref{eq:Tn}, then $T(n) = O(n^4)$.
+\end{proposition}
+
+The above proposition says that if in the first invokation of Line \ref{line:DT} in Algorithm \ref{alg:psp_i_simplified}, the partition size $\abs{\P'}$ is no more than $\frac{n}{2}$ and the number of nodes of each subgraph is no more than $\frac{n}{2}$. Then our PSPI algorithm has $O(n^4)$ time complexity. This is general scenario and one order of magnitude faster than Algorithm \ref{alg:psp} $O(n^5)$.
+
+If the worst case scenario is considered, that is, at most $\abs{V}-2$ times \texttt{Split} is called. Suppose the time complexity of \texttt{DT} is bounded by $Cn^4$. Then in worst scenario, the complexity bound for \texttt{Split} is $C(3^4+4^4 + \dots + n^4) \sim \frac{1}{5}Cn^5$, which is $5$ times faster than the original PSP algorithm $Cn^5$.
+
 \section{Empirical Study of GBIC}\label{sec:es}
 \subsection{Data Clustering Scenario}\label{subsec:dc}
 \subsection{Info-Detection for Outlier Detection}\label{subsec:od}
@@ -574,7 +630,7 @@ $f[\P] \geq \frac{k-1}{n-1}\sum_{(i,j) \in E} w_{ij}$. That is, the result holds
 		In this proof, we make some notation convention.
 		$w(C) = \displaystyle\sum_{(i,j) \in E(C)} w_{ij},$
 		$w(A, C) = \displaystyle\sum_{\substack{i \in A, j \in C \\ (i,j) \in E(V')}} (w_{ij}+w_{ji})$ and
-		$\P_C = \{\{i \}| i \in C \}$. Suppose $\gamma_N = I(Z_B)$, from equation \eqref{eq:gammaN}, we can get $\gamma_N =\frac{f[\P_B]} {\abs{B} -1}$.
+		$\P_C = \{\{i \}| i \in C \}$. Suppose $\gamma_N = I(Z_B)$, from equation \eqref{eq:largest_threshold}, we can get $\gamma_N =\frac{f[\P_B]} {\abs{B} -1}$.
 		Since $V' = B \cup \{i'\}$
 		$f[\P_{V'}] = f[\P_B] + \sum_{i \in B}w_{ii'}$.
 		
@@ -639,6 +695,35 @@ If $m \geq \frac{nr}{2}$, we have $I_{\P}(Z_V) = \frac{m+rn(n-1)}{2n-1} \leq m =
 $I_{\P}(Z_V)  \leq  I_{\{S_1, S_2\}}(Z_V)$ since $\P$ is finer than $\{S_1, S_2\}$. Therefore, either $S_1$ or $S_2$ cannot be discoveried.
 
 \end{proof}
+
+\begin{proof}[Proof of Proposition \ref{prop:alg_complexity}]
+Let $\mu_i = \frac{n_i}{n} \leq \frac{1}{2}$. We proceed by induction to show $T(n) = O(n^4)$. More specifically, $T(n) \leq q C n^4$ where $ q = \frac{16}{5}$. $T(3)$ is a constant and $T(m) \leq q C m^4$ holds for $m=3$. Suppose
+	$T(m) \leq qC m^4$ holds for all $m \leq n-1$. Then for $T(n)$
+	We first show that 
+	\begin{equation}\label{eq:outerI}
+	\sum_{i=1}^k T(n_i) \leq 10 T(\frac{n}{2})
+	\end{equation}
+	Since $\sum_{i=1}^k T(n_i) \leq qC n^4\sum_{i=1}^k u_i^4$ and $10 T(\frac{n}{2}) \geq 10Cn^4 (\frac{1}{2})^4$ from equation \eqref{eq:Tn}
+	\begin{equation}\label{eq:innerI}
+       q\sum_{i=1}^k u_i^4 \leq 10 (\frac{1}{2})^4 
+	\end{equation}
+	We have \eqref{eq:innerI} $\Rightarrow$ \eqref{eq:outerI}. The constraint is that $u_1\leq u_2 \leq \dots \leq u_k \leq \frac{1}{2}$ and $\sum_{i=1}^k u_i = 1$. Therefore we have $u_1 \leq \frac{1}{k}, u_2 \leq \frac{1}{k-1}, \dots, u_{k-1} \leq \frac{1}{2}$.
+	\begin{equation}\label{eq:outerOne}
+	 q[2(\frac{1}{2})^4 + \sum_{i=3}^k (\frac{1}{i})^4] \leq 10 (\frac{1}{2})^4
+	\end{equation}
+	We have \eqref{eq:outerOne} $\Rightarrow$ \eqref{eq:innerI}. And \eqref{eq:outerOne} is equivalent to
+	$\sum_{i=3}^k (\frac{1}{i})^4 \leq \frac{9}{8}(\frac{1}{2})^4$
+	\begin{align*}
+		\sum_{i=3}^k (\frac{1}{i})^4 & < \frac{1}{9}\sum_{i=3}^k (\frac{1}{i})^2 \\
+		& < \frac{1}{9}\sum_{i=3}^k (\frac{1}{(i-1)i}) \\
+		& < \frac{1}{18} < \frac{9}{8}(\frac{1}{2})^4
+	\end{align*}
+	Therefore, \eqref{eq:outerI} holds and from \eqref{eq:Tn} and $T(k) \leq T(\frac{n}{2})$ we have 
+	\begin{align}
+		T(n)  & \leq Cn^4 + 11T(\frac{n}{2}) \\
+		& \leq C n^4 + 11 q C (\frac{n}{2})^4 = \frac{16}{5} C n^4
+	\end{align}
+\end{proof}	
 \section{Experiment Setup}
 \end{document}
 % end of file template.tex
