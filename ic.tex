@@ -400,6 +400,7 @@ Proposition \ref{prop:main} gave a method to check whether the newly added node 
 To compute the clusters in GBIC, we use an indrect method. That is, we first compute the PSP structure defined in Equation \eqref{eq:PSP_structure}. Then from the established equivalence of the nested partition and the clustering tree, the hierarchical
 clustering results are obtained.
 
+\subsection{Formulation of PSPI}
 Compared with Algorithm \ref{alg:psp}, we will give an improved algorithm in this Section using the same \texttt{DT} routine. We notice that different invocation of DT is independent and does not utilize the intrinsic hierarchical structure in the original version of PSP algorithm \cite{narayanan}. If the hierarchical tree structure is used, we can invoke DT on smaller graph in later computation and make the total computation one order of magnitude faster than previous.
 
 To be more specific, suppose we get $P_i = {C_1, \dots, C_t}$ for the first invocation of DT. Then we can compute PSP for each $C_i(i=1,\dots, t)$ respectively and construct those $P_j(j>i)$ from the subgraph computation. For $P_j(j<i)$, we can contract the graph $G$  to $G^t$ which has $t$ nodes by contracting each $C_i$ to a single node. By applying DT to $G^t$ can we get $P_j(j<i)$. We summarize our improved version (PSPI) in Algorithm \ref{alg:psp_i_simplified}.
@@ -452,6 +453,7 @@ In \eqref{eq:Tn}, $Cn^4$ is the time complexity of \texttt{DT} when $\abs{E} = O
 The above proposition says that if in the first invokation of Line \ref{line:DT} in Algorithm \ref{alg:psp_i_simplified}, the partition size $\abs{\P'}$ is no more than $\frac{n}{2}$ and the number of nodes of each subgraph is no more than $\frac{n}{2}$. Then our PSPI algorithm has $O(n^4)$ time complexity. This is general scenario and one order of magnitude faster than Algorithm \ref{alg:psp} $O(n^5)$.
 
 If the worst case scenario is considered, that is, at most $\abs{V}-2$ times \texttt{Split} is called. Suppose the time complexity of \texttt{DT} is bounded by $Cn^4$. Then in worst scenario, the complexity bound for \texttt{Split} is $C(3^4+4^4 + \dots + n^4) \sim \frac{1}{5}Cn^5$, which is $5$ times faster than the original PSP algorithm $Cn^5$.
+\subsection{Empirical Comparison of Different PSP Algorithms}
 
 \section{Empirical Study of GBIC}\label{sec:es}
 In this section, we apply GBIC to various machine learning problems including community detection, link prediction, data clustering and outlier detection. In some problems we need to give decision criterion  based on the structure of GBIC. These decision criterions are empirically inspired and performs well in our experiment.  Our experiments
@@ -500,7 +502,15 @@ The community structure is shown in Fig. \ref{fig:c1}. It has 4 communities in m
 	\caption{Distance comparison between different hierarchical community detection method. Smaller distance indicates more similar structure with the ground truth tree.}\label{fig:cdr}	
 \end{figure}
 \subsection{Link Prediction}
-We use the NIPS-authorship dataset as in \cite{RN23}.
+Link Prediction Problem is predicting whether an unobserved edge exists between two nodes in a graph.  GBIC does not give an explicit way to make prediction. Here we give a heuristic prediction scheme based on the hierarchical tree $T$. Our problem is that given node $(i,j) \not\in E$, we should make a prediction whether they have an connected edge. We split the scenario 
+into two cases:
+\begin{enumerate}
+\item If they are share the same parent in the tree $T$, we test whether the addition of the edge with weight $w$ will split them. To be more specific, we consider the sub-graph consisting of all the sibling of $i,j$. We make an info-clustering on this sub-graph. If the partition is trivial, then we conclude that the connected edge exists. Otherwise, the edge does not exist.
+
+\item If they do not share the same parent in the tree $T$, we test whether the addition of the edge will join them. The test is bidirectional. Suppose $I$ is the parent node of $i$ and it consists of several parts. Consider the sub-graph $I \cup \{j\}$. If the largest critical value becomes larger than before, then there is an edge bewteen $i,j$. Otherwise, consider the other part of the test for $J$ including $j$. If neither of the two tests succeed, we conclude that there is no edge between $i,j$. To test whether the largest critical value becomes larger than before, we will use Proposition \ref{prop:main},  thus avoiding complicated solution of GBIC for subgraphs.
+\end{enumerate}
+
+Co-authorship datasets are a typical examplar to compare different prediction methods. We use the NIPS-authorship (00-17) dataset as in \cite{RN23}.
 
 \subsection{Data Clustering Scenario}\label{subsec:dc}
 \subsection{Outlier Detection}\label{subsec:od}
