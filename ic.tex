@@ -452,9 +452,14 @@ The above proposition says that if in the first invokation of Line \ref{line:DT}
 If the worst case scenario is considered, that is, at most $\abs{V}-2$ times \texttt{Split} is called. Suppose the time complexity of \texttt{DT} is bounded by $Cn^4$. Then in worst scenario, the complexity bound for \texttt{Split} is $C(3^4+4^4 + \dots + n^4) \sim \frac{1}{5}Cn^5$, which is $5$ times faster than the original PSP algorithm $Cn^5$.
 
 \section{Empirical Study of GBIC}\label{sec:es}
+In this section, we apply GBIC to various machine learning problems including community detection, link prediction, data clustering and outlier detection. In some problems we need to give decision criterion  based on the structure of GBIC. These decision criterions are empirically inspired and performs well in our experiment.  Our experiments
+include synthetic and real-world dataset and we will compare GBIC with classical methods and Bayesian inference.
+\subsection{Community Detection}\label{subsec:cd}
+Community Detection problems can be regarded as finding a proper partition of a given graph and we call each subgraph in the partition a community. There are many good algorithms
+to find the flat partition which splits the graph into several non-overlapping subgraphs. However, it is a hard problem to inference the hierarhical structure of a complex graph automatically.
+\subsection{Link Prediction}
 \subsection{Data Clustering Scenario}\label{subsec:dc}
-\subsection{Info-Detection for Outlier Detection}\label{subsec:od}
-\subsection{Community Detection Field}\label{subsec:cd}
+\subsection{Outlier Detection}\label{subsec:od}
 \section{Conclusion}\label{sec:conc}
 
 %\begin{acknowledgements}
