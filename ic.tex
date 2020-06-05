@@ -50,6 +50,8 @@ grestore
 \usepackage{amssymb}
 \usepackage{natbib}
 \usepackage{bm}
+\usepackage{subcaption}
+\captionsetup{compatibility=false}
 \input{macros.tex}
 %
 % \usepackage{mathptmx}      % use Times fonts if available on your TeX system
@@ -398,7 +400,7 @@ Proposition \ref{prop:main} gave a method to check whether the newly added node 
 To compute the clusters in GBIC, we use an indrect method. That is, we first compute the PSP structure defined in Equation \eqref{eq:PSP_structure}. Then from the established equivalence of the nested partition and the clustering tree, the hierarchical
 clustering results are obtained.
 
-Compared with Algorithm \ref{alg:psp}, we will give an improved algorithm in this Section using the same \texttt{DT} routine. We notice that different invocation of DT is independent and does not utilize the intrinsic hierarchical structure in the original version of PSP algorithm \cite{RN3}. If the hierarchical tree structure is used, we can invoke DT on smaller graph in later computation and make the total computation one order of magnitude faster than previous.
+Compared with Algorithm \ref{alg:psp}, we will give an improved algorithm in this Section using the same \texttt{DT} routine. We notice that different invocation of DT is independent and does not utilize the intrinsic hierarchical structure in the original version of PSP algorithm \cite{narayanan}. If the hierarchical tree structure is used, we can invoke DT on smaller graph in later computation and make the total computation one order of magnitude faster than previous.
 
 To be more specific, suppose we get $P_i = {C_1, \dots, C_t}$ for the first invocation of DT. Then we can compute PSP for each $C_i(i=1,\dots, t)$ respectively and construct those $P_j(j>i)$ from the subgraph computation. For $P_j(j<i)$, we can contract the graph $G$  to $G^t$ which has $t$ nodes by contracting each $C_i$ to a single node. By applying DT to $G^t$ can we get $P_j(j<i)$. We summarize our improved version (PSPI) in Algorithm \ref{alg:psp_i_simplified}.
 
@@ -456,8 +458,50 @@ In this section, we apply GBIC to various machine learning problems including co
 include synthetic and real-world dataset and we will compare GBIC with classical methods and Bayesian inference.
 \subsection{Community Detection}\label{subsec:cd}
 Community Detection problems can be regarded as finding a proper partition of a given graph and we call each subgraph in the partition a community. There are many good algorithms
-to find the flat partition which splits the graph into several non-overlapping subgraphs. However, it is a hard problem to inference the hierarhical structure of a complex graph automatically.
+to find the flat partition which splits the graph into several non-overlapping subgraphs \citep{malliaros2013clustering}. However, it is a hard problem to make inference on the hierarhical structure of a complex graph automatically. In this subsection GBIC can achieve success to recover the hierarhical structure of a 2-layer graph upon properly defined ``edge weight''. 
+
+We can not treat each edge with equal weight otherwise it is easy to obtain only trivial clustering results due to Proposition \ref{prop:triangle}. Inspired by Proposition \ref{prop:reweight}, we use the following weighting scheme:
+
+\begin{equation}\label{eq:wij_scheme}
+    w_{ij} = 1 + \abs{\{k | (i,k),(j,k) \in E \}} \textrm{ for } (i,j) \in E
+\end{equation}
+This weight assignment scheme is the number of triangles which contain the edge, which is equivalent to $r=n$ in the model problem of Proposition \ref{prop:triangle}. Then there are
+at least $\frac{n^2}{2}$ edges to cut off the recovery condition, which is quite strong. We consider a more complex model and empirically justify the weighting scheme of Equation 
+\eqref{eq:wij_scheme} works.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{pic/two_level.eps}
+		\caption{a community with two hierarchical levels with $z_{\mathrm{in}_1} = 14,$ $z_{\mathrm{in}_2} = 3, z_{\mathrm{out}}=1$.}\label{fig:c1}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{pic/tree_info-clustering.pdf}
+		\caption{hierarchical tree obtained by graph-based info-clustering for left figure. The tree leaves with the same ancestor are merged for clarity.}\label{fig:c2}
+	\end{subfigure}
+	\caption{Community Detection Experiment Illustration}
+\end{figure}
+We use a two-level artificial dataset proposed in \cite{RN22}. 
+The community structure is shown in Fig. \ref{fig:c1}. It has 4 communities in macro-level, and each macro community contains 4 micro communities. We use $z_{\mathrm{in}_1}$ to represent the internal average degree of nodes within micro community; $z_{\mathrm{in}_2}$ as node degree between different micro communities but within one macro community; $z_{\mathrm{out}}$ as node degree between different macro communities. By varying one and fixing the other two in $\{z_{\mathrm{in}_1}, z_{\mathrm{in}_2}, z_{\mathrm{out}} \}$ we get different set of experiment. To compare the deduced hierarchical tree structure with the ground truth, we use the normalized Robinson-Foulds distance as the metric. It describes the distance between two trees with different topology and falls within $[0,1]$. We compare the RF distance of GBIC with that of GN (Girvan-Newman algorithm) and BHCD (a kind of Bayesian Hierarchical method for graph structure in \cite{RN23}). The result is shown in Fig. \ref{fig:cdr}. As can be seen from Fig.\ref{fig:cdr}, in either case, graph-based info-clustering can produce more similar tree structures than that of the ground truth.
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.33\textwidth}
+		\includegraphics[width=\textwidth]{pic/z_in_1.eps}
+		\caption{}
+	\end{subfigure}~
+	\begin{subfigure}{0.33\textwidth}
+		\includegraphics[width=\textwidth]{pic/z_in_2.eps}
+		\caption{}
+	\end{subfigure}~
+	\begin{subfigure}{0.33\textwidth}
+		\includegraphics[width=\textwidth]{pic/z_o.eps}
+		\caption{}
+	\end{subfigure}
+	\caption{Distance comparison between different hierarchical community detection method. Smaller distance indicates more similar structure with the ground truth tree.}\label{fig:cdr}	
+\end{figure}
 \subsection{Link Prediction}
+We use the NIPS-authorship dataset as in \cite{RN23}.
+
 \subsection{Data Clustering Scenario}\label{subsec:dc}
 \subsection{Outlier Detection}\label{subsec:od}
 \section{Conclusion}\label{sec:conc}
