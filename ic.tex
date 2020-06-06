@@ -502,7 +502,7 @@ The community structure is shown in Fig. \ref{fig:c1}. It has 4 communities in m
 	\caption{Distance comparison between different hierarchical community detection method. Smaller distance indicates more similar structure with the ground truth tree.}\label{fig:cdr}	
 \end{figure}
 \subsection{Link Prediction}
-Link Prediction Problem is predicting whether an unobserved edge exists between two nodes in a graph.  GBIC does not give an explicit way to make prediction. Here we give a heuristic prediction scheme based on the hierarchical tree $T$. Our problem is that given node $(i,j) \not\in E$, we should make a prediction whether they have an connected edge. We split the scenario 
+Link Prediction Problem is predicting whether an unobserved edge exists between two nodes in a graph \citep{liben2007link}.  GBIC does not give an explicit way to make prediction. Here we give a heuristic prediction scheme based on the hierarchical tree $T$. Our problem is that given node $(i,j) \not\in E$, we should make a prediction whether they have an connected edge. We split the scenario 
 into two cases:
 \begin{enumerate}
 \item If they are share the same parent in the tree $T$, we test whether the addition of the edge with weight $w$ will split them. To be more specific, we consider the sub-graph consisting of all the sibling of $i,j$. We make an info-clustering on this sub-graph. If the partition is trivial, then we conclude that the connected edge exists. Otherwise, the edge does not exist.
@@ -511,8 +511,32 @@ into two cases:
 \end{enumerate}
 
 Co-authorship datasets are a typical examplar to compare different prediction methods. We use the NIPS-authorship (00-17) dataset as in \cite{RN23}.
+Since the graph is sparse and it is hard to predict for some node with little connection information, we restrict the network to the 234 nodes whose degrees are larger than other cutting-off nodes. Since the prediction  is a hypothesis testing problem, we use true positive rate (TPR), true negative rate(TNR) and accuracy (ACC) as the evaluation metric. We compare GBIC with BHCD. For TPR and ACC our method achieves higher score.
+\begin{table}
+\centering
+\input{compare.tex}
+\end{table}
 
 \subsection{Data Clustering Scenario}\label{subsec:dc}
+For data clustering task (or clustering analysis), we are given $n$ datas ,each with a feature vector of length $m$. To use GBIC on such scenario, we need to construct a similarity matrix from the feature vectors. Each element from the similarity matrix corresponds a weight value of the underlining graph. The Spectural Clustering follows the similarity matrix approach. Since distance metric is well studied in clustering analysis. It is often to use $\exp(-\gamma d)$ to transform the distance to similarity. The rbf kernel and Laplacian kernel are of this type. For these type of similarity, the graph is quite dense and to reduce the computational cost we can treat very small weights as zero. That is, we set a threshold for the weights to remove some edges in the graph. We can also use k-nearest neighbors to generate discrete similarities. It is hard to say which similarity metric is better than others and it depends on specific problems. Besides, the hyperparameters of the metric can be tuned as well.
+
+After we get the clustering tree, we can get a proper flat clustering by threshold method. This is typical for most hierarhical clustering method. Then we can compare different clustering method, whether they are hierarical or not. We use 4 different datasets for such purpose.
+\begin{enumerate}
+\item Four Gaussian blobs with unit variance and centers at $(3,3), (3,-3), (-3,3), (-3,-3)$ respectively.  We generate 25 points for each blob.
+\item Three concentric circles with radius $0.1,0.2,0.3$ and number of data points as $60, 100, 140$. The angles of these points are uniform distributed and they also oscillate along the radius direction.
+\item UCI glass dataset with 214 samples, 6 classes, 9 dimensions of feature.
+\end{enumerate}
+We use adjusted rand index as the metric to score different clustering method, the best performance for each algorithm is shown in Table \ref{tb:e1}.  It can be seen from the table that graph-based info-clustering is better than other clustering algorithms.
+\begin{table}[!ht]
+\centering
+\InputIfFileExists{compare_3.tex}{}{}
+\caption{ accuracy for different clustering algorithms }\label{tb:e1}
+\end{table}
+To compare different hierarhical clustering method, we can compare the clustering tree directly. We use the gene-expression dataset coming from \cite{khan2001classification}.
+Since we do not know the ground truth tree structure. We can split the fearues and apply the clustering algorithms on train and test data respectively and compare the resulting
+clustering tree. In this way, the clustering tree from the train data is treated as ground truth. By doing so we can also test the stability of the clustering method.
+
+
 \subsection{Outlier Detection}\label{subsec:od}
 \section{Conclusion}\label{sec:conc}
 
