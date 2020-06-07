@@ -531,7 +531,7 @@ The community structure is shown in Fig. \ref{fig:c1}. It has 4 communities in m
 Link Prediction Problem is predicting whether an unobserved edge exists between two nodes in a graph \citep{liben2007link}.  GBIC does not give an explicit way to make prediction. Here we give a heuristic prediction scheme based on the hierarchical tree $T$. Our problem is that given node $(i,j) \not\in E$, we should make a prediction whether they have an connected edge. We split the scenario 
 into two cases:
 \begin{enumerate}
-\item If they are share the same parent in the tree $T$, we test whether the addition of the edge with weight $w$ will split them. To be more specific, we consider the sub-graph consisting of all the sibling of $i,j$. We make an info-clustering on this sub-graph. If the partition is trivial, then we conclude that the connected edge exists. Otherwise, the edge does not exist.
+\item If they are share the same parent in the tree $T$, we test whether the addition of the edge with weight $w$ will split them. To be more specific, we consider the sub-graph consisting of all the sibling of $i,j$. We do GBIC on this sub-graph. If the partition is trivial, then we conclude that the connected edge exists. Otherwise, the edge does not exist.
 
 \item If they do not share the same parent in the tree $T$, we test whether the addition of the edge will join them. The test is bidirectional. Suppose $I$ is the parent node of $i$ and it consists of several parts. Consider the sub-graph $I \cup \{j\}$. If the largest critical value becomes larger than before, then there is an edge bewteen $i,j$. Otherwise, consider the other part of the test for $J$ including $j$. If neither of the two tests succeed, we conclude that there is no edge between $i,j$. To test whether the largest critical value becomes larger than before, we will use Proposition \ref{prop:main},  thus avoiding complicated solution of GBIC for subgraphs.
 \end{enumerate}
@@ -546,17 +546,14 @@ Since the graph is sparse and it is hard to predict for some node with little co
 
 
 \subsection{Outlier Detection}\label{subsec:od}
-Outlier Detection is the identification of abnormal data (called outliers) which differs from the majority of the data (called inliers) \cite{grubbs1969procedures}
-To apply our GBIC method to this scanerio, we consider the case when we are required to detect outliers in a multi-class dataset and then we use critical values of $C_{\gamma}(Z_V)$. 
-Assuming the clusters of inliners are of equal size $N$ and the total number of outliers $M$ is less than $N$.
-If we know there are $k$ classes, we should choose the critical value $\gamma_{-k}$ as the threshold value.
+Outlier Detection is the identification of abnormal data (called outliers) which differs from the majority of the data (called inliers) \citep{grubbs1969procedures}
+To apply our GBIC method to this scanerio, we consider the case when we are required to detect outliers in a multi-class dataset and then we use critical values of $C_{\gamma}(Z_V)$. Suppose $\lambda_k$ is the largest threshold value and there are $K$ clusters each with 
+equal size $N$ and the total number of outliers $M$ is less than $N$,
+we should choose the critical value $\gamma_{k+1-K}$ as the threshold value.
 
-Actually we do not need to manually choose which threshold to use and in reality it is often the case that we do not know how many classes there are.
-An empirical and reasonable way to deal with the situation is given as follows:
-We start from the finest partition $\mathcal{P}_{-1}$ and test whether the total number of data (equal to $N+M$) is larger than $2M$. If true, then $k=1$ and $\mathcal{P}_{-1}$ is our choice.
-Empirically, $M$ is estimated from $|\mathcal{P}_{-1}|$.
-
-The selection rule for $\mathcal{P}_{-k}$ is as follows:
+In reality it is often the case that we do not know the value of $K$.
+An empirical and reasonable way to deal with this situation is trying from $K=1,2, \dots$ and use the smallest suitable one.
+The selection rule for $\mathcal{P}_{-k}$ can be summarized as follows:
 
 \begin{algorithmic}
 \STATE Let $k=1$
@@ -565,8 +562,12 @@ The selection rule for $\mathcal{P}_{-k}$ is as follows:
 \ENDWHILE
 \end{algorithmic}
 
-We use $n$ to represent the total number of data. Notice that the condition $ n > (k+1) |\mathcal{P}_{-k}|$ is equivalent
-to $N>M$ when there are $k$ clusters and $k$ is small.
+We use $n$ to represent the total number of data. Since we assume $k$ is small, $M \approx |\mathcal{P}_{-k}|$.
+And the condition $ n > (k+1) |\mathcal{P}_{-k}|$ is equivalent
+to $N>M$ since $n=kN + M$.
+
+
+
 
 
 \section{Conclusion}\label{sec:conc}
