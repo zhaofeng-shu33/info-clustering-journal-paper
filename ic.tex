@@ -458,6 +458,32 @@ If the worst case scenario is considered, that is, at most $\abs{V}-2$ times \te
 \section{Empirical Study of GBIC}\label{sec:es}
 In this section, we apply GBIC to various machine learning problems including community detection, link prediction, data clustering and outlier detection. In some problems we need to give decision criterion  based on the structure of GBIC. These decision criterions are empirically inspired and performs well in our experiment.  Our experiments
 include synthetic and real-world dataset and we will compare GBIC with classical methods and Bayesian inference.
+\subsection{Data Clustering Scenario}\label{subsec:dc}
+For data clustering task (or clustering analysis), we are given $n$ datas ,each with a feature vector of length $m$. To use GBIC on such scenario, we need to construct a similarity matrix from the feature vectors. Each element from the similarity matrix corresponds a weight value of the underlining graph. The Spectural Clustering follows the similarity matrix approach. Since distance metric is well studied in clustering analysis. It is often to use $\exp(-\gamma d)$ to transform the distance to similarity. The rbf kernel and Laplacian kernel are of this type. For these type of similarity, the graph is quite dense and to reduce the computational cost we can treat very small weights as zero. That is, we set a threshold for the weights to remove some edges in the graph. We can also use k-nearest neighbors to generate discrete similarities. It is hard to say which similarity metric is better than others and it depends on specific problems. Besides, the hyperparameters of the metric can be tuned as well.
+
+After we get the clustering tree, we can get a proper flat clustering by threshold method. This is typical for most hierarhical clustering method. Then we can compare different clustering method, whether they are hierarical or not. We use 4 different datasets for such purpose.
+\begin{enumerate}
+\item Four Gaussian blobs with unit variance and centers at $(3,3), (3,-3), (-3,3), (-3,-3)$ respectively.  We generate 25 points for each blob.
+\item Three concentric circles with radius $0.1,0.2,0.3$ and number of data points as $60, 100, 140$. The angles of these points are uniform distributed and they also oscillate along the radius direction.
+\item UCI glass dataset with 214 samples, 6 classes, 9 dimensions of feature.
+\end{enumerate}
+We use adjusted rand index as the metric to score different clustering method, the best performance for each algorithm is shown in Table \ref{tb:e1}.  It can be seen from the table that graph-based info-clustering is better than other clustering algorithms.
+\begin{table}[!ht]
+\centering
+\InputIfFileExists{compare_3.tex}{}{}
+\caption{ accuracy for different clustering algorithms }\label{tb:e1}
+\end{table}
+To compare different hierarhical clustering method, we can compare the clustering tree directly. We use the gene-expression dataset coming from \cite{khan2001classification}.
+Since we do not know the ground truth tree structure. We can split the fearues and apply the clustering algorithms on train and test data respectively and compare the resulting
+clustering tree. In this way, the clustering tree from the train data is treated as ground truth. By doing so we can also test the stability of the clustering method.
+
+We compare GBIC with agglomerative hierarhical clustering with average distance and Bayesian Rose tree \citep{blundell2011discovering}. The tree similarity metric is Robinson-Foulds distance, which is the number of steps to transform one tree to another (A step is either adding or removing an edge) \citep{day1985optimal}. We vary the samples of data and the results are shown in Figure \ref{fig:shc}. As can be seen, for the classical hierarhical method the trees are complex and the distance is large. The distance of GBIC and Bayesian Rose tree is near and our method is more suitable when the number of samples are relatively small.
+
+\begin{figure}
+\centering
+\includegraphics[width=6cm]{pic/plot_results.eps}
+\caption{Comparison of the stability of hierarhical clustering method}\label{fig:shc}
+\end{figure}
 \subsection{Community Detection}\label{subsec:cd}
 Community Detection problems can be regarded as finding a proper partition of a given graph and we call each subgraph in the partition a community. There are many good algorithms
 to find the flat partition which splits the graph into several non-overlapping subgraphs \citep{malliaros2013clustering}. However, it is a hard problem to make inference on the hierarhical structure of a complex graph automatically. In this subsection GBIC can achieve success to recover the hierarhical structure of a 2-layer graph upon properly defined ``edge weight''. 
@@ -484,19 +510,19 @@ at least $\frac{n^2}{2}$ edges to cut off the recovery condition, which is quite
 	\caption{Community Detection Experiment Illustration}
 \end{figure}
 We use a two-level artificial dataset proposed in \cite{RN22}. 
-The community structure is shown in Fig. \ref{fig:c1}. It has 4 communities in macro-level, and each macro community contains 4 micro communities. We use $z_{\mathrm{in}_1}$ to represent the internal average degree of nodes within micro community; $z_{\mathrm{in}_2}$ as node degree between different micro communities but within one macro community; $z_{\mathrm{out}}$ as node degree between different macro communities. By varying one and fixing the other two in $\{z_{\mathrm{in}_1}, z_{\mathrm{in}_2}, z_{\mathrm{out}} \}$ we get different set of experiment. To compare the deduced hierarchical tree structure with the ground truth, we use the dendrogram purity as the metric. We compare the RF distance of GBIC with that of GN (Girvan-Newman algorithm) and BHCD (a kind of Bayesian Hierarchical method for graph structure in \cite{RN23}). The result is shown in Fig. \ref{fig:cdr}. As can be seen from Fig.\ref{fig:cdr}, in either case, graph-based info-clustering can produce more similar tree structures than that of the ground truth.
+The community structure is shown in Fig. \ref{fig:c1}. It has 4 communities in macro-level, and each macro community contains 4 micro communities. We use $z_{\mathrm{in}_1}$ to represent the internal average degree of nodes within micro community; $z_{\mathrm{in}_2}$ as node degree between different micro communities but within one macro community; $z_{\mathrm{out}}$ as node degree between different macro communities. By varying one and fixing the other two in $\{z_{\mathrm{in}_1}, z_{\mathrm{in}_2}, z_{\mathrm{out}} \}$ we get different set of experiment. To compare the deduced hierarchical tree structure with the ground truth, we use the normalized Robinson-Foulds distance as the metric, which lies within $[0,1]$. We compare the RF distance of GBIC with that of GN (Girvan-Newman algorithm) and BHCD (a kind of Bayesian Hierarchical method for graph structure in \cite{RN23}). The result is shown in Fig. \ref{fig:cdr}. As can be seen from Fig.\ref{fig:cdr}, in either case, graph-based info-clustering can produce more similar tree structures than that of the ground truth.
 \begin{figure}
 	\centering
 	\begin{subfigure}{0.33\textwidth}
-		\includegraphics[width=\textwidth]{pic/z_in_1-dp.eps}
+		\includegraphics[width=\textwidth]{pic/z_in_1.eps}
 		\caption{}
 	\end{subfigure}~
 	\begin{subfigure}{0.33\textwidth}
-		\includegraphics[width=\textwidth]{pic/z_in_2-dp.eps}
+		\includegraphics[width=\textwidth]{pic/z_in_2.eps}
 		\caption{}
 	\end{subfigure}~
 	\begin{subfigure}{0.33\textwidth}
-		\includegraphics[width=\textwidth]{pic/z_o-dp.eps}
+		\includegraphics[width=\textwidth]{pic/z_o.eps}
 		\caption{}
 	\end{subfigure}
 	\caption{Distance comparison between different hierarchical community detection method. Smaller distance indicates more similar structure with the ground truth tree.}\label{fig:cdr}	
@@ -517,32 +543,7 @@ Since the graph is sparse and it is hard to predict for some node with little co
 \input{compare.tex}
 \end{table}
 
-\subsection{Data Clustering Scenario}\label{subsec:dc}
-For data clustering task (or clustering analysis), we are given $n$ datas ,each with a feature vector of length $m$. To use GBIC on such scenario, we need to construct a similarity matrix from the feature vectors. Each element from the similarity matrix corresponds a weight value of the underlining graph. The Spectural Clustering follows the similarity matrix approach. Since distance metric is well studied in clustering analysis. It is often to use $\exp(-\gamma d)$ to transform the distance to similarity. The rbf kernel and Laplacian kernel are of this type. For these type of similarity, the graph is quite dense and to reduce the computational cost we can treat very small weights as zero. That is, we set a threshold for the weights to remove some edges in the graph. We can also use k-nearest neighbors to generate discrete similarities. It is hard to say which similarity metric is better than others and it depends on specific problems. Besides, the hyperparameters of the metric can be tuned as well.
 
-After we get the clustering tree, we can get a proper flat clustering by threshold method. This is typical for most hierarhical clustering method. Then we can compare different clustering method, whether they are hierarical or not. We use 4 different datasets for such purpose.
-\begin{enumerate}
-\item Four Gaussian blobs with unit variance and centers at $(3,3), (3,-3), (-3,3), (-3,-3)$ respectively.  We generate 25 points for each blob.
-\item Three concentric circles with radius $0.1,0.2,0.3$ and number of data points as $60, 100, 140$. The angles of these points are uniform distributed and they also oscillate along the radius direction.
-\item UCI glass dataset with 214 samples, 6 classes, 9 dimensions of feature.
-\end{enumerate}
-We use adjusted rand index as the metric to score different clustering method, the best performance for each algorithm is shown in Table \ref{tb:e1}.  It can be seen from the table that graph-based info-clustering is better than other clustering algorithms.
-\begin{table}[!ht]
-\centering
-\InputIfFileExists{compare_3.tex}{}{}
-\caption{ accuracy for different clustering algorithms }\label{tb:e1}
-\end{table}
-To compare different hierarhical clustering method, we can compare the clustering tree directly. We use the gene-expression dataset coming from \cite{khan2001classification}.
-Since we do not know the ground truth tree structure. We can split the fearues and apply the clustering algorithms on train and test data respectively and compare the resulting
-clustering tree. In this way, the clustering tree from the train data is treated as ground truth. By doing so we can also test the stability of the clustering method.
-
-We compare GBIC with agglomerative hierarhical clustering with average distance and Bayesian Rose tree \citep{blundell2011discovering}. The tree similarity metric is Robinson-Foulds distance, which is the number of steps to transform one tree to another (A step is either adding or removing an edge). We vary the samples of data and the results are shown in Figure \ref{fig:shc}. As can be seen, our GBIC method achieves the highest 
-
-\begin{figure}
-\centering
-\includegraphics[width=6cm]{pic/plot_results.eps}
-\caption{Comparison of the stability of hierarhical clustering method}\label{fig:shc}
-\end{figure}
 
 \subsection{Outlier Detection}\label{subsec:od}
 \section{Conclusion}\label{sec:conc}
