@@ -454,6 +454,39 @@ The above proposition says that if in the first invokation of Line \ref{line:DT}
 
 If the worst case scenario is considered, that is, at most $\abs{V}-2$ times \texttt{Split} is called. Suppose the time complexity of \texttt{DT} is bounded by $Cn^4$. Then in worst scenario, the complexity bound for \texttt{Split} is $C(3^4+4^4 + \dots + n^4) \sim \frac{1}{5}Cn^5$, which is $5$ times faster than the original PSP algorithm $Cn^5$.
 \subsection{Empirical Comparison of Different PSP Algorithms}
+In this section, we compare our PSPI \ref{alg:psp_i_simplified} with Narayanan's algorithm \ref{alg:psp}.
+Another improvement is formulated by \cite{kolmogorov} using parametric maximum flow.
+This improvement can achieve $\abs{V} \textrm{MF}(G)$ time complexity theoretically. And we will compare the above three using two datasets with different density.
+
+The first dataset is four Gaussian blobs with equal size and we can vary the number of points in each blob. The dataset with 100 points in total is the same with that used in 
+Section \ref{subsec:dc}. The second dataset is a two-level graph with $s^3$ nodes. The dataset with $s=4$ is the same with that used in Section \ref{subsec:cd}.
+We can construct a graph from the first dataset and the edge weight is computed with the rbf kernel. The characteristics of the two datasets are summarized in the following table:
+\begin{table}[!ht]
+\centering
+\begin{tabular}{ccc}
+\hline
+name & weight type & density \\
+\hline
+GaussianBlobs & int & $|E|=O(|V|^2)$\\
+Two-level graph & float & $|E|=O(|V|^{3/2})$\\
+\hline
+\end{tabular}
+\end{table}
+We use CPU times to measure the time complexity of the algorithms, by scaling the two kinds of graphs, the experiment results are shown in Figure \ref{fig:esc}.
+As can be seen, our implementation is much faster than previous ones.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{pic/2019-08-26-gaussian.eps}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{pic/2019-09-19-two_level.eps}
+	\end{subfigure}
+	\caption{Empirical speed comparison of different PSP algorithms}\label{fig:esc}
+\end{figure}
+
+We notice that parametric flow based PSP  \citep{kolmogorov}  does not perform well in practice. This may be related with the extra cost to construct intermediate graph structures and maintain concurrent threads, which can not be neglectable in implementation.
 
 \section{Empirical Study of GBIC}\label{sec:es}
 In this section, we apply GBIC to various machine learning problems including community detection, link prediction, data clustering and outlier detection. In some problems we need to give decision criterion  based on the structure of GBIC. These decision criterions are empirically inspired and performs well in our experiment.  Our experiments
@@ -574,6 +607,14 @@ We prepare three artifical datasets to verify our empirical method. The first on
 	\includegraphics[width=\textwidth]{pic/outlier_boundary_illustration.eps}
 	\caption{Detection boundary lines of different methods on different artificial dataset}	\label{fig:boundary}
 \end{figure}
+
+For outlier detection tasks, we also compare GBIC with other commonly used techniques on three datasets: GaussianBlob, Moon and UCI Lymphography. The other methods include local outlier factor \citep{Breunig}, isolation forest \citep{if}, elliptic envelope \citep{rousseeuw1999fast} and one class SVM \citep{svm}. We use two metrics to measure the overall performance of the detection: true positive rate (TPR) and true negative rate (TNR). The inlier is treated as positive sample. TPR measures the percentage of right detection in inlier set while TNR measures that in outlier set. It is difficult for a method to achieve high score on both two metrics. We manage to maximize TNR while controlling TPR $\geq 90\%$ for each method. The hyper parameters and metric are tuned for each method and the best result of TNR is shown in Table \ref{tab:odm}. We can see that Info-Detection is competitive with local outlier factor and outperforms other methods on these datasets.
+
+\begin{table}
+\centering
+\input{id_compare.tex}
+\caption{Comparison of different outlier detection methods}\label{tab:odm}
+\end{table}
 
 The method presented in this section is an extension of Info-Detection \citep{zhao2019info}, in which the inliers are assumed to be only one class. Therefore it can handle more general cases and
 jointly do outliers and clustering tasks.
