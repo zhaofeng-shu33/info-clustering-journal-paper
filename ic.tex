@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%% file template.tex %%%%%%%%%%%%%%%%%%%%%%%%%
-%
+%\left( 
 % This is a general template file for the LaTeX package SVJour3
 % for Springer journals.          Springer Heidelberg 2010/09/16
 %
@@ -570,7 +570,7 @@ into two cases:
 \end{enumerate}
 
 Co-authorship datasets are a typical examplar to compare different prediction methods. We use the NIPS-authorship (00-17) dataset as in \cite{RN23}.
-Since the graph is sparse and it is hard to predict for some node with little connection information, we restrict the network to the 234 nodes whose degrees are larger than other cutting-off nodes. Since the prediction  is a hypothesis testing problem, we use true positive rate (TPR), true negative rate(TNR) and accuracy (ACC) as the evaluation metric. We compare GBIC with BHCD. For TPR and ACC our method achieves higher score.
+Since the graph is sparse and it is hard to predict for some node with little connection information, we restrict the network to the 234 nodes whose degrees are larger than other cutting-off nodes. Since the prediction  is a hypothesis testing problem, we use true positive rate (TPR), true negative rate(TNR) and accuracy (ACC) as the evaluation metric. We compare GBIC with BHCD and a local prediction method based on a metric called Resource Allocation Index \citep{zhou2009predicting}. For TPR our method achieves higher score.
 \begin{table}
 \centering
 \input{compare.tex}
