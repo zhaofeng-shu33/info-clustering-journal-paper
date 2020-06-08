@@ -76,17 +76,18 @@ grestore
 
 %\titlerunning{Short form of title}        % if too long for running head
 
-\author{First Author         \and
-        Second Author %etc.
+\author{Feng Zhao         \and
+        Yang Li \and %etc.
+        Fei Ma \and
+        Shao-Lun Huang \and
+        Lin Zhang
 }
 
 %\authorrunning{Short form of author list} % if too long for running head
 
-\institute{F. Author \at
-              first address \\
-              Tel.: +123-45-678910\\
-              Fax: +123-45-678910\\
-              \email{fauthor@example.com}           %  \\
+\institute{Feng Zhao \at
+              Department of Electronic Engineering, Tsinghua University, Beijing, PR China \\
+              \email{zhaof17@mails.tsinghua.edu.cn}           %  \\
 %             \emph{Present address:} of F. Author  %  if needed
            \and
            S. Author \at
@@ -104,10 +105,10 @@ We propose a graph-based hierarchical clustering method based on a multivariate 
 The proposed method can generate non-binary hierarchical tree that reveals the intrinsic structures in the data, with no hyper-parameter to tune. 
 The hierarchical tree can be computed efficiently using
 our improved algorithm. Besides clustering task, we show that our method can be adopted and
-used in outlier detection and community discovery problems.
+used in many other unsuperivised data mining tasks including community discovery problem, link prediction and outlier detection.
 Experiments show that the clustering result outperforms
 other hierarchical clustering techniques and is very suitable to find the complex community structure.
-\keywords{First keyword \and Second keyword \and More}
+\keywords{Clustering \and Multivariate Mutual Information \and Principal Sequence of Partition}
 % \PACS{PACS code1 \and PACS code2 \and more}
 % \subclass{MSC code1 \and MSC code2 \and more}
 \end{abstract}
@@ -658,19 +659,21 @@ jointly do outliers and clustering tasks.
 %\end{thebibliography}
 \appendix
 \section{Proofs}
+\subsection{Proof of Theorem \ref{thm:DPX}}
+We need the following Lemma to prove Theorem \ref{thm:DPX}:
 \begin{lemma}\label{lem:xyz}
-If $(X,Y)$ is weakly dependent with $Z$, then $X$ is weakly dependent with $Z$.
+	If $(X,Y)$ is weakly dependent with $Z$, then $X$ is weakly dependent with $Z$.
 \end{lemma}
 \begin{proof}
-From the definition of weakly dependence for two random variables, we have
-\begin{equation}
-P_{X,Y|Z=z}(x,y) = P_{X,Y}(x,y)(1+\epsilon \frac{\phi_z(x,y)}{\sqrt{P_{X,Y}(x,y)}}), z \in \mathcal{Z}
-\end{equation}
-Summing the above equation over $y\in \mathcal{Y}$ we have
-\begin{equation}
-P_{X|Z=z}(x) = P_X(x)(1+\epsilon\frac{\tilde{\phi}_z(x)}{\sqrt{P_X(x)}}),
-\textrm{ where } \tilde{\phi}_z(x) = \frac{\sum_{y\in Y} \sqrt{P_{X,Y}(x,y) }\phi_z(x,y)}{\sqrt{P_X(x)}}
-\end{equation}
+	From the definition of weakly dependence for two random variables, we have
+	\begin{equation}
+	P_{X,Y|Z=z}(x,y) = P_{X,Y}(x,y)(1+\epsilon \frac{\phi_z(x,y)}{\sqrt{P_{X,Y}(x,y)}}), z \in \mathcal{Z}
+	\end{equation}
+	Summing the above equation over $y\in \mathcal{Y}$ we have
+	\begin{equation}
+	P_{X|Z=z}(x) = P_X(x)(1+\epsilon\frac{\tilde{\phi}_z(x)}{\sqrt{P_X(x)}}),
+	\textrm{ where } \tilde{\phi}_z(x) = \frac{\sum_{y\in Y} \sqrt{P_{X,Y}(x,y) }\phi_z(x,y)}{\sqrt{P_X(x)}}
+	\end{equation}
 \end{proof}
 \begin{proof}[Proof of Theorem \ref{thm:DPX}]
 From the definition of weak dependence for more than 2 random variables, we can find a discrete distribution $U$ over $\{1, 2,\dots, K\}$, such that $X_1, \dots, X_n$ are independent conditioned on $U$. Since $(X_1, \dots, X_n)$ is weakly dependent with $U$, from Lemma \ref{lem:xyz}, it follows that $X_i$ is weakly dependent with $U$.  That is, 
@@ -756,7 +759,7 @@ D(P_{X_1,\dots, X_n}|| \prod_{C\in \P}P_{X_C}) & ={1 \over 2} \sum_{x_1,\dots,x_
 & = \frac{1}{2} \sum_{\substack{(i,j) \not\in C\\ C\in \P}} \norm{\widetilde{B}_{ij}}_F^2 + o(\epsilon^2)
 \end{align*}
 \end{proof}
-
+\subsection{Proof of Proposition \ref{prop:triangle}}
 \begin{proof}[Proof of Proposition \ref{prop:triangle}]
 
 We use deduction to show  
@@ -790,6 +793,7 @@ Also
 We then have $\sum_{(i,j) \in E(C_1)} w_{ij} \leq \frac{n_1-1}{n-1}\sum_{(i,j) \in E} w_{ij}$. From equation \eqref{eq:PPrelation} we have 
 $f[\P] \geq \frac{k-1}{n-1}\sum_{(i,j) \in E} w_{ij}$. That is, the result holds for $\abs{\P}=k$.
 \end{proof}
+\subsection{Proof of Proposition \ref{prop:main}}
 \begin{proof}[Proof of Proposition \ref{prop:main}]
 		In this proof, we make some notation convention.
 		$w(C) = \displaystyle\sum_{(i,j) \in E(C)} w_{ij},$
@@ -825,10 +829,13 @@ $f[\P] \geq \frac{k-1}{n-1}\sum_{(i,j) \in E} w_{ij}$. That is, the result holds
 		Combined with \eqref{eq:gammaNF}, adding equation \eqref{eq:convert} and \eqref{eq:summation} we can get
 		$w(\{i'\}, B') > \gamma_N$. Then $\sum_{j \in B}w_{ii'} > \gamma_N $ follows.
 \end{proof}
+
+\subsection{Proof of Proposition \ref{prop:reweight}}
+We need the following lemmas to prove Proposition \ref{prop:reweight}.
 \begin{lemma}[Corollary 5.1 in \cite{secretKey}]\label{lemma:laminarity}
-\begin{equation}\label{eq:P}
-I(Z_{C_1 \cup C_2}) \geq \min\{ I(Z_{C_1}), I(Z_{C_2})\}, \textrm{ for } C_1\cap C_2 \neq \emptyset
-\end{equation}
+	\begin{equation}\label{eq:P}
+	I(Z_{C_1 \cup C_2}) \geq \min\{ I(Z_{C_1}), I(Z_{C_2})\}, \textrm{ for } C_1\cap C_2 \neq \emptyset
+	\end{equation}
 \end{lemma}
 \begin{lemma}\label{lemma:sub}
 	If node set $S_1 \cap S_2 \neq \emptyset, S_1 \not\subseteq S_2$ and $I(Z_{S_1}) \geq I(Z_{S_2})$, then $S_2$ is not a cluster of $G$.
@@ -841,9 +848,8 @@ I(Z_{C_1 \cup C_2}) \geq \min\{ I(Z_{C_1}), I(Z_{C_2})\}, \textrm{ for } C_1\cap
 	For a complete graph $G(V,E)$ with equal weight $w$ on each edge, we have $I(Z_{V})=\frac{nw}{2}$ where $n=\abs{V}$. And $I(Z_S) < I(Z_V)$ for any subset $S\subsetneq V$.
 \end{corollary}
 \begin{proof}
-From Proposition \ref{prop:triangle}, $I(Z_{V})$ is achieved by $\P=\{\{1\},\dots,\{n\} \}$ and $I(Z_V) = I_{\P}(Z_V) = \frac{n(n-1)w/2}{n-1} = \frac{nw}{2} $. From bottom-up approach, $I(Z_V) = \max_{S\subset V} I(Z_S)$, therefore $I(Z_S) \leq I(Z_V)$. If $I(Z_S) = I(Z_V)$, consider $\P_S=\{i | i \in S\}$, then $I(Z_S) = I_{\P_S}(Z_S) = \frac{\abs{S}w}{2} < I(Z_V)$, a contradiction. Therefore, $I(Z_S) < I(Z_V)$ holds for any subset $S\subsetneq V$.
+	From Proposition \ref{prop:triangle}, $I(Z_{V})$ is achieved by $\P=\{\{1\},\dots,\{n\} \}$ and $I(Z_V) = I_{\P}(Z_V) = \frac{n(n-1)w/2}{n-1} = \frac{nw}{2} $. From bottom-up approach, $I(Z_V) = \max_{S\subset V} I(Z_S)$, therefore $I(Z_S) \leq I(Z_V)$. If $I(Z_S) = I(Z_V)$, consider $\P_S=\{i | i \in S\}$, then $I(Z_S) = I_{\P_S}(Z_S) = \frac{\abs{S}w}{2} < I(Z_V)$, a contradiction. Therefore, $I(Z_S) < I(Z_V)$ holds for any subset $S\subsetneq V$.
 \end{proof}
-
 \begin{proof}[Proof of Proposition \ref{prop:reweight}]
 	We will show that if $U \neq S_1$ and $U \neq S_2$, $U$ cannot be a cluster of $G$.
 	
@@ -859,7 +865,7 @@ If $m \geq \frac{nr}{2}$, we have $I_{\P}(Z_V) = \frac{m+rn(n-1)}{2n-1} \leq m =
 $I_{\P}(Z_V)  \leq  I_{\{S_1, S_2\}}(Z_V)$ since $\P$ is finer than $\{S_1, S_2\}$. Therefore, either $S_1$ or $S_2$ cannot be discoveried.
 
 \end{proof}
-
+\subsection{Proof of Proposition \ref{prop:alg_complexity}}
 \begin{proof}[Proof of Proposition \ref{prop:alg_complexity}]
 Let $\mu_i = \frac{n_i}{n} \leq \frac{1}{2}$. We proceed by induction to show $T(n) = O(n^4)$. More specifically, $T(n) \leq q C n^4$ where $ q = \frac{16}{5}$. $T(3)$ is a constant and $T(m) \leq q C m^4$ holds for $m=3$. Suppose
 	$T(m) \leq qC m^4$ holds for all $m \leq n-1$. Then for $T(n)$
@@ -888,7 +894,6 @@ Let $\mu_i = \frac{n_i}{n} \leq \frac{1}{2}$. We proceed by induction to show $T
 		& \leq C n^4 + 11 q C (\frac{n}{2})^4 = \frac{16}{5} C n^4
 	\end{align}
 \end{proof}	
-\section{Experiment Setup}
 \end{document}
 % end of file template.tex
 
