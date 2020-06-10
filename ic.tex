@@ -187,49 +187,50 @@ the local information geometry theory and the concept of weak dependency of two 
 next are the general info-clustering model and its relationship with principal sequence of partitions (PSP) of submodular function;
 the final part is about the original algorithm used to solve PSP problem when the submodular function
 is graph cut function.
-\subsection{Local Information Geometry}
-It is well known that KL-Divengence can be used to measure the distance of two probabistic distributions. When the two distributions are quite "near", that is, both of them are within a neighborhood of a distribution $P$, we can simplify the expression of KL-Divergence as the Euclid distance \citep{huang2017information}. To be more specific, we use the example of discrete distribution and use $P_0$ to represent a distribution on alphabet $\mathcal{X}$. We say $P$ is in a $\epsilon$-Neighborhood $N^{(\epsilon)}(P_0)$ of $P_0$ if
+\subsection{Local Information Geometry}\label{subsec:lig}
+It is well known that KL-Divergence can be used to measure the distance of two probabilistic distributions. When the two distributions are quite "near", that is, both of them are within a neighborhood of a distribution $P$, we can approximate the expression of KL-Divergence with "Euclid distance" \citep{huang2017information}. To be more specific, let $P_0$ represent a probability mass function (PMF) of a discrete distribution on alphabet $\mathcal{X}$. We say $P$ is in a $\epsilon$-Neighborhood $N^{(\epsilon)}(P_0)$ of $P_0$ if
 \begin{equation}
 P \in N^{(\epsilon)}(P_0) \iff \sum_{x \in \mathcal{X}} \frac{(P(x) - P_0(x))^2}{P(x)} < \epsilon^2
 \end{equation}
 The above equation can be expressed in concise form if we write $P(x) = P_0(x) + \epsilon
-\sqrt{P_0(x)} \phi(x)$, in which $\phi(x)$ is treated as feature vector. Then we have $||\phi || < 1$.
+\sqrt{P_0(x)} \phi(x)$, in which $\phi(x)$ is treated as the feature vector. Then the euclidean norm $||\phi || < 1$.
 If both $P_1, P_2 \in N^{(\epsilon)}(P_0)$ we have
 \begin{equation}\label{eq:approx:ig}
 D(P_1 || P_2) = \frac{\epsilon^2}{2} ||\phi_1 - \phi_2||^2 + o(\epsilon^2)
 \end{equation}
-In addition, the above result can be used when two random variables are weakly independent \citep{huang2019universal}. That is, we say $X$ and $Y$ are weakly dependent if the conditional distribution $Y|X(\cdot |x) \in N^{(\epsilon)}(Y)$ for all $x \in \mathcal{X}$. Under the assumption of
-weak dependence the mutual information, which is defined by $D(P_{XY}||P_XP_Y)$ can be expressed
+In addition, the above result can be used when two random variables are weakly independent \citep{huang2019universal}. We say $X$ and $Y$ are weakly dependent if the conditional PMF $P_{Y|X}(\cdot |x) \in N^{(\epsilon)}(Y)$ for all $x \in \mathcal{X}$. Under the assumption of
+weak dependence, the mutual information, which is defined by $D(P_{XY}||P_XP_Y)$, can be expressed
 in concise form:
 \begin{equation}\label{eq:Ixy}
 I(X;Y) = \frac{1}{2}\sum_{x\in \mathcal{X}, y\in \mathcal{Y}} B^2(x,y) + o(\epsilon^2) \textrm{ where }  B(x,y)=\frac{P_{X,Y}(x,y) - P_X(x) P_Y(y)}{\sqrt{P_X(x)P_Y(y)}}
 \end{equation}
-To simplify the notation, the term $\sum_{x\in \mathcal{X}, y\in \mathcal{Y}} B^2(x,y)$ can be regarded as the square of Frobenious norm $\norm{B}_F^2$ for matrix $\bm{B}$. Equation \eqref{eq:Ixy} gives the domaint term
+To simplify the notation, the term $\sum_{x\in \mathcal{X}, y\in \mathcal{Y}} B^2(x,y)$ can be regarded as the square of Frobenius norm $\norm{B}_F^2$ for matrix $B$. Equation \eqref{eq:Ixy} gives the dominant term
 of the mutual information when the random variables are weakly dependent.
 
 \subsection{Theoretical Info-Clustering}
-There are many ways to extend mutual information for multiple random variables. \cite{ic2016} gives one based on partition of set $V$. All partitions of $V$ except for $\{V\}$ consists the non-trivial partition collection $\Pi'(V)$ and the multivariate mutual information(MMI) of $\{Z_i | i \in V\}$ is defined as:
+There are many ways to extend mutual information for multiple random variables. \cite{ic2016} gives one extension based on partition of set $V$. We use $\Pi'(V)$ to represent all partitions of $V$ except for $\{V\}$. The multivariate mutual information (MMI) of $\{Z_i | i \in V\}$ is defined as:
 \begin{align}\label{eq:IZV}
 I(Z_V) &:= \min_{P \in \Pi'(V)} I_{P}(Z_V) \textrm{ where} \\
 I_P(Z_V) &:= \frac{1}{|P| - 1}D(P_{Z_V} || \prod_{C\in P} P_{Z_C})
 \end{align}
-Based on the definition of MMI, the cluster can be obtained by considering all maximal subsets $B$ such that $I(Z_B) > \lambda$ for a certain threshold $\lambda$. All such $B$ consists of $\mathcal{C}(Z_V)$.
-This is the theoretical definition of clusters, which is equivalent to the algorithmic one:
+Based on the definition of MMI, the cluster can be obtained by considering all maximal subsets $B$ such that $I(Z_B) > \lambda$ for a certain threshold $\lambda$. All such $B$ consists of the cluster set $\mathcal{C}_{\lambda}(Z_V)$. We call $\gamma$ is a threshold value for info-clustering if $C_{\lambda}(Z_V)$ changes at $\lambda=\gamma$.
+This theoretical definition of clusters is also equivalent to the algorithmic one:
 
 \begin{equation}\label{eq:CZV}
 C(Z_V) = \{ V\} \cup \bigcup_{B \in \mathcal{C}_{\lambda_1}} \mathcal{C}(Z_B) \textrm{ where } \lambda_1 = I(Z_V)
 \end{equation}
 
-Equation \eqref{eq:CZV} gives a divisive approach to obtain all clusters and threshold values from
+Equation \eqref{eq:CZV} gives a divisive approach to obtain all clusters $C(Z_V)$ and threshold values from
 the largest set $V$ and smallest threshold value $\lambda_1$. However, we cannot get a feasible algorithm
 to compute the clusters since it is unknown how to compute $I(Z_V)$.
-To get over this difficulty a relationship between $I(Z_V)$ and a special kind of submodular function minimization problem is established \citep{mac}: All threshold values and clusters are the same as those of
-the following optimization problem with $f[\mathcal{P}]=D(P_{Z_V} || \prod_{C\in P}P_{Z_C})$:
+To get over this difficulty a relationship between $I(Z_V)$ and
+a special kind of submodular function minimization problem is established \citep{mac}. All threshold values and clusters are the same as those of
+the following optimization problem with:
 \begin{align}\label{eq:hPLambda}
 h_{\mathcal{P}}(\lambda) &= f[\mathcal{P}] - |\mathcal{P}| \lambda \notag\\
 h(\lambda) &= \min_{\mathcal{P} \in \Pi'(V)}h_{\mathcal{P}}(\lambda)
 \end{align}
-In the above equation, $h(\lambda)$ is a piecewise linear function about $\lambda$ with turning points
+In the above equation, $f[\mathcal{P}]=D(P_{Z_V} || \prod_{C\in P}P_{Z_C})$. We can see that $h(\lambda)$ is a piecewise linear function about $\lambda$ with turning points
 $\lambda_1, \dots, \lambda_{k}$. The general solution for \eqref{eq:hPLambda} can be written as
 \begin{equation}\label{eq:PSP_structure}
 h(\lambda) = \begin{cases} h_{P_0}(\lambda) & \lambda < \lambda_1 \\
@@ -238,28 +239,30 @@ h_{P_k}(\lambda) & \lambda \geq \lambda_k
 \end{cases}
 \end{equation}
 Furthermore, we have $P_0 \succeq P_1 \dots \succeq P_k$ \citep{narayanan}. That is, partition $P_{i+1}$ is a refinement of $P_i$.
+And $C_{\lambda_i} =\{C | C\in \P_i, \abs{C} > 1\}$.
 
-Another link between MMI and threshold values is established by \citet{agg_ic} as 
+A relationship between MMI and the largest threshold value is established by \citet{agg_ic} as 
 \begin{equation}\label{eq:largest_threshold}
 \lambda_k = \max_{B\subseteq V} I(Z_B)
 \end{equation}
 \subsection{Efficient Algorithm to solve PSP structure}
-\cite{narayanan} proposes a divide and conquer approach to solve the PSP structure from equation \eqref{eq:hPLambda} for a general submodular function. Since the optimal partition is $P_0 = \{V\}$ when $\lambda=0$ and the partition is $P_k=\{\{1\}, \{2\}, \dots, \{|V|\}\}$ when $\lambda$ is quite large,
+\cite{narayanan} proposes a divide and conquer approach to solve the PSP structure from equation \eqref{eq:hPLambda} for a general submodular function $f[\P]$.
+Since the optimal partition is $P_0 = \{V\}$ when $\lambda=0$ and the partition is $P_k=\{\{1\}, \{2\}, \dots, \{|V|\}\}$ when $\lambda$ is quite large,
 his method starts from two endpoints $\lambda_i = 0, \lambda_j = +\infty$ and find the intersection of 
 $h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$. Then we compute a partition $P'$ such that $h(\lambda') = h_{P'}(\lambda')$. By definition $h(\lambda') \leq h'$ and when the strict inequality is taken we can repeat the process within $(\lambda_i, \lambda')$ and $(\lambda', \lambda_j)$ respectively. The above procedure is summarized in Algorithm \ref{alg:psp}.
 \begin{algorithm}
 \caption{PSP algorithm}\label{alg:psp}
 \begin{algorithmic}[1]
-\REQUIRE Statistics of $Z_V$ sufficient for calculating $f(B)$ for all $B \subseteq V$
-\ENSURE A sorted critical value array \textbf{L} and a reverse ordered array \textbf{PSP} containing $\P_1,\dots, P_k$.
+\REQUIRE Statistics of $Z_V$ sufficient for calculating $f[B]$ for all $B \subseteq V$
+\ENSURE A sorted critical value array \textbf{L} and a reverse ordered array \textbf{PSP} containing $\P_1,\dots, \P_k$.
 \STATE \textbf{L}  $\leftarrow$ empty list.
 \STATE $Q\leftarrow \{V\}, P \leftarrow \{ \{i \} | i \in V\}$
 \STATE $\mathbf{PSP}= [Q, P]$
 \STATE \texttt{Split}$(Q,P)$
 \STATE sort $L$ and sort $\mathbf{PSP}$ with respect to $\succeq$ 
 \FUNCTION{\texttt{Split}$(Q,P)$}
- \STATE\label{alg:gamma} $\gamma' = {1 \over \abs{P} - \abs{Q}} (f(P)-f(Q))$
- \STATE $h' = {1 \over \abs{P} - \abs{Q}}(\abs{P} f(Q) - \abs{Q} f(P))$
+ \STATE\label{alg:gamma} $\gamma' = {1 \over \abs{P} - \abs{Q}} (f[P]-f[Q])$
+ \STATE $h' = {1 \over \abs{P} - \abs{Q}}(\abs{P} f[Q] - \abs{Q} f[P])$
  \STATE $(\tilde{h}, P') = \texttt{DT}(f,\gamma')$ \footnotemark
  \IF{$\tilde{h} = h'$}
  	\STATE insert $\gamma'$ to $\mathbf{L}$
@@ -272,34 +275,38 @@ $h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$. Then we compute a partiti
 \end{algorithmic}
 \end{algorithm}
 
-In Algorithm \ref{alg:psp}, a function DT is used to get the miminal value. There are some candicates for this function, throughout this paper we use the one proposed by \cite{mac}. Since the theoretical and algorithmic detail is not correlated with this paper, we omit their introduction.
+In Algorithm \ref{alg:psp}, a function \texttt{DT} is used to get the minimal value of Equation \eqref{eq:hPLambda}.
+One of implementation of  \texttt{DT} is described by \cite{mac} and we omit it here.
 
-\section{Formulation of graph-based Info-clustering}\label{sec:GBIC}
+\section{Formulation of Graph-based Info-clustering}\label{sec:GBIC}
+
+In this section, we will extend info-clustering theory and focus specifically on graph model. We call our approach graph-based info-clustering (GBIC).
+We will also explore various theoretical
+properties of GBIC, which guides the empirical extension of GBIC to other unsupervised learning tasks.
 
 General model of Info-Clustering is not very useful since we know little about the joint distribution.
-We need to do some kind of model reduction to get some useful model. In particular, it has been shown
-by \cite{ic2016} that when $Z_1, \dots, Z_n$ forms a Markov chain, then we can get a model called Mutual Information Relevance Network \citep{butte1999mutual}. In the following section we will show
-that the general model reduces to our graph-based Info-Clustering when $Z_1, \dots, Z_n$ are weakly
-independent. The relationship of these two special models, together with their parent model, are shown
-in the Vienn diagram in Fig. \ref{fig:relationship} % For one-column wide figures use
+We need to do some kind of model reduction to get some useful model. 
+In the following section we will use local information geometry to reduce the general model of info-clustering to our GBIC.
+%. The relationship of these two special models, together with their parent model, are shown
+% in the Vienn diagram in Fig. \ref{fig:relationship} % For one-column wide figures use
 
-\begin{figure}
-\centering
+%\begin{figure}
+%\centering
 % Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
-  \includegraphics[width=6cm]{relationship.eps}
+%  \includegraphics[width=6cm]{relationship.eps}
 % figure caption is below the figuregit
-\caption{General Info clustering models reduces to GBIC or MIRN model respectively under different assumptions for the joint distribution}
-\label{fig:relationship}       % Give a unique label
-\end{figure}
+%\caption{General Info clustering models reduces to GBIC or MIRN model respectively under different assumptions for the joint distribution}
+%\label{fig:relationship}       % Give a unique label
+%\end{figure}
 
-From local geometry information it is known that two random variables $X$ and $Y$ are weakly dependent if
-\begin{equation}
-P_{Y|X=x}(y) = P_Y(y) +\epsilon \phi_x(y) \sqrt{P_Y(y)}
-\end{equation}
-where $\norm{\phi_x}\leq 1$.
+%From local geometry information it is known that two random variables $X$ and $Y$ are weakly dependent if
+%\begin{equation}
+%P_{Y|X=x}(y) = P_Y(y) +\epsilon \phi_x(y) \sqrt{P_Y(y)}
+%\end{equation}
+%where $\norm{\phi_x}\leq 1$.
 
-For multiple random variables we give:
+First we introduce the concept of weak dependency for multiple random variables.
 
 \begin{definition}\label{def:general}
 $X_1, \dots, X_n (n\geq 3)$ are weakly dependent if there exist a random variable $U$ such that
@@ -307,37 +314,67 @@ $(X_1, \dots, X_n)$ is weakly dependent with $U$ and $X_1, \dots X_n$ are indepe
 on $U$.
 \end{definition}
 
+This definition is an extension of weak dependence for two random variables mentioned in Section \ref{subsec:lig}.
+For example, suppose $X=(X_1, \dots, X_n)$ are joint Gaussian and its covariance matrix concentrates on the diagonal lines.
+Intuitively $X_1, \dots, X_n$ are near independent since the non-diagonal value of covariance matrix is very small. 
+And actually we can find another $n$ dimensional Gaussian random vector $U$ such that the correlation of $X$ and $U$ are small
+and $\mathrm{Cov}(X|U)$ is diagonal matrix. Then by Definition \ref{def:general} we say $X_1, \dots, X_n$ are weakly dependent.
+For clustering tasks, it is impossible to compute the joint distribution from limited data and it is better to make some
+assumptions on the distribution. And in this article, we make the assumption of weak dependency, which is indeed better than totally
+independence and competitive to parametric Bayesian assumption.
+
 Let $\P$ be the partition of $V=\{1,2,\dots, n\}$. We claim:
 \begin{theorem}\label{thm:DPX}
 If $X_1, \dots, X_n$ are weakly dependent, then
-\begin{equation}
+\begin{equation}\label{eq:PXV}
 D(P_{X_V} || \prod_{C\in \P} P_{X_{C}}) = {1 \over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \P}} \norm{B_{ij}}_F^2 + o(\epsilon^2)
 \end{equation}
 \end{theorem}
-We can see that Theorem \ref{thm:DPX} is an extension of the approximation of mutual equation in Equation \eqref{eq:Ixy} to the case of multiple random variables. We can treat the B matrix term ${1 \over 2} \norm{B_{ij}}_F^2$
-as the capacity weight for a graph. To get the required KL-Divergence under a given partition, we only need to make a
-summation of these weight terms.
+We can see that Theorem \ref{thm:DPX} is an extension of the approximation of mutual equation in Equation \eqref{eq:Ixy} to the case of multiple random variables.
+$B_{ij}$ is the B matrix between random variable $X_i$ and $X_j$.
+% To get the required KL-Divergence under a given partition, we only need to make a
+%summation of these weight terms.
 
-Theorem \ref{thm:DPX} inspires us to get a simpler model
-called Graph-Based Info-Clustering from
-Equation \eqref{eq:IZV}.
+Theorem \ref{thm:DPX} is a statement about random variables. Given a $K-$ cluster dataset with $n$ samples, there are $K$ random variables. 
+If we consider a total partition $\P=\{ \{X_1\}, \dots, \{X_K\}\}$, to compute Equation \eqref{eq:PXV} we only need to compute the pairwise B matrix related
+quantity. Assume Cluster i $X_i$ with alphabet size $\abs{\mathcal{X}_i}$
+such that $\sum_{i=1}^K \abs{\mathcal{X}_i} = n$,
+since $X_i$ and $X_j$ are weakly independent for $i\neq j$, we can show that
+\begin{equation} 
+P_{X_iX_j}(x_i, x_j) = P_{X_i}(x_i)P_{X_j}(x_j) + \epsilon \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} \phi_{X_iX_j}(x_i, x_j) + o(\epsilon)
+\end{equation}
+Therefore from Equation \eqref{eq:Ixy}, we have $\norm{B_{ij}}_F^2 = \sum_{x_i \in \mathcal{X}_i, x_j \in \mathcal{X}_j} \phi^2_{X_iX_j}(x_i, x_j)$ and Equation \eqref{eq:PXV} can be computed for the total partition.
+
+For other non-trivial partitions of $X_1, \dots, X_k$, the same procedure can be carried and we have the following expression in terms of data.
+\begin{equation}\label{eq:PXV_Data}
+D(P_{X_V} || \prod_{C\in \P} P_{X_{C}}) = {1 \over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \P}} \sum_{x_i \in \mathcal{X}_i, x_j \in \mathcal{X}_j}  \phi_{X_iX_j}(x_i, x_j) + o(\epsilon^2)
+\end{equation}
+We can treat the term $\phi^2_{X_iX_j}(x_i, x_j)$ as the capacity weight for a graph, with each data sample as a vertex.
+We then expand each $X_i$ to its alphabet and treat the partition $\P$ as partition of the graph vertices. Also we omit the high order terms $o(\epsilon^2)$ and write
+$w_{ij} = \phi^2_{X_{d(x_i)}X_{d(x_j)}}(x_i, x_j)$ where $d(x_i)$ maps the vertex to its underlining random variable index, $1\leq i,j \leq \abs{V}$.
 
 Consider a directed graph
 \footnotetext{without loss of generality we only consider directly graph to reduce computing complexity in algorithm part}
-$G(V, E)$ where the edge weight $w$ is nonnegative and represents pairwise similarity of nodes. For a subset $C$ of $V$, $f(\cdot)$ is graph cut function, that is $f(C) = \sum_{i\not\in C, j\in C, (i,j) \in E} w_{ij}$. To measure the similarity shared by multiple nodes, we use the following metric.
-\begin{definition}[multivariate similarity]\label{def:ms}
+$G(V, E)$ where the edge weight $w$ is non-negative and represents pairwise similarity of nodes. For a subset $C$ of $V$, $f(\cdot)$ is graph cut function, that is $f(C) = \sum_{i\not\in C, j\in C, (i,j) \in E} w_{ij}$. Combing Equation \ref{eq:IZV, eq:PXV_Data} we have
+\begin{definition}\label{def:ms}
 \begin{align}
 I_{\P}(Z_V) & := \frac{ f[\P] }{  \abs{\mathcal{P}} - 1 } \textrm{ where } f[\P] = \sum_{C\in \P}f(C)\\
 I(Z_V) & := \min_{\mathcal{P} \in \Pi'(V)} I_{\mathcal{P}}(Z_V)  \label{eq:ms}
 \end{align}
 \end{definition}
-The quantity $I(Z_V)$ in equation \eqref{eq:ms} is called \textbf{multivariate similarity} of $G$. We can also compute multivariate similarity for subgraph $G'(V',E')$ of $G$, denoted by $I(Z_{V'})$. Multivariate similarity is an extension of pairwise similarity. When $V'=\{i,j\}$, we have $I(Z_{V'})=w_{ij}$ from above definition.
+The quantity $I(Z_V)$ in equation \eqref{eq:ms} is called MMI of $G$. We can also compute MMI for subgraph $G'(V',E')$ of $G$, denoted by $I(Z_{V'})$. When $V'=\{i,j\}$, we have $I(Z_{V'})=w_{ij}$ from above definition.
 
-To perform clustering tasks using our multivariate similarity we proceed in a divisive way as Equation \eqref{eq:CZV}. Instead of focusing on each clusters, we are trying to get the cluster tree $\mathcal{T}$. A hierarchical tree $\mathcal{T}$ of $G$ is a rooted tree. Each node in $\mathcal{T}$ is represented by a subset $S \subset V$. Its root node is $V$ and its leaf node is $\{j\}$. Each non-leaf node of $\mathcal{T}$ is called a cluster of graph $G$.
+To reduce the general model to GBIC, we also assume that each random variable $X_i$ only takes discrete values from $\mathcal{X}_i$. This is all observed samples belong to Cluster i. To apply GBIC on empirical experiment, $w_{ij}$ should be chosen property. From its definition, $w_{ij} \geq 0$. When $w_{ij} = 0$ we say there is no edge between
+node $i$ and node $j$. The choice of $w_{ij}$ is not unique. From engineering prospective, the rbf kernel $w_{ij} = \exp(-\gamma \norm{x_i - x_j}^2)$ is a not bad choice
+where $\gamma$ is a positive parameter to be tuned.
+
+To perform clustering tasks on our GBIC model, it is the same procedure as the general infor-clustering model. That is, we proceed in a divisive way as Equation \eqref{eq:CZV}. Finally, we can get the cluster tree $\mathcal{T}$. A hierarchical tree $\mathcal{T}$ of $G$ is a rooted tree. Each node in $\mathcal{T}$ is represented by a subset $S \subset V$. Its root node is $V$ and its leaf node is $\{j\}$. Each non-leaf node of $\mathcal{T}$ is called a cluster of graph $G$.
 
 For a graph $G$, suppose $I_{\P^*}(Z_V)=I(Z_V)$, each element of $\P^*$ is a child of the hierarchical tree root $V$. For each child node set $C$, use partition $\P_C$ where $I(Z_C)=I_{\P_C}(Z_C)$ to split it until this tree branch is divided into singletons.
 
 Besides the above top-down approach, there is an equivalent "bottom-up" build procedure inspired from Equation \eqref{eq:largest_threshold}: For a graph $G$, suppose $I(Z_C) = \max_{B\subseteq V} I(Z_B)$ and $C$ is maximal, merge elements of $C$ together and contract $G$ to a smaller graph. At each step select the set with maximal multivariate similarity to contract the graph until the graph is contracted to a single node, which is the tree root.
+
+Based on our assumption, multiple tree leaf node is assumed to join a stem node $X_i$ or one leaf node is a random variable $X_j$. In the later case, we say $X_j$ is an outlier.
 
 The two procedures are illustrated by Fig. \ref{fig:ta}. For the top-down approach, there may be multiple partition $\P$ that reaches the minimum in \eqref{eq:ms}, we can show that there is a unique finest partition and this one is used; for the bottom-up approach, there may be multiple intersecting subsets with equal maximal multivariate similarity, we can show that the union of these subsets also reach the maximal and maximal $C$ is well defined.
 %proof in attachment, before the proof of the above proposition. (2 statements)
