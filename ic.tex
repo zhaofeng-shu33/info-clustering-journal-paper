@@ -275,7 +275,7 @@ $h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$. Then we compute a partiti
 \end{algorithmic}
 \end{algorithm}
 
-In Algorithm \ref{alg:psp}, a function \texttt{DT} is used to get the minimal value of Equation \eqref{eq:hPLambda}.
+In Algorithm \ref{alg:psp}, a function \texttt{DT} (Dilworth truncation) is used to get the minimal value of Equation \eqref{eq:hPLambda}.
 One of implementation of  \texttt{DT} is described by \cite{mac} and we omit it here.
 
 \section{Formulation of Graph-based Info-clustering}\label{sec:GBIC}
@@ -387,7 +387,7 @@ Based on our assumption, the tree leaf nodes are data samples and they are joine
 	\includegraphics[width=\textwidth]{GBIC.pdf}
 	\caption{hierarchical tree generation based on GBIC. There are 10 data samples and 4 underlining clusters. The cluster of triangles joins the cluster of circles and the cluster of squares joins the cluster of pentagons. Finally, the intermediate two super-clusters joins at the tree root}\label{fig:ta}
 \end{figure}
-Consider 10 data samples and their feature vectors are on Euclidean plane, as shown in Figure \ref{fig:ta}. The underlining graph with 10 nodes is weighted  by $w_{ij} = \exp(-\norm{x_i - x_j}^2)$. Let $X_1, X_2, X_3, X_4$ represents the square, pentagon, circle and triangle samples respectively. We can write the clustering solution \footnotetext{computed by Algorithms introduced in the next Section} as:
+Consider 10 data samples and their feature vectors are on Euclidean plane, as shown in Figure \ref{fig:ta}. The underlining graph with 10 nodes is weighted  by $w_{ij} = \exp(-\norm{x_i - x_j}^2)$. Let $X_1, X_2, X_3, X_4$ represents the square, pentagon, circle and triangle samples respectively. We can write the clustering solution \footnote{computed by Algorithms introduced in the next Section} as:
 \begin{equation*}
 \P = 
 \begin{cases}
@@ -397,7 +397,10 @@ Consider 10 data samples and their feature vectors are on Euclidean plane, as sh
 \{\{X_1\},\{X_2\},\{X_3\},\{X_4\}\} & 0.59 \leq \lambda \geq 0.98
 \end{cases}
 \end{equation*}
-When $\lambda > 0.98$, some clusters are split further to data samples and we omit the partition of data samples. Although the clustering tree does not distinguish $\{\{X_1\},\{X_2\},\{X_3,X_4\}\}$ from $\{\{X_1,X_2\},\{X_3\}, \{X_4\}\}$, the partition $\{\{X_1,X_2\},\{X_3\}, \{X_4\}\}$ does not exist.
+When $\lambda > 0.98$, some clusters are split further to data samples.
+Although the clustering tree does not distinguish
+$\{\{X_1\},\{X_2\},\{X_3,X_4\}\}$ from $\{\{X_1,X_2\},\linebreak[2] \{X_3\}, \{X_4\}\}$,
+the partition $\{\{X_1,X_2\},\{X_3\}, \{X_4\}\}$ does not exist.
 \end{example}
 
 Since GBIC is a special model of info-clustering, all theoretical properties of info-clustering apply to GBIC as well. Besides, we will give some extra properties (Proposition \ref{prop:triangle} to \ref{prop:main}), which are specific to GBIC model.
@@ -421,23 +424,23 @@ m$ and the recovery is possible. If $m\geq \frac{nr}{2}$, the recovery is not po
 
 In later part we will show how the result of Proposition \ref{prop:reweight} can be used to build a hierarchical discovery method in community detection problems.
 
-Besides considering static graph $G$, there is often a problem to consider which cluster the new observation belongs to.
-To model this, we add a new node $i'$ to the existing graph $G$.
-Let $V'=B \cup \{i'\}$, we can compute $\gamma'_N$ for the new graph $G(V', E(V'))$ and compare it with $\gamma_N$. From equation \eqref{eq:largest_threshold} $\gamma'_N \geq \gamma_N$ holds in general. It can be shown that we do not need to compute $\gamma'_N$ to determine whether $\gamma'_N>\gamma_N$. We summarize our main result as follows:
+Besides considering static graph $G$, there is often a problem to consider which cluster a new observation belongs to.
+To model this, we add a new node $i'$ to the existing graph $G$. Let $\gamma_N$ represents the largest critical value
+and $V'=B \cup \{i'\}$, we can compute $\gamma'_N$ for the new graph $G(V', E(V'))$ and compare it with $\gamma_N$. From equation \eqref{eq:largest_threshold} $\gamma'_N \geq \gamma_N$ holds in general. It can be shown that we do not need to compute $\gamma'_N$ to determine whether $\gamma'_N>\gamma_N$. We summarize our main result as follows:
 \begin{proposition}\label{prop:main}
 \begin{equation}
 \gamma'_N > \gamma_N \iff  \sum_{i \in B} w_{ii'} > \gamma_N 
 \end{equation}
 \end{proposition}
-Proposition \ref{prop:main} gave a method to check whether the newly added node destroys the outermost structure of the original clustering tree.  In later part we will show how this result can be used to build our Info-Detection method for outlier detection problem.
+Proposition \ref{prop:main} gave a method to check whether the newly added node destroys the clustering set structure of the original clustering tree.  For example, suppose we add a square sample to Fig \ref{fig:ta} from the upper right position. If it is near to the square cluster, the newly added sample is belonging to the cluster. Otherwise it is an outlier. In later part we will show more precisely how this result can be used to deal with outlier detection problem.
 \section{Improved PSP Algorithms}\label{sec:alg}
-To compute the clusters in GBIC, we use an indrect method. That is, we first compute the PSP structure defined in Equation \eqref{eq:PSP_structure}. Then from the established equivalence of the nested partition and the clustering tree, the hierarchical
-clustering results are obtained.
+To compute the clusters in GBIC, we first compute the PSP structure defined in Equation \eqref{eq:PSP_structure}. Then from the established equivalence of the nested partition and the clustering tree, the hierarchical
+clustering results are obtained. This procedure is the same with the general model of info-clustering and the algorithm to computing PSP structures is not limited to our model. In this section, we will give a faster algorithm to compute PSP structures for a general directed graph.
 
 \subsection{Formulation of PSPI}
-Compared with Algorithm \ref{alg:psp}, we will give an improved algorithm in this Section using the same \texttt{DT} routine. We notice that different invocation of DT is independent and does not utilize the intrinsic hierarchical structure in the original version of PSP algorithm \cite{narayanan}. If the hierarchical tree structure is used, we can invoke DT on smaller graph in later computation and make the total computation one order of magnitude faster than previous.
+Our improved algorithm will use the same \texttt{DT} routine as mentioned Algorithm \ref{alg:psp}. We notice that different invocation of \texttt{DT} is independent and does not utilize the intrinsic hierarchical structure in the original version of PSP algorithm \cite{narayanan}. If the hierarchical tree structure is used, we can invoke \texttt{DT} on smaller graph in later computation and make the total computation one order of magnitude faster than previous.
 
-To be more specific, suppose we get $P_i = {C_1, \dots, C_t}$ for the first invocation of DT. Then we can compute PSP for each $C_i(i=1,\dots, t)$ respectively and construct those $P_j(j>i)$ from the subgraph computation. For $P_j(j<i)$, we can contract the graph $G$  to $G^t$ which has $t$ nodes by contracting each $C_i$ to a single node. By applying DT to $G^t$ can we get $P_j(j<i)$. We summarize our improved version (PSPI) in Algorithm \ref{alg:psp_i_simplified}.
+To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first invocation of DT. Then we can compute PSP for each $C_i(i=1,\dots, t)$ respectively and construct those $P_j(j>i)$ from the subgraph computation. For $P_j(j<i)$, we can contract the graph $G$  to $G^t$ which has $t$ nodes by contracting each $C_i$ to a single node. By applying DT to $G^t$ can we get $P_j(j<i)$. We summarize our improved version (PSPI) in Algorithm \ref{alg:psp_i_simplified}.
 
 \begin{algorithm}
 	\caption{An Improved Principal Sequence of Partition Algorithm}\label{alg:psp_i_simplified}
