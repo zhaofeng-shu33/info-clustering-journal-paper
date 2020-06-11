@@ -104,8 +104,9 @@ grestore
 We propose a graph-based hierarchical clustering method based on a multivariate information metric.
 The proposed method can generate non-binary hierarchical tree that reveals the intrinsic structures in the data, and is robust against outliers. 
 The hierarchical tree can be computed efficiently using
-our improved algorithm, which is one order of magnitude faster than previous. Besides clustering analysis,our method can be adopted and
-used in many other unsuperivised data mining tasks including community discovery problem, link prediction and outlier detection.
+our improved algorithm, which is one order of magnitude faster than previous.
+Besides clustering analysis, our method can be adopted and
+used in many other unsupervised data mining tasks including community discovery, link prediction and outlier detection.
 Experiments show that the clustering result outperforms
 other hierarchical clustering techniques and is competent for more difficult unsupervised learning tasks.
 \keywords{Clustering \and Multivariate Mutual Information \and Principal Sequence of Partition}
@@ -118,13 +119,13 @@ other hierarchical clustering techniques and is competent for more difficult uns
 % background information goes here
 Clustering Analysis is an important research topic in machine learning.
 It has wide applications in many areas. For example, to track the epidemic
-sources within a community and assist for the model of natural disasters with observed data.
+sources within a community \citep{epidemic2020} and assist for the model of natural disasters with observed data \citep{earthquake2016}.
 
 There are many different methods for clustering analysis. One of them is called
 hierarchical clustering. The classical method of hierarchical clustering uses the Euclid distance between samples
 as the metric to merge the most similar pairs until all the samples are merged into a clustering
 tree \citep{slink}. Compared with other clustering method, hierarchical clustering can better describe the relationship between different clusters. Still, the classical hierarchical clustering method has some
-drawbacks. One of them is pairwise merging, which is not optimal since it does not consider information shared among more than two clusters. Besides, the criterion to split the clustering tree into a flat clustering structure is arbitrary set and lacks explanations, which bring some mysteries in practical
+drawbacks. One of them is pairwise merging, which is not optimal since it does not consider information shared among more than two clusters. Besides, the criterion to split the clustering tree into a flat clustering structure is arbitrary and lacks explanations, which bring some mysteries in practical
 usage.
 
 In recent 20 years, there are many emerging hierarchical clustering methods which brought new insights into this area. These new methods arise from combination of different domain knowledge and
@@ -136,7 +137,7 @@ graph partition based on Dasgupta's cost \citep{dasgupta2016cost},
 Gradient-based Hierarchical Clustering based on hyperbolic geometry \citep{hyperbolic} etc.
 These methods have both advantages and disadvantages.
 Practitioners need to choose the proper method according to the specific problem.
-For example, an extension called Bayesian Rose Trees of Bayesian clustering
+For example, an extension of Bayesian clustering, called Bayesian Rose Trees 
 can produce non-binary hierarchical tree
 under a given probabilistic model \citep{blundell2011discovering}.
 But Bayesian model has many hyper-parameters to tune and the clustering results between different runs may vary greatly because of its intrinsic randomness. For problems with stable requirement it
@@ -147,7 +148,7 @@ Besides the hierarchical methods mentioned above, there is a specific branch whi
 are mostly empirically inspired and may not reflect the true underlining probabilistic model of the data.
 Either variants of mutual information or some other kind of information-theoretic metric is used in the past literature. For the former method, the metric of mutual information is used and an agglomerative scheme is adopted \citep{mim}. The mutual information between samples and cluster labels is estimated using Parzen's window, which is a kind of Gaussian mixture model. Such adoption
 has some theoretical benefits but suffers from sub-optimization of mutual information cost in the agglomerative approximation.
-For the latter part, i.e., other information metrics, there has been some discussion about using Information Potential\citep{ic2002}. However, this metric replies on Gaussian kernels and there is only approximate greedy algorithms to compute this metric. It is until the proposal of multivariate mutual information metric in clustering that there is some breakthrough \citep{ic2016}.
+For the latter part, i.e., other information metrics, there has been some discussion about using Information Potential \citep{ic2002}. However, this metric replies on Gaussian kernels and there is only approximate greedy algorithms to compute this metric. It is until the proposal of multivariate mutual information metric in clustering that there is some breakthrough \citep{ic2016}.
 
 Multivariate mutual information, as its name suggests, is an extension of mutual information for multiple
 random variables. Using such metric as the thresholds, \citet{ic2016} shows that we can get a clustering
@@ -159,34 +160,32 @@ Therefore, we call our method graph-based info-clustering (GBIC).
 
 Restricting info-clustering from abstract probabilistic space to graph model can be theoretically formulated from the local regime assumption of distributions. It's known that estimation of mutual information between $X$ and $Y$ from data is a hard task but when $X$ and $Y$ are nearly independent, \citet{huang2017information} shows that the estimation can be simplified to do some kind of alternative conditional expectation, which can be computed efficiently from data. In this paper, we will extend this local regime result to multivariate case and show that under the local regime assumption info-clustering is equivalent to a graph model.
 
-Many problems in graph model are NP-Hard and only allows approximate solutions. Quite surprisingly, our proposed graph-based clustering method is polynomial-time efficient solvable exactly.
+Many problems in graph model are NP-Hard and only allows approximate solutions. Quite surprisingly, our proposed graph-based clustering method is can be solved exactly in polynomial time.
 This result has been established by using a special graph partition structure called "Principal Sequence of Partition"(PSP), which is equivalent to the info-clustering framework \citep{ic2016}. There is polynomial time algorithms to compute PSP.
 However, the original algorithm proposed by
-\citet{narayanan}, which is used directly by \citet{mac}, has a high time complexity to fit the practice. There has been some improvement
-using parametric maximal flow techniques \citep{kolmogorov}, which is later adopted for graph model
-by \citet{pin}. In this article, we will propose a new improvement to compute PSP, called PSPI. We will deduce the time complexity of PSPI under some mind assumptions. And we will show that empirically our improvement runs almost an order of magnitude faster than other methods.
+\citet{narayanan}, has a high time complexity to fit the practice. There has been some improvement
+using parametric maximal flow techniques \citep{kolmogorov}. In this article, we will propose a new improvement to compute PSP, called PSPI. We will deduce the time complexity of PSPI under some mild assumptions. And we will show that empirically our improvement runs almost an order of magnitude faster than other methods.
 
-As far as we know, the mathematical expression of info-clustering on graph model is similar to the minimum average cost \citep{mac} and network information flow \citep{pin}. Therefore, the algorithmic implementations, i.e., to compute PSP, are the same within these methods. We call them PSP-based methods. However, Different methods
-are based on different assumptions and the theoretical discussion differs between these methods. Besides, in this article, some theoretical
-properties are analyzed specifically for graph model, which is absent from prior work. These properties inspires us to extend our method to many different data-mining problems.
+As far as we know, the mathematical expression of info-clustering on graph model is similar to that of the minimum average cost \citep{mac} and network information flow \citep{pin}. Therefore, the algorithmic implementations, i.e., to compute PSP, are the same with these methods. We call them PSP-based methods. However, different methods
+are based on different assumptions and the theoretical discussion differs between these methods. Though our GBIC derived from info-clustering, some theoretical
+properties are analyzed specifically for our graph model, which is absent from prior work. These properties inspires us to extend our method to many different data-mining problems.
 
 There has been little prior work on applying PSP-based methods to data engineering problems except for some proof-of-concept experiment \citep{mac}. In this paper, we will consider the application
 of our graph-based info-clustering to different unsupervised learning problems. Specifically
-we will not only consider data clustering problems, in which our proposed method can be directly applied. We will also consider link prediction, outlier detection and community discovery problems, in which we will propose new promising
+we will not only consider clustering analysis problems, in which our proposed method can be directly applied. We will also consider link prediction, outlier detection and community discovery problems, in which we will propose new promising
 method adopted from graph-based info-clustering. We will conduct empirical experiments on both artificially generated data and some real-world dataset and show the feasibility of our method in
 these problems.
 
-Our contribution is summarized as follows: Firstly we extend the theory of info-clustering, we show that info-clustering is a graph model under local information geometry assumption. We also give some novel theoretical properties of GBIC. Secondly, we give the fastest implementation of PSP-based algorithm. Thirdly, from engineering prospective, we extend GBIC to community detection, link prediction and outlier detection fields.
+Our contribution is summarized as follows: Firstly we extend the theory of info-clustering. We show that info-clustering is a graph model under local information geometry assumption. We also give some novel theoretical properties of GBIC. Secondly, we give the fastest implementation of PSP-based algorithm. Thirdly, from engineering prospective, we extend GBIC to community detection, link prediction and outlier detection fields.
  
-The paper is organized as follows: In Section \ref{sec:bk} we introduce the background knowledge of the theoretical Info-Clustering, its relationship with PSP structure and theory of local geometry information. In Section \ref{sec:GBIC} our formulation of GBIC and important properties of our model are given. In Section \ref{sec:alg}, we propose an improved algorithm to compute the PSP structure of graph. Then in Section \ref{sec:es} we conduct empirical study of GBIC on data clustering and extend the method to other fields including link prediction, outlier detection and community discovery. Finally we give the conclusion in Section \ref{sec:conc}.
+The paper is organized as follows: In Section \ref{sec:bk} we introduce the background knowledge, which are most relevant with our work. In Section \ref{sec:GBIC} our formulation of GBIC and important properties of our model are given. In Section \ref{sec:alg}, we propose an improved algorithm to compute the PSP structure of graph. Then in Section \ref{sec:es} we conduct empirical study of GBIC on data clustering and extend the method to other fields. Finally we give the conclusion in Section \ref{sec:conc}.
 
 
 \section{Background Knowledge}\label{sec:bk}
 Before proceeding to introduce our theoretical and algorithmic results, it is necessary to review some prior results from minimal technical aspect. We split this section into three parts, first we introduce
 the local information geometry theory and the concept of weak dependency of two random variables;
 next are the general info-clustering model and its relationship with principal sequence of partitions (PSP) of submodular function;
-the final part is about the original algorithm used to solve PSP problem when the submodular function
-is graph cut function.
+the final part is about the original algorithm used to solve PSP problem.
 \subsection{Local Information Geometry}\label{subsec:lig}
 It is well known that KL-Divergence can be used to measure the distance of two probabilistic distributions. When the two distributions are quite "near", that is, both of them are within a neighborhood of a distribution $P$, we can approximate the expression of KL-Divergence with "Euclid distance" \citep{huang2017information}. To be more specific, let $P_0$ represent a probability mass function (PMF) of a discrete distribution on alphabet $\mathcal{X}$. We say $P$ is in a $\epsilon$-Neighborhood $N^{(\epsilon)}(P_0)$ of $P_0$ if
 \begin{equation}
