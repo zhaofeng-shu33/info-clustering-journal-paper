@@ -330,14 +330,14 @@ D(P_{X_V} || \prod_{C\in \P} P_{X_{C}}) = {1 \over 2}\sum_{\substack{(i,j) \not\
 \end{equation}
 \end{theorem}
 We can see that Theorem \ref{thm:DPX} is an extension of the approximation of mutual equation in Equation \eqref{eq:Ixy} to the case of multiple random variables.
-$B_{ij}$ is the B matrix between random variable $X_i$ and $X_j$.
+$B_{ij}$ is the $B$ matrix between random variable $X_i$ and $X_j$.
 % To get the required KL-Divergence under a given partition, we only need to make a
 %summation of these weight terms.
 
-Theorem \ref{thm:DPX} is a statement about random variables. Now we expand it to data samples. Given a $K-$cluster dataset with $n$ samples, each cluster is a random variable. 
-Assume the $i$-th cluster $X_i$ with alphabet size $\abs{\mathcal{X}_i}$, totally
-we have $\sum_{i=1}^K \abs{\mathcal{X}_i} = n$,
-since $X_i$ and $X_j$ are weakly independent for $i\neq j$, we have
+Theorem \ref{thm:DPX} is a statement about random variables. Now we expand it to data samples. Given a $K-$cluster dataset with $n$ samples, each cluster is regarded as a random variable. 
+Assuming the $i$-th cluster $X_i$ with alphabet size $\abs{\mathcal{X}_i}$, totally
+we have $\sum_{i=1}^K \abs{\mathcal{X}_i} = n$.
+Since $X_i$ and $X_j$ are weakly independent for $i\neq j$, we have
 \begin{equation}\label{eq:phi_w}
 P_{X_iX_j}(x_i, x_j) = P_{X_i}(x_i)P_{X_j}(x_j) + \epsilon \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} \phi_{X_iX_j}(x_i, x_j) + o(\epsilon)
 \end{equation}
@@ -345,14 +345,14 @@ Therefore from Equation \eqref{eq:Ixy}, $\norm{B_{ij}}_F^2 = \epsilon^2 \sum_{x_
 \begin{equation}\label{eq:PXV_Data}
 D(P_{X_V} || \prod_{C\in \P} P_{X_{C}}) = {\epsilon^2\over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \P}} \sum_{x_i \in \mathcal{X}_i, x_j \in \mathcal{X}_j}  \phi^2_{X_iX_j}(x_i, x_j) + o(\epsilon^2)
 \end{equation}
-We can treat the term $\phi^2_{X_iX_j}(x_i, x_j)$ as the capacity weight for a graph with $n$ nodes. Each vertex of the graph is corresponding to a data sample.
+We can treat the term $\phi^2_{X_iX_j}(x_i, x_j)$ as the capacity weight of an edge for a graph with $n$ nodes. Each vertex of the graph is corresponding to a data sample.
 To simplify the notation, let $w_{ij} = \phi^2_{X_{d(x_i)}X_{d(x_j)}}(x_i, x_j)$ where $d(x_i)$ maps the vertex to its underlining random variable index, $1\leq i,j \leq \abs{V}$.
 We can also expand each $X_i$ to its alphabet and treat the partition $\P$ as partition of the graph vertices.
 Denote $f(C) = \sum_{i\not\in C, j\in C, (i,j) \in E} w_{ij}$. Equation \eqref{eq:PXV_Data} can be simplified as
 \begin{equation}\label{eq:PXV_Data_Simplified}
 D(P_{X_V} || \prod_{C\in \P} P_{X_{C}}) = {\epsilon^2\over 2}\sum_{C \in \P} f(C)+ o(\epsilon^2)
 \end{equation}
-Combining Equation \eqref{eq:IZV} and\eqref{eq:PXV_Data_Simplified} we get the expression for the second order coefficient of multivariate mutual information (MMI):
+Combining Equation \eqref{eq:IZV} and \eqref{eq:PXV_Data_Simplified} we get the expression for the second order coefficient of multivariate mutual information (MMI):
 \begin{definition}[MMI of GBIC]\label{def:ms}
 	\begin{align}
 	I_{\P}(Z_V) & := \frac{ f[\P] }{  \abs{\mathcal{P}} - 1 } \textrm{ where } f[\P] = \sum_{C\in \P}f(C) \label{eq:ms_first}\\
@@ -360,15 +360,15 @@ Combining Equation \eqref{eq:IZV} and\eqref{eq:PXV_Data_Simplified} we get the e
 	\end{align}
 \end{definition}
 
-With a little abuse of terminology and notation, we use $_{\P}(Z_V)$ to represent the second order coefficient of MMI and call it the MMI of graph-based mutual clustering (GBIC). 
+With a little abuse of terminology and notation, we use $I_{\P}(Z_V)$ to represent the second order coefficient of MMI and call it the MMI of graph-based mutual clustering (GBIC). 
 
-The graph considered in this article is directed graph
-\footnotetext{without loss of generality we only consider directly graph to reduce computing complexity in algorithm part}
-$G(V, E)$. For a subset $C$ of $V$, $f(\cdot)$ can be seen as graph cut function. We can also compute MMI of GBIC for subgraph $G'(V',E')$ of $G$, denoted by $I(Z_{V'})$. When $V'=\{i,j\}$, we have $I(Z_{V'})=w_{ij}$ from above definition.
+The graph considered in this article is directed graph $G(V, E)$
+\footnote{without loss of generality we only consider directly graph to reduce computational cost in algorithm part}
+. For a subset $C$ of $V$, $f(\cdot)$ can be seen as graph cut function. We can also compute MMI of GBIC for subgraph $G'(V',E')$ of $G$, denoted by $I(Z_{V'})$. When $V'=\{i,j\}$, we have $I(Z_{V'})=w_{ij}$ from the above definition.
 
 To reduce the general model of info-clustering to GBIC, we not only use the weak dependency assumption, but also assume that each random variable $X_i$ only takes discrete values from the observed samples $\mathcal{X}_i$. The second assumption is also plausible, since it can be seen as an non-parametric approach restricted to discrete distribution. When the number of observed samples is large, it is approximating a continuous distribution.
 
-To apply GBIC on empirical experiment, $w_{ij}$ should be chosen property. $w_{ij}$ measures the relevance of events $X_{d(x_i)} = x_i$
+To apply GBIC on empirical experiment, $w_{ij}$ should be chosen properly. $w_{ij}$ measures the relevance of events $X_{d(x_i)} = x_i$
 and $X_{d(x_j)} = x_j$. 
 From its definition \eqref{eq:phi_w}, $w_{ij} \geq 0$. When $w_{ij} = 0$, the two events are independent and we say there is no edge between
 node $i$ and node $j$. The larger $w_{ij}$ takes, the more relevant the two events are. The relevance can be regarded as similarity of data samples 
@@ -386,7 +386,7 @@ Based on our assumption, the tree leaf nodes are data samples and they are joine
 	\includegraphics[width=\textwidth]{GBIC.pdf}
 	\caption{hierarchical tree generation based on GBIC. There are 10 data samples and 4 underlining clusters. The cluster of triangles joins the cluster of circles and the cluster of squares joins the cluster of pentagons. Finally, the intermediate two super-clusters joins at the tree root}\label{fig:ta}
 \end{figure}
-Consider 10 data samples and their feature vectors are on Euclidean plane, as shown in Figure \ref{fig:ta}. The underlining graph with 10 nodes is weighted  by $w_{ij} = \exp(-\norm{x_i - x_j}^2)$. Let $X_1, X_2, X_3, X_4$ represents the square, pentagon, circle and triangle samples respectively. We can write the clustering solution \footnote{computed by Algorithms introduced in the next Section} as:
+Consider 10 data samples and their feature vectors are on Euclidean plane, as shown in Figure \ref{fig:ta}. The underlining graph with 10 nodes is weighted  by $w_{ij} = \exp(-\norm{x_i - x_j}^2)$. Let $X_1, X_2, X_3, X_4$ represents the square, pentagon, circle and triangle samples respectively. We can write the clustering solution \footnote{computed by Algorithm \ref{alg:psp_i_simplified} introduced in the next Section} as:
 \begin{equation*}
 \P = 
 \begin{cases}
@@ -397,15 +397,15 @@ Consider 10 data samples and their feature vectors are on Euclidean plane, as sh
 \end{cases}
 \end{equation*}
 When $\lambda > 0.98$, some clusters are split further to data samples.
-Although the clustering tree does not distinguish
+Although the clustering tree itself does not distinguish
 $\{\{X_1\},\{X_2\},\{X_3,X_4\}\}$ from $\{\{X_1,X_2\},\linebreak[2] \{X_3\}, \{X_4\}\}$,
-the partition $\{\{X_1,X_2\},\{X_3\}, \{X_4\}\}$ does not exist.
+by threshold value constraints the partition $\{\{X_1,X_2\} \linebreak[2] ,\{X_3\}, \{X_4\}\}$ does not exist.
 \end{example}
 
 Since GBIC is a special model of info-clustering, all theoretical properties of info-clustering apply to GBIC as well. Besides, we will give some extra properties (Proposition \ref{prop:triangle} to \ref{prop:main}), which are specific to GBIC model.
 
 We notice that the weight given in Equation \ref{eq:ms_first} is additive. This tends to produce trivial hierarchical structure when the scheme of weights is not chosen properly.
-For example, if all weights value are within the range of $[a, 2a]$ where $a>0$. This is due to the following proposition:
+For example, it happens if all weights value are within the range of $[a, 2a]$ where $a>0$. This is due to the following proposition:
 
 \begin{proposition}\label{prop:triangle}
 Let $w_{ij}=0$ if $(i,j)\not\in E$. If $w_{ij} + w_{jk} \geq w_{ki}$ for any different triple $i, j, k \in V$, then the info-clustering solution is trivial\footnotemark.
