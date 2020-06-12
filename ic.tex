@@ -424,22 +424,23 @@ m$ and the recovery is possible. If $m\geq \frac{nr}{2}$, the recovery is not po
 In later part we will show how the result of Proposition \ref{prop:reweight} can be used to build a hierarchical discovery method in community detection problems.
 
 Besides considering static graph $G$, there is often a problem to consider which cluster a new observation belongs to.
-To model this, we add a new node $i'$ to the existing graph $G$. Let $\gamma_N$ represents the largest critical value
-and $V'=B \cup \{i'\}$, we can compute $\gamma'_N$ for the new graph $G(V', E(V'))$ and compare it with $\gamma_N$. From equation \eqref{eq:largest_threshold} $\gamma'_N \geq \gamma_N$ holds in general. It can be shown that we do not need to compute $\gamma'_N$ to determine whether $\gamma'_N>\gamma_N$. We summarize our main result as follows:
+To model this, we add a new node $i'$ to the existing graph $G$. Let $\gamma_N$ represents the largest critical value.
+From Equation \eqref{eq:largest_threshold}, assume $\gamma_N = I(Z_B)$ and $V'=B \cup \{i'\}$. We can compute $\gamma'_N$ for the new graph $G(V', E(V'))$ and compare it with $\gamma_N$. $\gamma'_N \geq \gamma_N$ holds in general. It can be shown that we do not need to compute $\gamma'_N$ to determine whether $\gamma'_N>\gamma_N$. We summarize our main result as follows:
 \begin{proposition}\label{prop:main}
 \begin{equation}
 \gamma'_N > \gamma_N \iff  \sum_{i \in B} w_{ii'} > \gamma_N 
 \end{equation}
 \end{proposition}
-Proposition \ref{prop:main} gave a method to check whether the newly added node destroys the clustering set structure of the original clustering tree.  For example, suppose we add a square sample to Fig \ref{fig:ta} from the upper right position. If it is near to the square cluster, the newly added sample is belonging to the cluster. Otherwise it is an outlier. In later part we will show more precisely how this result can be used to deal with outlier detection problem.
+Proposition \ref{prop:main} gives a method to check whether the newly added node destroys the outermost clustering structure of the hierarchical tree.  For example, suppose we add a triangle sample to Fig \ref{fig:ta} from the bottom left position. If it is near to the triangle cluster, the newly added sample is belonging to the cluster. Otherwise it is an outlier. In later part we will show more precisely how this result can be used to deal with outlier detection problem.
+
 \section{Improved PSP Algorithms}\label{sec:alg}
 To compute the clusters in GBIC, we first compute the PSP structure defined in Equation \eqref{eq:PSP_structure}. Then from the established equivalence of the nested partition and the clustering tree, the hierarchical
-clustering results are obtained. This procedure is the same with the general model of info-clustering and the algorithm to computing PSP structures is not limited to our model. In this section, we will give a faster algorithm to compute PSP structures for a general directed graph.
+clustering results are obtained. This procedure is the same with the general model of info-clustering and the algorithm to computing PSP structures is not limited to GBIC. In this section, we will give a faster algorithm to compute PSP structures for a general directed graph.
 
 \subsection{Formulation of PSPI}
-Our improved algorithm will use the same \texttt{DT} routine as mentioned Algorithm \ref{alg:psp}. We notice that different invocation of \texttt{DT} is independent and does not utilize the intrinsic hierarchical structure in the original version of PSP algorithm \cite{narayanan}. If the hierarchical tree structure is used, we can invoke \texttt{DT} on smaller graph in later computation and make the total computation one order of magnitude faster than previous.
+Our improved algorithm will use the same \texttt{DT} routine as mentioned Algorithm \ref{alg:psp}. We notice that different invocation of \texttt{DT} is independent and does not utilize the intrinsic hierarchical structure in Algorithm \ref{alg:psp}. If the hierarchical tree structure is used, we can invoke \texttt{DT} on smaller graph in later computation and make the total computation one order of magnitude faster than previous.
 
-To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first invocation of DT. Then we can compute PSP for each $C_i(i=1,\dots, t)$ respectively and construct those $P_j(j>i)$ from the subgraph computation. For $P_j(j<i)$, we can contract the graph $G$  to $G^t$ which has $t$ nodes by contracting each $C_i$ to a single node. By applying DT to $G^t$ can we get $P_j(j<i)$. We summarize our improved version (PSPI) in Algorithm \ref{alg:psp_i_simplified}.
+To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first invocation of DT. Then we can compute PSP for each $C_i(i=1,\dots, t)$ respectively and construct those $P_j(j>i)$ from the subgraph computation. For $P_j(j<i)$, we can contract the graph $G$  to $G^t$ which has $t$ nodes by contracting each $C_i$ to a single node. By applying DT to $G^t$ can we get $P_j(j<i)$. We summarize our improved version (PSPI) in Algorithm \ref{alg:psp_i_simplified} and illustrate the algorithm by Figure \ref{fig:pspi}.
 
 \begin{algorithm}
 	\caption{An Improved Principal Sequence of Partition Algorithm}\label{alg:psp_i_simplified}
@@ -458,10 +459,10 @@ To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first in
 		\FOR{$S$ in $P'$ and $\abs{S}>1$}
 		\STATE make each children of $\widetilde{V}$ in $\mathcal{T}$ have new parent $S$		
 		\STATE make the parent of $S$ be $\widetilde{V}$
-		\STATE \texttt{Split}($\widetilde{G}[S], S$) where $\widetilde{G}[S]$ is the subgraph of $\widetilde{G}$ restricted on $S$
+		\STATE \texttt{Split}($\widetilde{G}[S], S$) where $\widetilde{G}[S]$ is the subgraph of $\widetilde{G}$ restricted on $S$ \label{line:SplitDown}
 		\STATE contract $S$ to a single node in $\widetilde{G}$ % graph \widetilde{G} is modified
 		\ENDFOR 
-		\STATE \texttt{Split}($\widetilde{G}, \widetilde{V}$)		
+		\STATE \texttt{Split}($\widetilde{G}, \widetilde{V}$)		\label{line:SplitUp}
 		\ENDIF
 		\ENDFUNCTION
 	\end{algorithmic}
@@ -471,10 +472,10 @@ To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first in
 \centering
 \includegraphics[width=0.9\textwidth]{improved_alg.png}
 \caption{Illustration of PSPI: The intermediate state is achieved first by Line \ref{line:DT} in Algorithm \ref{alg:psp_i_simplified};
-Then the larger ''ellipse'' is divided further and the tree ``ellipses'' are clustered upwards in a prescribed order to formal the final state.}\label{fig:pspi}
+Then the tree ellipses are divided further in Line \ref{line:SplitDown} and are also clustered upwards to formal the final state in Line \ref{line:SplitUp}.}\label{fig:pspi}
 \end{figure}
 
-We analyze the time complexity of Algorithm \ref{alg:psp_i_simplified} for dense graphs. That is, we suppose $\abs{V} = n, \abs{E} = O(n^2)$. For sparse graphs our algorithm is faster. We use a conclusion that \texttt{DT} routine has $O(n^4)$ time complexity and the time complexity for Algorithm \ref{alg:psp} is $O(n^5)$ \citep{pin}.
+We analyze the time complexity of Algorithm \ref{alg:psp_i_simplified} for dense graphs. That is, we suppose $\abs{V} = n, \abs{E} = O(n^2)$. For sparse graphs the bound can be improved. We use a conclusion that \texttt{DT} routine has $O(n^4)$ time complexity and the time complexity for Algorithm \ref{alg:psp} is $O(n^5)$ \citep{pin}.
 
 We use $T(n)$ to represent the time complexity of \texttt{Split} when the graph has $n$ nodes.
 From Algorithm \ref{alg:psp_i_simplified}, the recursive relationship for $T(n)$ is
@@ -486,17 +487,17 @@ In \eqref{eq:Tn}, $Cn^4$ is the time complexity of \texttt{DT}. $\delta_{k<n} = 
 	 If $n_i \leq \frac{n}{2}, \textrm{ for } i=1,\dots,k$ and $ k \leq \frac{n}{2}$  hold in equation \eqref{eq:Tn}, then $T(n) = O(n^4)$.
 \end{proposition}
 
-The condition in Proposition \ref{prop:alg_complexity} restricts the of the figure of the clustering tree. For each non-leaf node, the number of children and the number of samples in each children are limited. However, the limitation is not so strict and
-many near-balanced trees satisfied the condition. Therefore, we can say that under the condition of Proposition \ref{prop:alg_complexity},
-our PSPI has time complexity $O(n^4)$, which is one order of magnitude faster than Algorithm \ref{alg:psp} $O(n^5)$.
+The condition in Proposition \ref{prop:alg_complexity} restricts the shape of the clustering tree. For each non-leaf node, the number of its children and the number of samples in each children are limited. However, the limitation is not so strict and
+many near-balanced trees satisfied the condition. Therefore, we can say that under this mild condition of Proposition \ref{prop:alg_complexity},
+our PSPI has time complexity $O(n^4)$, which is one order of magnitude faster than $O(n^5)$ of Algorithm \ref{alg:psp}.
 
 If the worst case scenario is considered, that is, the depth of the hierarchical tree is of order $O(n)$. Then it is inevitable to invoke \texttt{DT} $O(n)$ times.
 In this scenario, the complexity bound for $T(n)$ is $C(3^4+4^4 + \dots + n^4) \sim \frac{1}{5}Cn^5$, which is $5$ times faster than $Cn^5$ of Algorithm \ref{alg:psp}.
 
 \subsection{Empirical Comparison of Different PSP Algorithms}
 Another improvement to compute PSP is formulated by \cite{kolmogorov} using parametric maximum flow.
-This improvement can achieve $\abs{V} \textrm{MF}(G)$ time complexity theoretically. 
-In this section, we compare our PSPI with Narayanan's algorithm \ref{alg:psp} and Kolmogorov's algorithm
+This improvement can also achieve $O(n^4)$ time complexity theoretically. 
+In this section, we compare our PSPI with Algorithm \ref{alg:psp} and Kolmogorov's algorithm
 using two datasets with different edge density.
 
 The first dataset is four Gaussian blobs with equal size and we can vary the number of points in each blob. The dataset with 100 points in total is the same with that used in 
@@ -509,13 +510,13 @@ Table \ref{tab:alg_compare}.
 \hline
 name & weight type & density \\
 \hline
-GaussianBlobs & int & $|E|=O(|V|^2)$\\
+Gaussian-blobs & int & $|E|=O(|V|^2)$\\
 Two-level graph & float & $|E|=O(|V|^{3/2})$\\
 \hline
 \end{tabular}
-\caption{Dataset properties used in algorithm speed comparison}
+\caption{Dataset properties used in algorithm speed comparison} \label{tab:alg_compare}
 \end{table}
-We use CPU times to measure the time complexity of the algorithms. By varying the number of nodes, the experiment results are shown in Figure \ref{fig:esc}.
+We use CPU times to measure the time complexity of the algorithms. By varying the number of nodes, we can get the experiment results, shown in Figure \ref{fig:esc}.
 As can be seen, our implementation is much faster than previous ones.
 
 \begin{figure}
@@ -529,16 +530,16 @@ As can be seen, our implementation is much faster than previous ones.
 	\caption{Empirical speed comparison of different PSP algorithms}\label{fig:esc}
 \end{figure}
 
-We notice that parametric flow based PSP \citep{kolmogorov}  does not perform well in practice. This may be related with the extra cost to construct intermediate graph structures and maintain concurrent threads, whose overhead can not be neglectable in implementation.
+We notice that parametric flow based PSP \citep{kolmogorov}  does not perform well in practice. This may be related with the extra cost to construct intermediate graph structures and maintain concurrent threads, whose time overhead can not be neglectable in implementation.
 
 \section{Empirical Study of GBIC}\label{sec:es}
-In this section, we apply GBIC to various machine learning problems including clustering analysis, community detection, link prediction and outlier detection.
-In some problems we need to extend GBIC and give the corresponding decision criterion based on the structure of GBIC.
+In this section, we apply GBIC to various unsupervised learning problems including clustering analysis, community detection, link prediction and outlier detection.
+In some problems we need to extend GBIC and give the corresponding decision criterion based on the clustering tree of GBIC.
 These decision criteria are empirically inspired and performs well in our experiment. Our experiments
 include synthetic and real-world dataset and we will compare GBIC with classical methods and Bayesian inference.
 
 \subsection{Clutering Analysis Scenario}\label{subsec:dc}
-For data clustering task (or clustering analysis), we are given $n$ data, each with a feature vector of length $m$.
+For clustering analysis task, we are given $n$ data, each with a feature vector of length $m$.
 To use GBIC on such scenario, we need to construct a similarity matrix from the feature vectors. Each element of the similarity matrix corresponds a weight value of the underlining graph. Some classical clustering methods like Spectral Clustering also follow the similarity matrix approach. Practical study shows that rbf kernel and Laplacian kernel are good choice to construct the matrix.
 For these type of similarity, the graph is quite dense and to reduce the computational cost we can treat very small weights as zero. That is, we set a threshold for the weights to remove some edges in the graph. We can also use k-nearest neighbors to generate discrete similarities. It is hard to say which similarity metric is better than others and it depends on specific problems. Besides, the hyper-parameters of the metric can be tuned as well.
 
@@ -668,7 +669,7 @@ We prepare three artificial datasets to verify our empirical method. The first o
 	\caption{Detection boundary lines of different methods on different artificial dataset}	\label{fig:boundary}
 \end{figure}
 
-For outlier detection tasks, we also compare GBIC with other commonly used techniques on three datasets: GaussianBlob, Moon and UCI Lymphography. The first two dataset are artificially generated as mentioned above. The third one is of 148 samples with 6 outliers. The other methods include local outlier factor \citep{Breunig}, isolation forest \citep{if}, elliptic envelope \citep{rousseeuw1999fast} and one class SVM \citep{svm}. We use TPR and TNR to measure the overall performance of the detection. The inlier is treated as positive sample. TPR measures the percentage of right detection in inlier set while TNR measures that in outlier set. It is difficult for a method to achieve high score on both two metrics. We manage to maximize TNR while controlling TPR $\geq 90\%$ for each method. The hyper parameters and metric are tuned for each method and the best result of TNR is shown in Table \ref{tab:odm}. We can see that GBIC is competitive with local outlier factor and outperforms other methods on these datasets.
+For outlier detection tasks, we also compare GBIC with other commonly used techniques on three datasets: Gaussian-blob, Moon and UCI Lymphography. The first two dataset are artificially generated as mentioned above. The third one is of 148 samples with 6 outliers. The other methods include local outlier factor \citep{Breunig}, isolation forest \citep{if}, elliptic envelope \citep{rousseeuw1999fast} and one class SVM \citep{svm}. We use TPR and TNR to measure the overall performance of the detection. The inlier is treated as positive sample. TPR measures the percentage of right detection in inlier set while TNR measures that in outlier set. It is difficult for a method to achieve high score on both two metrics. We manage to maximize TNR while controlling TPR $\geq 90\%$ for each method. The hyper parameters and metric are tuned for each method and the best result of TNR is shown in Table \ref{tab:odm}. We can see that GBIC is competitive with local outlier factor and outperforms other methods on these datasets.
 
 \begin{table}
 \centering
