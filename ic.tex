@@ -561,10 +561,10 @@ It can be seen from the table that GBIC is better than other clustering algorith
 
 To compare different hierarchical clustering method, it is better to compare the clustering tree directly.
 For this purpose,
-we use the gene-expression dataset coming from \cite{khan2001classification}.
-Because we do not know the ground truth tree structure, we can split the features and apply the clustering algorithms on train and test data respectively and compare the resulting clustering tree. In this way, the clustering tree from the train data is treated as ground truth. By doing so we can also test the stability of each clustering method.
+we use the gene-expression dataset from \cite{khan2001classification}.
+Because we do not know the ground truth, we can split the features and apply the clustering algorithms on two dataset with partial features respectively and compare the resulting clustering tree. By doing so we can also test the stability of each clustering method.
 
-We compare GBIC with agglomerative hierarchical clustering with average distance and Bayesian Rose tree \citep{blundell2011discovering}. The tree similarity metric is Robinson-Foulds distance, which is the number of steps to transform one tree to another (A step is either adding or removing an edge) \citep{day1985optimal}. We vary the samples of data and the results are shown in Figure \ref{fig:shc}. As can be seen, for the classical hierarhical method the trees tend to have more edges and the distance is large. The distance of GBIC and that of Bayesian Rose tree are near when $n$ is large. But when $n$ is small, our method performs best.
+We compare GBIC with agglomerative hierarchical clustering (average distance) and Bayesian Rose tree \citep{blundell2011discovering}. The tree similarity metric is Robinson-Foulds distance, which is the number of steps to transform one tree to another (A step is either adding or removing an edge) \citep{day1985optimal}. We vary the samples of data and the results are shown in Figure \ref{fig:shc}. As can be seen, for the classical hierarhical method the trees tend to have more edges and the distance is large. The distance of GBIC and that of Bayesian Rose tree are near when $n$ is large. But when $n$ is small, our method performs best.
 
 \begin{figure}
 \centering
@@ -576,17 +576,17 @@ We compare GBIC with agglomerative hierarchical clustering with average distance
 Community Detection problems can be regarded as finding a proper partition of a given graph and we call each subgraph in the partition a community. There are many good algorithms
 to find the flat partition which splits the graph into several non-overlapping subgraphs \citep{malliaros2013clustering}. However, it is a hard problem to make inference on the hierarchical structure of a complex graph automatically.
 In this subsection we use experiments to demonstrate that GBIC
-can achieve success to recover the hierarchical structure of a 2-layer graph upon properly defined ``edge weight''.
+can achieve success to recover the hierarchical structure of a two-level graph upon properly defined ``edge weight''.
 
 To apply GBIC on community detection problems, we can not treat each edge with equal weight otherwise it is very possible to obtain only trivial clustering results due to Proposition \ref{prop:triangle}. Inspired by Proposition \ref{prop:reweight}, we use the following weighting scheme:
 
 \begin{equation}\label{eq:wij_scheme}
     w_{ij} = 1 + \abs{\{k | (i,k),(j,k) \in E \}} \textrm{ for } (i,j) \in E
 \end{equation}
-This weight assignment scheme is the number of triangles which contains the edge. For edges in a complete graph, it is equivalent to take $r=n$ in the model problem of Proposition \ref{prop:triangle}. Then approximately there are
-at least $\frac{n^2}{2}$ edges to cut off the recovery condition.
-Beyond the theoretical analysis of 2 community model, now we consider a more complex structure and empirically justify the weighting scheme of Equation 
-\eqref{eq:wij_scheme} works.
+This weight assignment scheme is the number of triangles which contains the edge. For edges in a complete graph, it is equivalent to take $r=n$ in the model problem of Proposition \ref{prop:triangle}. Then approximately it needs
+at least $\frac{n^2}{2}$ edges to make the two subgraphs unrecoverable.
+Beyond the theoretical analysis of two community model, now we consider a more complex structure and empirically justify the weighting scheme of Equation 
+\eqref{eq:wij_scheme}.
 
 \begin{figure}
 	\centering
@@ -602,7 +602,7 @@ Beyond the theoretical analysis of 2 community model, now we consider a more com
 \end{figure}
 We use a two-level artificial dataset proposed in \cite{RN22}. 
 The community structure is shown in Fig. \ref{fig:c1}. It has 4 communities in macro-level, and each macro community contains 4 micro communities. We use $z_{\mathrm{in}_1}$ to represent the internal average degree of nodes within micro community; $z_{\mathrm{in}_2}$ as node degree between different micro communities but within one macro community; $z_{\mathrm{out}}$ as node degree between different macro communities. By varying one and fixing the other two in $\{z_{\mathrm{in}_1}, z_{\mathrm{in}_2}, z_{\mathrm{out}} \}$ we get different sets of experiment.
-To compare the deduced hierarchical tree structure with the ground truth, we use the normalized Robinson-Foulds distance as the metric, which lies within $[0,1]$. We compare the RF distance of GBIC with that of GN (Girvan-Newman algorithm) and BHCD (a kind of Bayesian Hierarchical method for graph structure in \cite{RN23}). The result is shown in Fig. \ref{fig:cdr}. As can be seen from Fig.\ref{fig:cdr}, in either case, graph-based info-clustering can produce more similar tree structures than other methods.
+To compare the deduced hierarchical tree structure with the ground truth, we use the normalized Robinson-Foulds distance as the metric, which lies within $[0,1]$. We compare the RF distance of GBIC with that of GN (Girvan-Newman algorithm) and BHCD (a kind of Bayesian Hierarchical method for graph structure by \cite{RN23}). The result is shown in Fig. \ref{fig:cdr}. As can be seen from Fig.\ref{fig:cdr}, in either case, graph-based info-clustering can produce more similar tree structures than other methods.
 \begin{figure}
 	\centering
 	\begin{subfigure}{0.33\textwidth}
@@ -620,18 +620,18 @@ To compare the deduced hierarchical tree structure with the ground truth, we use
 	\caption{Distance comparison between different hierarchical community detection method. Smaller distance indicates more similar structure with the ground truth tree.}\label{fig:cdr}	
 \end{figure}
 \subsection{Link Prediction}
-Link Prediction Problem is predicting whether an unobserved edge exists between two nodes in a graph \citep{liben2007link}.  GBIC does not give an explicit way to make prediction. Here we give a heuristic prediction scheme based on the hierarchical tree $T$ generated by GBIC.
+Link Prediction problem is predicting whether an unobserved edge exists between two nodes in a graph \citep{liben2007link}.  GBIC does not give an explicit way to make prediction. Here we give a heuristic prediction scheme based on the hierarchical tree $T$ generated by GBIC.
 Our problem is that given node $(i,j) \not\in E$, we should make a prediction whether they have an connected edge. We split the scenario 
 into two cases:
 \begin{enumerate}
-\item If they are share the same parent in the tree $T$, we test whether the addition of the edge with weight $w$ will split them. To be more specific, we consider the sub-graph consisting of all the sibling of $i,j$. We do GBIC on this sub-graph. If the partition is trivial, then we conclude that the connected edge exists. Otherwise, the edge does not exist.
+\item If node $i,j$ share the same parent in the tree $T$, we test whether the addition of the edge with weight $w$ will split them. To be more specific, we consider the subgraph consisting of all the sibling of $i,j$. We add edge $(i,j)$ and do GBIC on this sub-graph. If the partition is trivial, then we conclude that the connected edge exists. Otherwise, the edge does not exist.
 
-\item If they do not share the same parent in the tree $T$, we test whether the addition of the edge will join them. The test is bidirectional. Suppose $I$ is the parent node of $i$ and it consists of several parts. Consider the sub-graph $I \cup \{j\}$. If the largest critical value becomes larger than before, then there is an edge bewteen $i,j$. Otherwise, consider the other part of the test for $J$ including $j$. If neither of the two tests succeed, we conclude that there is no edge between $i,j$. To test whether the largest critical value becomes larger than before, we will use Proposition \ref{prop:main},  thus avoiding complicated solution of GBIC for subgraphs.
+\item If node $i,j$ do not share the same parent in the tree $T$, we test whether the addition of the edge will join them. The test is bidirectional. Suppose $I$ is the parent node of $i$ and it consists of several parts. We add edge $(i,j)$ and consider the subgraph $I \cup \{j\}$. If the largest critical value becomes larger than before, then there is an edge bewteen $i,j$. Otherwise, consider the other part of the test for $J$ including $j$. If neither of the two tests succeed, we conclude that there is no edge between $i,j$. To test whether the largest critical value becomes larger than before, we will use Proposition \ref{prop:main},  thus avoiding complicated solution of GBIC for subgraphs.
 \end{enumerate}
 
 Co-authorship datasets are a typical exemplar to compare different link prediction methods. We use the NIPS-authorship dataset as done by \cite{RN23}.
-Since the graph is sparse and it is hard to predict for some node with little connection information, we restrict the network to the 234 nodes whose degrees are largest. Since the prediction  is a hypothesis testing problem, we use true positive rate (TPR), true negative rate (TNR) and accuracy (ACC) as the evaluation metric. We compare GBIC with BHCD and a local prediction method based on a metric called Resource Allocation Index \citep{zhou2009predicting}. For TPR our method achieves higher score.
-
+Since the graph is sparse and it is hard to predict for some node with little connection information, we restrict the network to the 234 nodes whose degrees are largest. Since the prediction  is a hypothesis testing problem, we use true positive rate (TPR), true negative rate (TNR) and accuracy (ACC) as the evaluation metric. We compare GBIC with BHCD and a local prediction method based on a metric called Resource Allocation Index \citep{zhou2009predicting}. For TPR our method achieves higher score
+and for other metrics our method is near the best.
 \begin{table}
 \centering
 \input{compare.tex}
@@ -641,10 +641,10 @@ Since the graph is sparse and it is hard to predict for some node with little co
 
 \subsection{Outlier Detection}\label{subsec:od}
 Outlier Detection is the identification of abnormal data (called outliers) which differs from the majority of the data (called inliers) \citep{grubbs1969procedures}.
-To apply our GBIC method to this scenario, we consider the case when we are required to detect outliers in a multi-class dataset and we are required to
+To apply our GBIC method to this problem, we consider the case when we are required to detect outliers in a multi-class dataset and we are required to
 extract a partition $\{C_1, \dots, C_K, \{x_1\}, \dots, \{x_M\}\}$ from the PSP where $K$ is the number of clusters and $M$ is the number of outliers.
 In reality it is often the case that we do not know the value of $K, M$.
-If both $K$ and $M$ are small, using the notation of Equation \eqref{eq:PSP_structure}, an empirical and reasonable way to deal with this situation is inspecting the partition from the finest on: $\P_k, \P_{k-1}, \dots$.
+If both $K$ and $M$ are small, using the notation of Equation \eqref{eq:PSP_structure}, an empirical and reasonable way to deal with this situation is inspecting the partition beginning from the finest: $\P_k, \P_{k-1}, \dots$.
 The selection rule can be summarized as follows:
 
 \begin{algorithmic}
@@ -662,7 +662,7 @@ the boundary curve can be written as
 \end{equation}
 Notice $C_i$ is one of clusters, and there are $K$ boundary curves in total. If the new observations falls outside all of these closed balls, then we classify it as an outlier.
 
-We prepare three artificial datasets to verify our empirical method. The first one is one Gaussian blob with some noisy points uniformly distributed in a square. The second dataset is that we put $(0,0)$ to the 4 Gaussian Blob dataset used in Section \ref{sec:es}. The last one is two misplaced semi-circles (``Two moons'') and some noisy points inside and outside. The weight is chosen by rbf kernel and the results are shown in Figure \ref{fig:boundary}. As can be seen, the boundary curve is approximately the closure of the set of inliers.
+We prepare three artificial datasets to verify our empirical method. The first one is one Gaussian blob with some noisy points uniformly distributed in a square. The second dataset is that we put $(0,0)$ to the 4 Gaussian Blob dataset used in Section \ref{sec:es}. The last one is two misplaced semi-circles (``two moons'') and some noisy points inside and outside. The weight is chosen by rbf kernel and the results are shown in Figure \ref{fig:boundary}. As can be seen, the boundary curve is approximately the closure of the set of inliers.
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=\textwidth]{pic/outlier_boundary_illustration.eps}
@@ -677,11 +677,11 @@ For outlier detection tasks, we also compare GBIC with other commonly used techn
 \caption{Comparison of different outlier detection methods}\label{tab:odm}
 \end{table}
 
-The method presented in this section is an extension of Info-Detection \citep{zhao2019info}, in which the inliers are assumed to be only one class. Therefore it can handle more general cases and
+The method presented in this section is an extension of Info-Detection \citep{zhao2019info}, in which the inliers are assumed to be of one class. Therefore it can handle more general cases and
 jointly do outliers and clustering tasks.
 
 \section{Conclusion}\label{sec:conc}
-In this paper, we consider a special model of info-clustering applied on graph structure and propose a method called graph-based info-clustering (GBIC). We also propose an efficient algorithm to compute the principal sequence of partition of a graph, which is used to deduce the hierarchical structures of GBIC. Empirical study shows that GBIC can be applied to many fields and it performs well on a wide range of datasets. Our method is especially suitable if the hierarchical tree structure of data is preferred and to remove outliers from multiple-class datasets.
+In this paper, we consider a special model of info-clustering: graph-based info-clustering (GBIC). We also propose an efficient algorithm to compute the principal sequence of partition for a graph, which is used to deduce the hierarchical structures of GBIC. Empirical study shows that GBIC can be applied to many fields and it performs well on a wide range of datasets. Our method is especially suitable if the hierarchical tree structure of data is preferred and to remove outliers from multiple-class datasets.
 %\begin{acknowledgements}
 %If you'd like to thank anyone, place your comments here
 %and remove the percent signs.
