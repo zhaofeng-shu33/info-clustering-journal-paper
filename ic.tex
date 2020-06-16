@@ -264,7 +264,7 @@ $h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$. Then we compute a partiti
  \STATE $h' = {1 \over \abs{P} - \abs{Q}}(\abs{P} f[Q] - \abs{Q} f[P])$
  \STATE $(\tilde{h}, P') = \texttt{DT}(f,\gamma')$ \footnotemark
  \IF{$\tilde{h} = h'$}
- 	\STATE insert $\gamma'$ to $\mathbf{L}$
+ 	\STATE\label{line:11} insert $\gamma'$ to $\mathbf{L}$
  \ELSE
  	\STATE insert $P'$ to $\mathbf{PSP}$
  	\STATE \texttt{Split}$(Q, P')$
@@ -829,7 +829,8 @@ D(P_{X_1,\dots, X_n}|| \prod_{C\in \P}P_{X_C}) & ={1 \over 2} \sum_{x_1,\dots,x_
 	\end{equation}
 \end{lemma}
 \begin{proof}
-	We use Algorithm \ref{alg:psp}. Since $h(\lambda)$ is piecewise linear, the first line segment of $h(\lambda)$ is $ - \lambda $ and the last line segment is $ f[\P_k] - \abs{V} \lambda$. Their intersection point is $(\lambda_{+}, -\lambda_{+})$ where $\lambda_{+} = \frac{f[\P_k]}{\abs{V}-1}$. Since $\frac{f[\P]}{\abs{\P}-1} \geq \lambda_{+} \iff f[\P] - \abs{\P}\lambda_{+} \geq - \lambda_{+}$ Equation \eqref{eq:GF} says the minimizer of $h(\lambda)$ at $\lambda = \lambda_{+}$ is either $\{V\}$ or $\{\{1\},\{2\},\dots,\{\abs{V}\}\}$ and $h(\lambda)$ has only two line segments. From geometric point of view, the solution to equation \eqref{eq:ms} is the first turning point of $h(\lambda)$ and it is equal to that of last turning point if and only if \eqref{eq:GF} holds.
+	The partition is trivial if and only if Line \ref{line:11} is hit in Algorithm \ref{alg:psp} for the first invocation if \texttt{Split}.
+	Since $Q=\{V\}$, $f[Q]=0$. Let $\P_k = \{\{i\} | i \in V\}$, then $ f[P] = f[\P_k]$. We then have$(\gamma', h')=(\lambda_{+}, -\lambda_{+})$ where $\lambda_{+} = \frac{f[\P_k]}{\abs{V}-1}$. Since $\frac{f[\P]}{\abs{\P}-1} \geq \lambda_{+} \iff f[\P] - \abs{\P}\lambda_{+} \geq - \lambda_{+} \iff \tilde{h}(\lambda_{+}) = - \lambda_{+}$. Then the conclusion follows.
 \end{proof}
 
 \begin{proof}[Proof of Proposition \ref{prop:triangle}]
