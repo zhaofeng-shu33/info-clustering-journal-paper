@@ -725,7 +725,7 @@ We need the following Lemma to prove Theorem \ref{thm:DPX}:
 	If $(X,Y)$ is weakly dependent with $Z$, then $X$ is weakly dependent with $Z$.
 \end{lemma}
 \begin{proof}
-	From the definition of weakly dependence for two random variables, we have
+	From the definition of weak dependence for two random variables, we have
 	\begin{equation}
 	P_{X,Y|Z=z}(x,y) = P_{X,Y}(x,y)(1+\epsilon \frac{\phi_z(x,y)}{\sqrt{P_{X,Y}(x,y)}}), z \in \mathcal{Z}
 	\end{equation}
@@ -734,6 +734,7 @@ We need the following Lemma to prove Theorem \ref{thm:DPX}:
 	P_{X|Z=z}(x) = P_X(x)(1+\epsilon\frac{\tilde{\phi}_z(x)}{\sqrt{P_X(x)}}),
 	\textrm{ where } \tilde{\phi}_z(x) = \frac{\sum_{y\in Y} \sqrt{P_{X,Y}(x,y) }\phi_z(x,y)}{\sqrt{P_X(x)}}
 	\end{equation}
+	which implies $X$ is weakly dependent with $Z$.
 \end{proof}
 \begin{proof}[Proof of Theorem \ref{thm:DPX}]
 From the definition of weak dependence for more than 2 random variables, we can find a discrete distribution $U$ over $\{1, 2,\dots, K\}$, such that $X_1, \dots, X_n$ are independent conditioned on $U$. Since $(X_1, \dots, X_n)$ is weakly dependent with $U$, from Lemma \ref{lem:xyz}, it follows that $X_i$ is weakly dependent with $U$.  That is, 
@@ -746,10 +747,10 @@ P_{X_i, X_j | U = k}(x_i, x_j)
 =& P_{X_i | U=k}(x_i)
 P_{X_j | U=k}(x_j) \notag \\
 =& P_{X_i}(x_i)P_{X_j}(x_j)
-(1 + \epsilon(\frac{\phi^{(k,i)}(x_i)}{P_{X_i}(x_i)}
-+ \frac{\phi^{(k,j)}(x_j)}{P_{X_j}(x_j)}) +
+(1 + \epsilon(\frac{\phi^{(k,i)}(x_i)}{\sqrt{P_{X_i}(x_i)}}
++ \frac{\phi^{(k,j)}(x_j)}{\sqrt{P_{X_j}(x_j)}}) +
 \epsilon^2\frac{\phi^{(k,i)}(x_i)
-\phi^{(k,j)}(x_j)}{P_{X_i}(x_i)P_{X_j}(x_j)})\label{eq:XiXj}
+\phi^{(k,j)}(x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}})\label{eq:XiXj}
 \end{align}
 Since 
 \begin{align*}
@@ -762,7 +763,7 @@ From \eqref{eq:XiXj} we have
 P_{X_i, X_j}(x_i, x_j) = P_{X_i}(x_i)
 P_{X_j}(x_j) (1+\epsilon^2 \sum_{k=1}^K P_U(u_k)
 \frac{\phi^{(k,i)}(x_i)
-\phi^{(k,j)}(x_j)}{P_{X_i}(x_i)P_{X_j}(x_j)})
+\phi^{(k,j)}(x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}})
 )
 \end{equation}
 For more than 2 random variables:
@@ -771,12 +772,12 @@ P_{X_1,\dots,X_n}(x_1,\dots,x_n)  &= \sum_{k=1}^{K} P_{X_1,\dots,X_n | U=k}(x_1,
 &=  \sum_{k=1}^{K}P_U(u_k) \prod_{i=1}^n P_{X_i|U=k}(x_i)\\
 &= \sum_{k=1}^{K} P_U(u_k)\prod_{i=1}^n \left(P_{X_i} (x_i)( 1 + \epsilon {\phi^{(k,i)}(x_i ) \over \sqrt{P_{X_i}(x_i)}} )\right)\\
 &=  \sum_{k=1}^{K}P_U(u_k) (\prod_{i=1}^n  P_{X_i} (x_i))
-\left( 1 + \epsilon\sum_{i=1}^n {\phi^{(k,i)}(x_i) \over \sqrt{P_{X_i}(x_i)}} + \epsilon^2\sum_{i\neq j}{\phi^{k,i}(x_i)\phi^{k,j}(x_j)\over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right)+o(\epsilon^2) \\
+\left( 1 + \epsilon\sum_{i=1}^n {\phi^{(k,i)}(x_i) \over \sqrt{P_{X_i}(x_i)}} + \epsilon^2\sum_{i\neq j}{\phi^{(k,i)}(x_i)\phi^{(k,j)}(x_j)\over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right)+o(\epsilon^2) \\
 &= (\prod_{i=1}^n  P_{X_i} (x_i))
 (1+\epsilon\sum_{i=1}^n \sum_{k=1}^{K} P_U(u_k){\phi^{(k,i)}(x_i) \over \sqrt{P_{X_i}(x_i)}} \\
-&+\epsilon^2 \sum_{k=1}^{K} P_U(u_k)\sum_{i\neq j}{\phi^{k,i}(x_i)\phi^{k,j}(x_j)\over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} } ) + o(\epsilon^2)\\
+&+\epsilon^2 \sum_{k=1}^{K} P_U(u_k)\sum_{i\neq j}{\phi^{(k,i)}(x_i)\phi^{(k,j)}(x_j)\over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} } ) + o(\epsilon^2)\\
 &= (\prod_{i=1}^n  P_{X_i} (x_i))
-\left(1 +\epsilon^2\sum_{i\neq j} \sum_{k=1}^{K}P_U(u_k){\phi^{k,i}(x_i)\phi^{k,j}(x_j)\over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right) + o(\epsilon^2)
+\left(1 +\epsilon^2\sum_{i\neq j} \sum_{k=1}^{K}P_U(u_k){\phi^{(k,i)}(x_i)\phi^{(k,j)}(x_j)\over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right) + o(\epsilon^2)
 \end{align*}
 From \eqref{eq:PXiXj},
 let $B_{ij}(x_i, x_j)={P_{X_i, X_j}(x_i,x_j) - P_{X_i}(x_i)P_{X_j}(x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}} $, then we have:
@@ -797,21 +798,22 @@ Using Equation \eqref{eq:approx:ig} from information geometry:
 D(P_{X_1,\dots, X_n}|| P_{X_1}\dots P_{X_n}) & ={1 \over 2} \sum_{x_1,\dots,x_n}\phi^2(x_1,\dots, x_n) \\
 & = {1\over 2}\sum_{x_1,\dots,x_n} (\prod_{i=1}^n  P_{X_i} (x_i)) \left(\sum_{i\neq j}{B_{ij}(x_i, x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right)^2 +o(\epsilon^2) 
 \end{align*}
-From the definition of $B_{ij}$, the above is the summation over $\norm{B_{ij}}^2_F$(the coupling term is zero). Therefore we get the second order approximation for a total partition:
+From the definition of $B_{ij}$, the above is the summation over $\norm{B_{ij}}^2_F$(the coupling term is zero).
+Therefore we get the second order approximation for the total partition:
 \begin{equation}
 D(P_{X_1,\dots, X_n}|| P_{X_1}\dots P_{X_n}) =   {1 \over 2} \sum_{i\neq j} \norm{B_{ij}}^2_F + o(\epsilon^2)
 \end{equation}
 For an arbitrary partition $\P$, using Equation \eqref{eq:sep} for each $C\in \P$, we have
 \begin{equation}
-P_{X_C}(x_C) = \prod_{i\in C} P_{X_i}(x_i)(1+\sum_{i\neq j,i,j\in C} \frac{\tilde{B}_{ij}(x_i, x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}}) + o(\epsilon^2)
+P_{X_C}(x_C) = \prod_{i\in C} P_{X_i}(x_i)(1 + \epsilon^2 \sum_{i\neq j,i,j\in C} \frac{\tilde{B}_{ij}(x_i, x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}}) + o(\epsilon^2)
 \end{equation}
 Multiplying these equations and notice $\frac{\tilde{B}_{ij}(x_i, x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}}=O(\epsilon^2)$ from
 Equation \eqref{eq:Bsecond} we have:
 \begin{equation}
-\prod_{C\in \P}P_{X_C}(x_C) = \prod_{i=1}^n P_{X_i}(x_i)(1+\sum_{C\in\P}\sum_{i\neq j,i,j\in C}\frac{\tilde{B}_{ij}(x_i, x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}}) + o(\epsilon^2)
+\prod_{C\in \P}P_{X_C}(x_C) = \prod_{i=1}^n P_{X_i}(x_i)(1+\epsilon^2 \sum_{C\in\P}\sum_{i\neq j,i,j\in C}\frac{\tilde{B}_{ij}(x_i, x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}}) + o(\epsilon^2)
 \end{equation}
 Then $\prod_{C\in \P}P_{X_C}$ is in the neighborhood of $P_{X_1}\dots P_{X_n}$ with $$\phi_{\P}(x_1,\dots, x_n)=
-\sqrt{P_{X_1}(x_1)\dots P_{X_n}(x_n)}\left(\sum_{C\in\P}\sum_{i\neq j,i,j\in C}\frac{\tilde{B}_{ij}(x_i, x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}}\right)+o(\epsilon^2)$$.
+\sqrt{P_{X_1}(x_1)\dots P_{X_n}(x_n)}\left(\sum_{C\in\P}\sum_{i\neq j,i,j\in C}\frac{\tilde{B}_{ij}(x_i, x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}}\right)+o(\epsilon^2)$$
 Applying Equation  \eqref{eq:approx:ig} we have:
 \begin{align*}
 D(P_{X_1,\dots, X_n}|| \prod_{C\in \P}P_{X_C}) & ={1 \over 2} \sum_{x_1,\dots,x_n}(\phi(x_1,\dots, x_n)-\phi_{\P}(x_1, \dots, x_n))^2 \\
@@ -821,8 +823,8 @@ D(P_{X_1,\dots, X_n}|| \prod_{C\in \P}P_{X_C}) & ={1 \over 2} \sum_{x_1,\dots,x_
 \end{proof}
 \subsection{Proof of Proposition \ref{prop:triangle}}
 \begin{lemma}\label{lem:trival}
-	The partition to minimize equation \eqref{eq:ms} is $\P_k = \{\{1\},\{2\},\dots,\{\abs{V}\}\}$ if and only if equation \eqref{eq:GF} holds.
-	\begin{equation}\label{eq:GF}
+	The partition to minimize equation \eqref{eq:ms} is $\P_k = \{\{1\},\{2\},\dots,\{\abs{V}\}\}$ if and only if equation \eqref{eq:GF2} holds.
+	\begin{equation}\label{eq:GF2}
 	\frac{f[\P]}{\abs{\P}-1} \geq \frac{f[\P_k]}{\abs{V}-1} \textrm{ for any } \P \in \Pi'
 	\end{equation}
 \end{lemma}
