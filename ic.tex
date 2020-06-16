@@ -865,42 +865,7 @@ Also
 We then have $\sum_{(i,j) \in E(C_1)} w_{ij} \leq \frac{n_1-1}{n-1}\sum_{(i,j) \in E} w_{ij}$. From equation \eqref{eq:PPrelation} we have 
 $f[\P] \geq \frac{k-1}{n-1}\sum_{(i,j) \in E} w_{ij}$. That is, the result holds for $\abs{\P}=k$.
 \end{proof}
-\subsection{Proof of Proposition \ref{prop:main}}
-\begin{proof}[Proof of Proposition \ref{prop:main}]
-		In this proof, we make some notation convention.
-		$w(C) = \displaystyle\sum_{(i,j) \in E(C)} w_{ij},$
-		$w(A, C) = \displaystyle\sum_{\substack{i \in A, j \in C \\ (i,j) \in E(V')}} (w_{ij}+w_{ji})$ and
-		$\P_C = \{\{i \}| i \in C \}$. Suppose $\gamma_N = I(Z_B)$, from equation \eqref{eq:largest_threshold}, we can get $\gamma_N =\frac{f[\P_B]} {\abs{B} -1}$.
-		Since $V' = B \cup \{i'\}$
-		$f[\P_{V'}] = f[\P_B] + \sum_{i \in B}w_{ii'}$.
-		
-		If $ \sum_{i \in B} w_{ij} > \gamma_N$ we can get
-		$$
-		\gamma'_N \geq I_{\P_{V'}}(Z_{V'}) = \frac{(\abs{B}-1)\gamma_N + \sum_{i \in B}w_{ii'}}{\abs{B}} > \gamma_N
-		$$
-		
-		On the other hand, suppose $\gamma'_N = I(Z_K) > \gamma_N$. Then $K$ must contain $i'$. If $K=V'$ then the conclusion holds. Otherwise, Suppose $K = \{i'\} \cup B', B=B'\cup J, J\neq \emptyset$. We can write 
-		\begin{equation}\label{eq:gammaNF}
-		\gamma_N = \frac{w(J,B') + w(J) + w(B')}{ \abs{B'} + \abs{J} - 1 }
-		\end{equation}
-		Since $I(Z_K) = I_{\P_K}(Z_K)$ is maximal, we have $I_{\P_K}(Z_K) > I_{\P_{V'}}(Z_{V'})$ and $I_{\P_K}(Z_K) \geq I_{\P_{B'}}(Z_{B'})$.
-		\begin{align*}
-			\frac{w(\{i'\}, B') + w(B')}{\abs{B'}} >& \frac{w(B') + w(J, B') + w(J) + w(\{i'\}, B') + w(\{i'\}, J)}{\abs{B'} + \abs{J}}  \\
-			\frac{w(\{i'\}, B') + w(B')}{\abs{B'}} \geq & \frac{w(B')}{\abs{B'} - 1}
-		\end{align*}
-		we can get 
-		\begin{align}
-			\abs{J} (w(\{i'\}, B') + w(B')) > & \abs{B'} (w(J, B') + w(J) + w(\{i'\}, J)) \label{eq:target}
-			\\
-			(\abs{B'} - 1)  w(\{i'\}, B') \geq & w(B') \label{eq:convert}
-		\end{align}
-		Take equation \eqref{eq:convert} in \eqref{eq:target}, we can get
-		\begin{equation}\label{eq:summation}
-		\abs{J} w(\{i'\}, B') > w(J, B') + w(J) + w(\{i'\}, J)
-		\end{equation}	
-		Combined with \eqref{eq:gammaNF}, adding equation \eqref{eq:convert} and \eqref{eq:summation} we can get
-		$w(\{i'\}, B') > \gamma_N$. Then $\sum_{j \in B}w_{ii'} > \gamma_N $ follows.
-\end{proof}
+
 
 \subsection{Proof of Proposition \ref{prop:reweight}}
 We need the following lemmas to prove Proposition \ref{prop:reweight}.
@@ -934,8 +899,44 @@ We compare it to $I(Z_{S_1}) = \frac{nr}{2}$ and we can show that $I(Z_{S_1}) - 
 If $m < \frac{nr}{2}$, then $I(Z_{S_1}) - I_{\P'}(Z_U) > \frac{r(n-k)(k-1)}{2(n+k-1)} \geq 0$. Then $I(Z_{S_1})>I(Z_U)$, $U$ is not a cluster by Lemma \ref{lemma:sub}. In either case, $U$ is not a cluster of $G$ for $1<\abs{U}<2n, U \neq S_1, U\neq S_2$. 
 
 If $m \geq \frac{nr}{2}$, we have $I_{\P}(Z_V) = \frac{m+rn(n-1)}{2n-1} \leq m = I_{\{S_1, S_2\}}(Z_V)$. Suppose $I_{\P^*}(Z_V)$, If $S\in \P^*$ and $S\subseteq S_1$. From Lemma \ref{lemma:sub} we must have $S=S_1$. Then $\P^*=\{S_1, S_2\}$, which contradicts with
-$I_{\P}(Z_V)  \leq  I_{\{S_1, S_2\}}(Z_V)$ since $\P$ is finer than $\{S_1, S_2\}$. Therefore, either $S_1$ or $S_2$ cannot be discovered.
+$I_{\P}(Z_V)  \leq  I_{\{S_1, S_2\}}(Z_V)$ since $\P$ is finer than $\{S_1, S_2\}$. Therefore, neither $S_1$ nor $S_2$ can be discovered.
 
+\end{proof}
+\subsection{Proof of Proposition \ref{prop:main}}
+\begin{proof}[Proof of Proposition \ref{prop:main}]
+	In this proof, we make some notation convention.
+	$w(C) = \displaystyle\sum_{(i,j) \in E(C)} w_{ij},$
+	$w(A, C) = \displaystyle\sum_{\substack{i \in A, j \in C \\ (i,j) \in E(V')}} (w_{ij}+w_{ji})$ and
+	$\P_C = \{\{i \}| i \in C \}$. Suppose $\gamma_N = I(Z_B)$, from equation \eqref{eq:largest_threshold}, we can get $\gamma_N =\frac{f[\P_B]} {\abs{B} -1}$.
+	Since $V' = B \cup \{i'\}$
+	$f[\P_{V'}] = f[\P_B] + \sum_{i \in B}w_{ii'}$.
+	
+	If $ \sum_{i \in B} w_{ij} > \gamma_N$ we can get
+	$$
+	\gamma'_N \geq I_{\P_{V'}}(Z_{V'}) = \frac{(\abs{B}-1)\gamma_N + \sum_{i \in B}w_{ii'}}{\abs{B}} > \gamma_N
+	$$
+	
+	On the other hand, suppose $\gamma'_N = I(Z_K) > \gamma_N$. Then $K$ must contain $i'$. If $K=V'$ then the conclusion holds. Otherwise, Suppose $K = \{i'\} \cup B', B=B'\cup J, J\neq \emptyset$. We can write 
+	\begin{equation}\label{eq:gammaNF}
+	\gamma_N = \frac{w(J,B') + w(J) + w(B')}{ \abs{B'} + \abs{J} - 1 }
+	\end{equation}
+	Since $I(Z_K) = I_{\P_K}(Z_K)$ is maximal, we have $I_{\P_K}(Z_K) > I_{\P_{V'}}(Z_{V'})$ and $I_{\P_K}(Z_K) \geq I_{\P_{B'}}(Z_{B'})$.
+	\begin{align*}
+	\frac{w(\{i'\}, B') + w(B')}{\abs{B'}} >& \frac{w(B') + w(J, B') + w(J) + w(\{i'\}, B') + w(\{i'\}, J)}{\abs{B'} + \abs{J}}  \\
+	\frac{w(\{i'\}, B') + w(B')}{\abs{B'}} \geq & \frac{w(B')}{\abs{B'} - 1}
+	\end{align*}
+	we can get 
+	\begin{align}
+	\abs{J} (w(\{i'\}, B') + w(B')) > & \abs{B'} (w(J, B') + w(J) + w(\{i'\}, J)) \label{eq:target}
+	\\
+	(\abs{B'} - 1)  w(\{i'\}, B') \geq & w(B') \label{eq:convert}
+	\end{align}
+	Taking equation \eqref{eq:convert} in \eqref{eq:target}, we can get
+	\begin{equation}\label{eq:summation}
+	\abs{J} w(\{i'\}, B') > w(J, B') + w(J) + w(\{i'\}, J)
+	\end{equation}	
+	Combined with \eqref{eq:gammaNF}, adding equation \eqref{eq:convert} and \eqref{eq:summation} we can get
+	$w(\{i'\}, B') > \gamma_N$. Then $\sum_{j \in B}w_{ii'} > \gamma_N $ follows.
 \end{proof}
 \subsection{Proof of Proposition \ref{prop:alg_complexity}}
 \begin{proof}[Proof of Proposition \ref{prop:alg_complexity}]
