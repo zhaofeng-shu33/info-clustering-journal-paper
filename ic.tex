@@ -879,27 +879,31 @@ We need the following lemmas to prove Proposition \ref{prop:reweight}.
 \end{lemma}
 \begin{proof}
 	From Lemma \ref{lemma:laminarity},
-	$I(Z_{S_1\cup S_2}) \geq \min\{I(Z_{S_1}), I(Z_{S_2})\} = I(Z_{S_2})$. From bottom-up formulation,  $S_2$ cannot be a cluster of $G$.
+	$I(Z_{S_1\cup S_2}) \geq \min\{I(Z_{S_1}), I(Z_{S_2})\} = I(Z_{S_2})$. Since $S_1 \cup S_2 \supsetneq S_2$, from the definition of info-clustering, $S_2$ cannot be a cluster of $G$.
 \end{proof}
 \begin{corollary}\label{cor:complete}
 	For a complete graph $G(V,E)$ with equal weight $w$ on each edge, we have $I(Z_{V})=\frac{nw}{2}$ where $n=\abs{V}$. And $I(Z_S) < I(Z_V)$ for any subset $S\subsetneq V$.
 \end{corollary}
 \begin{proof}
-	From Proposition \ref{prop:triangle}, $I(Z_{V})$ is achieved by $\P=\{\{1\},\dots,\{n\} \}$ and $I(Z_V) = I_{\P}(Z_V) = \frac{n(n-1)w/2}{n-1} = \frac{nw}{2} $. From bottom-up approach, $I(Z_V) = \max_{S\subset V} I(Z_S)$, therefore $I(Z_S) \leq I(Z_V)$. If $I(Z_S) = I(Z_V)$, consider $\P_S=\{i | i \in S\}$, then $I(Z_S) = I_{\P_S}(Z_S) = \frac{\abs{S}w}{2} < I(Z_V)$, a contradiction. Therefore, $I(Z_S) < I(Z_V)$ holds for any subset $S\subsetneq V$.
+	From Proposition \ref{prop:triangle}, $I(Z_{V})$ is achieved by $\P=\{\{1\},\dots,\{n\} \}$ and $I(Z_V) = I_{\P}(Z_V) = \frac{n(n-1)w/2}{n-1} = \frac{nw}{2} $. From Equation \eqref{eq:largest_threshold}, $I(Z_V) = \max_{S\subset V} I(Z_S)$, therefore $I(Z_S) \leq I(Z_V)$. If $I(Z_S) = I(Z_V)$ for some $S\subsetneq V$, consider $\P_S=\{i | i \in S\}$, then $I(Z_S) = I_{\P_S}(Z_S) = \frac{\abs{S}w}{2} < I(Z_V)$, a contradiction. Therefore, $I(Z_S) < I(Z_V)$ holds for any subset $S\subsetneq V$.
 \end{proof}
 \begin{proof}[Proof of Proposition \ref{prop:reweight}]
-	We will show that if $U \neq S_1$ and $U \neq S_2$, $U$ cannot be a cluster of $G$.
+If $m < \frac{nr}{2}$, we will show that if $U \neq S_1$ and $U \neq S_2$, $U$ cannot be a cluster of $G$.
 	
 For any $U \in S_1 \cup S_2 $ and $\abs{U} \leq n$, If $U \in S_1$ or $U \in S_2$, then by Corollary \ref{cor:complete}, $I(Z_U) < I(Z_{S_1})$.
-If $U \cap S_1 \neq \emptyset$ or $U \cap S_2 \neq \emptyset$ holds, by Lemma \ref{lemma:sub}, $I(Z_{S_1})= I(Z_{S_2}) > I(Z_U) \Rightarrow U$ is not a cluster of $G$.
+If $U \cap S_1 \neq \emptyset$ or $U \cap S_2 \neq \emptyset$ holds, $I(Z_{S_1})= I(Z_{S_2}) = \frac{nr}{2} > m \geq I_{\{U \cap S_1, U \cap S_2\}} \geq I(Z_U) \Rightarrow U$ is not a cluster of $G$ from Lemma \ref{lemma:laminarity}.
 
 For $\abs{U} > n$ but $U \neq V = S_1 \cup S_2$. Suppose $S_2 \subset U$. Let $\P' = \{\{i\}| i\in U\}$, $I(Z_U) \leq I_{\P'}(Z_U) = \frac{\frac{rn(n-1)}{2} + m + \frac{rk(k-1)}{2}}{n+k-1}$ where $m_1 \leq nk$ and $k=\abs{U} - n < n$. 
 We compare it to $I(Z_{S_1}) = \frac{nr}{2}$ and we can show that $I(Z_{S_1}) - I_{\P'}(Z_U) \geq \frac{nrk-2m-rk(k-1)}{2(n+k-1)}$. 
 
-If $m < \frac{nr}{2}$, then $I(Z_{S_1}) - I_{\P'}(Z_U) > \frac{r(n-k)(k-1)}{2(n+k-1)} \geq 0$. Then $I(Z_{S_1})>I(Z_U)$, $U$ is not a cluster by Lemma \ref{lemma:sub}. In either case, $U$ is not a cluster of $G$ for $1<\abs{U}<2n, U \neq S_1, U\neq S_2$. 
+Using $m<\frac{nr}{2}$, $I(Z_{S_1}) - I_{\P'}(Z_U) > \frac{r(n-k)(k-1)}{2(n+k-1)} \geq 0$. Then $I(Z_{S_1})>I(Z_U)$, $U$ is not a cluster by Lemma \ref{lemma:sub}. In either case, $U$ is not a cluster of $G$ for $1<\abs{U}<2n, U \neq S_1, U\neq S_2$. Based on this conclusion, by simply comparing $I_{\P}(Z_V) = \frac{m+rn(n-1)}{2n-1}$ with
+$ I_{\{S_1, S_2\}}=m$ we can conclude that $I(Z_V) = I_{\{S_1, S_2\}}$ when $ m < \frac{nr}{2}$. Therefore, $S_1$ and $S_2$ can be simultaneously discovered by GBIC.
 
-If $m \geq \frac{nr}{2}$, we have $I_{\P}(Z_V) = \frac{m+rn(n-1)}{2n-1} \leq m = I_{\{S_1, S_2\}}(Z_V)$. Suppose $I_{\P^*}(Z_V)$, If $S\in \P^*$ and $S\subseteq S_1$. From Lemma \ref{lemma:sub} we must have $S=S_1$. Then $\P^*=\{S_1, S_2\}$, which contradicts with
-$I_{\P}(Z_V)  \leq  I_{\{S_1, S_2\}}(Z_V)$ since $\P$ is finer than $\{S_1, S_2\}$. Therefore, neither $S_1$ nor $S_2$ can be discovered.
+If $m \geq \frac{nr}{2}$, we have $I_{\P}(Z_V) = \frac{m+rn(n-1)}{2n-1} \leq m = I_{\{S_1, S_2\}}(Z_V)$.
+Suppose $I(Z_V) = I_{\P^*}(Z_V)$.
+If $S\in \P^*$ and $S\subseteq S_1$. From Lemma \ref{lemma:sub} we must have $S=S_1$. Then $\P^*=\{S_1, S_2\}$, which contradicts with
+$I_{\P}(Z_V)  \leq  I_{\{S_1, S_2\}}(Z_V)$ since $\P$ is finer than $\{S_1, S_2\}$. The same can be said if $S\in \P^*$ and $S\subseteq S_2$.
+Therefore, neither $S_1$ nor $S_2$ can be discovered.
 
 \end{proof}
 \subsection{Proof of Proposition \ref{prop:main}}
