@@ -491,7 +491,7 @@ In \eqref{eq:Tn}, $Cn^4$ is the time complexity of \texttt{DT}. $\delta_{k<n} = 
 	 If $n_i \leq \frac{n}{2}, \textrm{ for } i=1,\dots,k$ and $ k \leq \frac{n}{2}$  hold in equation \eqref{eq:Tn}, then $T(n) = O(n^4)$.
 \end{proposition}
 
-The condition in Proposition \ref{prop:alg_complexity} restricts the shape of the clustering tree. For each non-leaf node, the number of its children and the number of samples in each children are limited. However, the limitation is not so strict and
+The condition in Proposition \ref{prop:alg_complexity} restricts the shape of the clustering tree. For each non-leaf node, its children and the number of samples in each children are limited. However, the limitation is not so strict and
 many near-balanced trees satisfied the condition. Therefore, we can say that under this mild condition of Proposition \ref{prop:alg_complexity},
 our PSPI has time complexity $O(n^4)$, which is one order of magnitude faster than $O(n^5)$ of Algorithm \ref{alg:psp}.
 
@@ -587,7 +587,7 @@ To apply GBIC on community detection problems, we can not treat each edge with e
 \begin{equation}\label{eq:wij_scheme}
     w_{ij} = 1 + \abs{\{k | (i,k),(j,k) \in E \}} \textrm{ for } (i,j) \in E
 \end{equation}
-This weight assignment scheme is the number of triangles which contains the edge. For edges in a complete graph, it is equivalent to take $r=n$ in the model problem of Proposition \ref{prop:triangle}. Then approximately it needs
+This weight assignment scheme for $w_{ij}$ is the number of one and two hop paths between $i$ and $j$. For edges in a complete graph, it is equivalent to take $r=n$ in the model problem of Proposition \ref{prop:triangle}. Then approximately it needs
 at least $\frac{n^2}{2}$ edges to make the two subgraphs unrecoverable.
 Beyond the theoretical analysis of two community model, now we consider a more complex structure and empirically justify the weighting scheme of Equation 
 \eqref{eq:wij_scheme}.
@@ -634,11 +634,12 @@ into two cases:
 \end{enumerate}
 
 Co-authorship datasets are a typical exemplar to compare different link prediction methods. We use the NIPS-authorship dataset as done by \cite{RN23}.
-Since the graph is sparse and it is hard to predict for some node with little connection information, we restrict the network to the 234 nodes whose degrees are largest. Since the prediction  is a hypothesis testing problem, we use true positive rate (TPR), true negative rate (TNR) and accuracy (ACC) as the evaluation metric. We compare GBIC with BHCD and a local prediction method based on a metric called Resource Allocation Index \citep{zhou2009predicting}. For TPR our method achieves higher score
+Since the graph is sparse and it is hard to predict for some node with little connection information, we restrict the network to the 234 nodes whose degrees are largest. Since the prediction  is a hypothesis testing problem, we use true positive rate (TPR), true negative rate (TNR) and accuracy (ACC) as the evaluation metric. We compare GBIC with BHCD and a local prediction method based on a metric called Resource Allocation Index \citep{zhou2009predicting} and the result is shown in Table \ref{tab:nips}. It can be seen that for TPR our method achieves higher score
 and for other metrics our method is near the best.
 \begin{table}
 \centering
 \input{compare.tex}
+\caption{Comparison of different link prediction methods on Authorship dataset}\label{tab:nips}
 \end{table}
 
 
