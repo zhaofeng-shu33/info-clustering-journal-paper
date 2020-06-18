@@ -104,7 +104,7 @@ grestore
 We propose a graph-based hierarchical clustering method based on a multivariate information metric.
 The proposed method can generate non-binary hierarchical tree that reveals the intrinsic structures in the data, and is robust against outliers. 
 The hierarchical tree can be computed efficiently using
-our improved algorithm, which is one order of magnitude faster than previous.
+our improved algorithm, which is one order of magnitude faster than previous methods.
 Besides clustering analysis, our method can be adopted and
 used in many other unsupervised data mining tasks including community discovery, link prediction and outlier detection.
 Experiments show that the clustering result outperforms
@@ -117,60 +117,60 @@ other hierarchical clustering techniques and is competent for more difficult uns
 \section{Introduction}
 \label{intro}
 % background information goes here
-Clustering Analysis is an important research topic in machine learning.
+Clustering analysis is an important research topic in machine learning.
 It has wide applications in many areas. For example, to track the epidemic
 sources within a community \citep{epidemic2020} and assist for the model of natural disasters with observed data \citep{earthquake2016}.
 
-There are many different methods for clustering analysis. One of them is called
-hierarchical clustering. The classical method of hierarchical clustering uses the Euclid distance between samples
+Hierarchical clustering is one of many different methods for clustering analysis.
+The classical method of hierarchical clustering uses the Euclidean distance between samples
 as the metric to merge the most similar pairs until all the samples are merged into a clustering
 tree \citep{slink}. Compared with other clustering method, hierarchical clustering can better describe the relationship between different clusters. Still, the classical hierarchical clustering method has some
-drawbacks. One of them is pairwise merging, which is not optimal since it does not consider information shared among more than two clusters. Besides, the criterion to split the clustering tree into a flat clustering structure is arbitrary and lacks explanations, which bring some mysteries in practical
+drawbacks. For example, classical hierarchical clustering uses pairwise merging, which is not theoretically motivated since it does not consider information shared among more than two clusters in each step. Besides, the criterion to transform the clustering tree to a flat clustering structure is arbitrary and lacks explanations, which bring some mysteries in practical
 usage.
 
-In recent 20 years, there are many emerging hierarchical clustering methods which brought new insights into this area. These new methods arise from combination of different domain knowledge and
+In the last 2 decades, there are many emerging hierarchical clustering methods which brought new insights into this area. These new methods arise from the combination of different domain knowledge and
 subject branch. To name but a few, 
 Bayesian hierarchical clustering \citep{bhc},
 clusterpath based on convex optimization \citep{hocking2011clusterpath},
 hierarchical density estimation \citep{hde}, 
 graph partition based on Dasgupta's cost \citep{dasgupta2016cost},
 Gradient-based Hierarchical Clustering based on hyperbolic geometry \citep{hyperbolic} etc.
-These methods have both advantages and disadvantages.
+These methods have different trade-offs in terms of model complexity, efficiency and accuracy.
 Practitioners need to choose the proper method according to the specific problem.
 For example, an extension of Bayesian clustering, called Bayesian Rose Trees 
 can produce non-binary hierarchical tree
 under a given probabilistic model \citep{blundell2011discovering}.
 But Bayesian model has many hyper-parameters to tune and the clustering results between different runs may vary greatly because of its intrinsic randomness. For problems with stable requirement it
-is not suitable to use such method.
+is not suitable to use such a method.
 
 
 Besides the hierarchical methods mentioned above, there is a specific branch which brings information theory into clustering. This branch is based on the observation that metrics in hierarchical clustering
 are mostly empirically inspired and may not reflect the true underlining probabilistic model of the data.
 Either variants of mutual information or some other kind of information-theoretic metric is used in the past literature. For the former method, the metric of mutual information is used and an agglomerative scheme is adopted \citep{mim}. The mutual information between samples and cluster labels is estimated using Parzen's window, which is a kind of Gaussian mixture model. Such adoption
-has some theoretical benefits but suffers from sub-optimization of mutual information cost in the agglomerative approximation.
+has some theoretical benefits but suffers from sub-optimal result of mutual information cost in the agglomerative approximation.
 For the latter part, i.e., other information metrics, there has been some discussion about using Information Potential \citep{ic2002}. However, this metric replies on Gaussian kernels and there is only approximate greedy algorithms to compute this metric. It is until the proposal of multivariate mutual information metric in clustering that there is some breakthrough \citep{ic2016}.
 
 Multivariate mutual information, as its name suggests, is an extension of mutual information for multiple
 random variables. Using such metric as the thresholds, \citet{ic2016} shows that we can get a clustering
 tree for random variables. The theory sounds good but it is nearly impossible to compute such metric
-in practice. Similar issues exist for Bayesian approach. For these probabilistic methods, we
+in practice. Similar issues exist for the Bayesian approach. For these probabilistic methods, we
 are unable to estimate precisely the distribution from data. Parametric model is used in Bayesian
 method to overcome this obstacle, and in this article we will use the graph model to overcome the similar problem for info-clustering.
 Therefore, we call our method graph-based info-clustering (GBIC).
 
 Restricting info-clustering from abstract probabilistic space to graph model can be theoretically formulated from the local regime assumption of distributions. It's known that estimation of mutual information between $X$ and $Y$ from data is a hard task but when $X$ and $Y$ are nearly independent, \citet{huang2017information} shows that the estimation can be simplified to do some kind of alternative conditional expectation, which can be computed efficiently from data. In this paper, we will extend this local regime result to multivariate case and show that under the local regime assumption info-clustering is equivalent to a graph model.
 
-Many problems in graph model are NP-Hard and only allows approximate solutions. Quite surprisingly, our proposed graph-based clustering method is can be solved exactly in polynomial time.
-This result has been established by using a special graph partition structure called "Principal Sequence of Partition"(PSP), which is equivalent to the info-clustering framework \citep{ic2016}. There is polynomial time algorithms to compute PSP.
+Many problems in graph model are NP-hard and only allows approximate solutions. Quite surprisingly, our proposed graph-based clustering method is can be solved exactly in polynomial time.
+This result has been established by using a special graph partition structure called Principal Sequence of Partition (PSP), which is equivalent to the info-clustering framework \citep{ic2016}. There is polynomial time algorithms to compute PSP.
 However, the original algorithm proposed by
 \citet{narayanan}, has a high time complexity to fit the practice. There has been some improvement
-using parametric maximal flow techniques \citep{kolmogorov}. In this article, we will propose a new improvement to compute PSP, called PSPI. We will deduce the time complexity of PSPI under some mild assumptions. And we will show that empirically our improvement runs almost an order of magnitude faster than other methods.
+using parametric maximal flow techniques \citep{kolmogorov}. In this article, we will propose a new improvement to compute PSP, called PSPI. We will deduce the time complexity of PSPI under some mild assumptions. And we will also show that empirically our improvement runs almost an order of magnitude faster than other methods.
 
 As far as we know, the mathematical expression of info-clustering on graph model is similar to that of the minimum average cost \citep{mac} and network information flow \citep{pin}. Therefore, the algorithmic implementations, i.e., to compute PSP, are the same with these methods. We call them PSP-based methods. However, different methods
 are based on different assumptions and the theoretical discussion differs between these methods. Though our GBIC derived from info-clustering, some theoretical
 properties are analyzed specifically for our graph model, which is absent from prior work. These properties inspires us to extend our method to many different data-mining problems.
 
-There has been little prior work on applying PSP-based methods to data engineering problems except for some proof-of-concept experiment \citep{mac}. In this paper, we will consider the application
+There has been little prior work on applying PSP-based methods to data mining problems except for some proof-of-concept experiment \citep{mac}. In this paper, we will consider the application
 of our graph-based info-clustering to different unsupervised learning problems. Specifically
 we will not only consider clustering analysis problems, in which our proposed method can be directly applied. We will also consider link prediction, outlier detection and community discovery problems, in which we will propose new promising
 method adopted from graph-based info-clustering. We will conduct empirical experiments on both artificially generated data and some real-world dataset and show the feasibility of our method in
@@ -181,13 +181,13 @@ Our contribution is summarized as follows: Firstly we extend the theory of info-
 The paper is organized as follows: In Section \ref{sec:bk} we introduce the background knowledge, which are most relevant with our work. In Section \ref{sec:GBIC} our formulation of GBIC and important properties of our model are given. In Section \ref{sec:alg}, we propose an improved algorithm to compute the PSP structure of graph. Then in Section \ref{sec:es} we conduct empirical study of GBIC on data clustering and extend the method to other fields. Finally we give the conclusion in Section \ref{sec:conc}.
 
 
-\section{Background Knowledge}\label{sec:bk}
+\section{Background}\label{sec:bk}
 Before proceeding to introduce our theoretical and algorithmic results, it is necessary to review some prior results from minimal technical aspect. We split this section into three parts, first we introduce
 the local information geometry theory and the concept of weak dependency of two random variables;
 next are the general info-clustering model and its relationship with principal sequence of partitions (PSP) of submodular function;
 the final part is about the original algorithm used to solve PSP problem.
 \subsection{Local Information Geometry}\label{subsec:lig}
-It is well known that KL-Divergence can be used to measure the distance of two probabilistic distributions. When the two distributions are quite "near", that is, both of them are within a neighborhood of a distribution $P$, we can approximate the expression of KL-Divergence with "Euclid distance" \citep{huang2017information}. To be more specific, let $P_0$ represent a probability mass function (PMF) of a discrete distribution on alphabet $\mathcal{X}$. We say $P$ is in a $\epsilon$-Neighborhood $N^{(\epsilon)}(P_0)$ of $P_0$ if
+It is well known that KL-Divergence can be used to measure the distance of two probabilistic distributions. When the two distributions are quite "near", that is, both of them are within a neighborhood of a distribution $P$, we can approximate the expression of KL-Divergence with "Euclidean distance" \citep{huang2017information}. To be more specific, let $P_0$ represent a probability mass function (PMF) of a discrete distribution on alphabet $\mathcal{X}$. We say $P$ is in a $\epsilon$-Neighborhood $N^{(\epsilon)}(P_0)$ of $P_0$ if
 \begin{equation}
 P \in N^{(\epsilon)}(P_0) \iff \sum_{x \in \mathcal{X}} \frac{(P(x) - P_0(x))^2}{P(x)} < \epsilon^2
 \end{equation}
@@ -197,7 +197,7 @@ If both $P_1, P_2 \in N^{(\epsilon)}(P_0)$ we have
 \begin{equation}\label{eq:approx:ig}
 D(P_1 || P_2) = \frac{\epsilon^2}{2} ||\phi_1 - \phi_2||^2 + o(\epsilon^2)
 \end{equation}
-In addition, the above result can be used when two random variables are weakly independent \citep{huang2019universal}. We say $X$ and $Y$ are weakly dependent if the conditional PMF $P_{Y|X}(\cdot |x) \in N^{(\epsilon)}(Y)$ for all $x \in \mathcal{X}$. Under the assumption of
+In addition, the above result can be used when two random variables are weakly independent \citep{huang2019universal}. We say $X$ and $Y$ are \textbf{weakly dependent} if the conditional PMF $P_{Y|X}(\cdot |x) \in N^{(\epsilon)}(Y)$ for all $x \in \mathcal{X}$. Under the assumption of
 weak dependence, the mutual information, which is defined by $D(P_{XY}||P_XP_Y)$, can be expressed
 in concise form:
 \begin{equation}\label{eq:Ixy}
@@ -207,10 +207,10 @@ To simplify the notation, the term $\sum_{x\in \mathcal{X}, y\in \mathcal{Y}} B^
 of the mutual information when the random variables are weakly dependent.
 
 \subsection{Theoretical Info-Clustering}
-There are many ways to extend mutual information for multiple random variables. \cite{ic2016} gives one extension based on partition of set $V$. We use $\Pi'(V)$ to represent all partitions of $V$ except for $\{V\}$. The multivariate mutual information (MMI) of random variables $\{Z_i | i \in V\}$ is defined as:
-\begin{align}\label{eq:IZV}
-I(Z_V) &:= \min_{P \in \Pi'(V)} I_{P}(Z_V) \textrm{ where} \\
-I_P(Z_V) &:= \frac{1}{|P| - 1}D(P_{Z_V} || \prod_{C\in P} P_{Z_C})
+There are many ways to extend mutual information for multiple random variables. \cite{ic2016} gives one extension based on partition of set $V$. We use $\Pi'(V)$ to represent all partitions of $V$ except for $\{V\}$. The multivariate mutual information (MMI) of random variables $Z_V=\{Z_i | i \in V\}$ is defined as:
+\begin{align}
+I_P(Z_V) &:= \frac{1}{|P| - 1}D(P_{Z_V} || \prod_{C\in P} P_{Z_C}) \\
+I(Z_V) &:= \min_{P \in \Pi'(V)} I_{P}(Z_V)  \label{eq:IZV}
 \end{align}
 Based on the definition of MMI, the cluster can be obtained by considering all maximal subsets $B$ such that $I(Z_B) > \lambda$ for a certain threshold $\lambda$. All such $B$ consists of the cluster set $\mathcal{C}_{\lambda}(Z_V)$. We call $\gamma$ is a threshold value for info-clustering if $C_{\lambda}(Z_V)$ changes at $\lambda=\gamma$.
 This theoretical definition of clusters is also equivalent to the algorithmic one:
@@ -220,7 +220,7 @@ C(Z_V) = \{ V\} \cup \bigcup_{B \in \mathcal{C}_{\lambda_1}} \mathcal{C}(Z_B) \t
 \end{equation}
 
 Equation \eqref{eq:CZV} gives a divisive approach to obtain all clusters $C(Z_V)$ and threshold values from
-the largest set $V$ and smallest threshold value $\lambda_1$. However, we cannot get a feasible algorithm
+the largest set $V$ and the smallest threshold value $\lambda_1$. However, we cannot get a feasible algorithm
 to compute the clusters since it is unknown how to compute $I(Z_V)$.
 To get over this difficulty a relationship between $I(Z_V)$ and
 a special kind of submodular function minimization problem is established \citep{mac}. All threshold values of info-clustering are the same as those of
@@ -284,7 +284,7 @@ We will also explore various theoretical
 properties of GBIC, which guides the empirical extension of GBIC to other unsupervised learning tasks.
 
 General model of info-clustering is not very useful since we know little about the joint distribution.
-We need to do some kind of model reduction to get some useful model. 
+We need to perform model reduction to get some useful model. 
 In the following section we will use local information geometry to reduce the general model of info-clustering to our GBIC.
 %. The relationship of these two special models, together with their parent model, are shown
 % in the Vienn diagram in Fig. \ref{fig:relationship} % For one-column wide figures use
@@ -308,49 +308,53 @@ In the following section we will use local information geometry to reduce the ge
 First we introduce the concept of weak dependency for multiple random variables.
 
 \begin{definition}\label{def:general}
-$X_1, \dots, X_n (n\geq 3)$ are weakly dependent if there exist a random variable $U$ such that
-$(X_1, \dots, X_n)$ is weakly dependent with $U$ and $X_1, \dots X_n$ are independent conditioned
+$Z_1, \dots, Z_n (n\geq 3)$ are weakly dependent if there exist a random variable $U$ such that
+$(Z_1, \dots, Z_n)$ is weakly dependent with $U$ and $Z_1, \dots Z_n$ are independent conditioned
 on $U$.
 \end{definition}
 
 This definition is an extension of weak dependence for two random variables mentioned in Section \ref{subsec:lig}.
-For example, suppose $X=(X_1, \dots, X_n)$ are joint Gaussian and its covariance matrix concentrates on the diagonal lines.
-Intuitively $X_1, \dots, X_n$ are near independent since the non-diagonal value of covariance matrix is very small. 
-And actually we can find another $n$ dimensional Gaussian random vector $U$ such that the correlation of $X$ and $U$ are small
-and $\mathrm{Cov}(X|U)$ is diagonal matrix. Then by Definition \ref{def:general} we say $X_1, \dots, X_n$ are weakly dependent.
+For example, suppose $(Z_1, \dots, Z_n)$ are joint Gaussian and its covariance matrix concentrates on the diagonal lines.
+Intuitively $Z_1, \dots, Z_n$ are near independent since the non-diagonal value of covariance matrix is very small. 
+And actually we can find another $n$ dimensional Gaussian random vector $U$ such that the correlation of $Z$ and $U$ are small
+and $\mathrm{Cov}(X|U)$ is diagonal matrix. Then by Definition \ref{def:general} we say $Z_1, \dots, Z_n$ are weakly dependent.
 For clustering tasks, it is impossible to compute the joint distribution from limited data and it is better to make some
 assumptions on the distribution. And in this article, we make the assumption of weak dependency, which is indeed better than totally
 independence and competitive to parametric Bayesian assumption.
 
 Let $\P$ be the partition of $V=\{1,2,\dots, n\}$. We claim:
 \begin{theorem}\label{thm:DPX}
-If $X_1, \dots, X_n$ are weakly dependent, then
+If $Z_1, \dots, Z_n$ are weakly dependent, then
 \begin{equation}\label{eq:PXV}
-D(P_{X_V} || \prod_{C\in \P} P_{X_{C}}) = {1 \over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \P}} \norm{B_{ij}}_F^2 + o(\epsilon^2)
+D(P_{Z_V} || \prod_{C\in \P} P_{Z_{C}}) = {1 \over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \P}} \norm{B_{ij}}_F^2 + o(\epsilon^2)
 \end{equation}
+where $B_{ij}$ is the $B$ matrix between random variable $Z_i$ and $Z_j$.
 \end{theorem}
 We can see that Theorem \ref{thm:DPX} is an extension of the approximation of mutual equation in Equation \eqref{eq:Ixy} to the case of multiple random variables.
-$B_{ij}$ is the $B$ matrix between random variable $X_i$ and $X_j$.
+
 % To get the required KL-Divergence under a given partition, we only need to make a
 %summation of these weight terms.
 
 Theorem \ref{thm:DPX} is a statement about random variables. Now we expand it to data samples. Given a $K-$cluster dataset with $n$ samples, each cluster is regarded as a random variable. 
-Assuming the $i$-th cluster $X_i$ with alphabet size $\abs{\mathcal{X}_i}$, totally
-we have $\sum_{i=1}^K \abs{\mathcal{X}_i} = n$.
-Since $X_i$ and $X_j$ are weakly independent for $i\neq j$, we have
+Assuming the $i$-th cluster $Z_i$ with alphabet size $\abs{\mathcal{Z}_i}$, totally
+we have $\sum_{i=1}^K \abs{\mathcal{Z}_i} = n$.
+Since $Z_i$ and $Z_j$ are weakly independent for $i\neq j$, we have
 \begin{equation}\label{eq:phi_w}
-P_{X_iX_j}(x_i, x_j) = P_{X_i}(x_i)P_{X_j}(x_j) + \epsilon \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} \phi_{X_iX_j}(x_i, x_j) + o(\epsilon)
+P_{Z_i Z_j}(z_i, z_j) = P_{Z_i}(z_i)P_{Z_j}(z_j) + \epsilon \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)} \phi_{Z_i Z_j}(z_i, z_j) + o(\epsilon)
 \end{equation}
-Therefore from Equation \eqref{eq:Ixy}, $\norm{B_{ij}}_F^2 = \epsilon^2 \sum_{x_i \in \mathcal{X}_i, x_j \in \mathcal{X}_j} \phi^2_{X_iX_j}(x_i, x_j)$ and Equation \eqref{eq:PXV} can be expanded as
+Therefore from Equation \eqref{eq:Ixy}, $\norm{B_{ij}}_F^2 = \epsilon^2 \sum_{z_i \in \mathcal{Z}_i, z_j \in \mathcal{Z}_j} \phi^2_{Z_i Z_j}(z_i, z_j)$ and Equation \eqref{eq:PXV} can be expanded as
 \begin{equation}\label{eq:PXV_Data}
-D(P_{X_V} || \prod_{C\in \P} P_{X_{C}}) = {\epsilon^2\over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \P}} \sum_{x_i \in \mathcal{X}_i, x_j \in \mathcal{X}_j}  \phi^2_{X_iX_j}(x_i, x_j) + o(\epsilon^2)
+D(P_{Z_V} || \prod_{C\in \P} P_{Z_{C}}) =
+{\epsilon^2\over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \P}}
+\sum_{z_i \in \mathcal{Z}_i, z_j \in \mathcal{Z}_j}  \phi^2_{Z_i Z_j}(z_i, z_j) + o(\epsilon^2)
 \end{equation}
-We can treat the term $\phi^2_{X_iX_j}(x_i, x_j)$ as the capacity weight of an edge for a graph with $n$ nodes. Each vertex of the graph is corresponding to a data sample.
-To simplify the notation, let $w_{ij} = \phi^2_{X_{d(x_i)}X_{d(x_j)}}(x_i, x_j)$ where $d(x_i)$ maps the vertex to its underlining random variable index, $1\leq i,j \leq \abs{V}$.
-We can also expand each $X_i$ to its alphabet and treat the partition $\P$ as partition of the graph vertices.
+We can treat the term
+$\phi^2_{Z_i Z_j}(z_i, z_j)$ as the weight of an edge for a graph with $n$ nodes. Each vertex of the graph is corresponding to a data sample.
+To simplify the notation, let $w_{ij} = \phi^2_{Z_{d(z_i)}Z_{d(z_j)}}(z_i, z_j)$ where $d(z_i)$ maps the vertex to its underlining random variable index, $1\leq i,j \leq \abs{V}$.
+We can also expand each $Z_i$ to its alphabet and treat the partition $\P$ as partition of the graph vertices.
 Denote $f(C) = \sum_{i\not\in C, j\in C, (i,j) \in E} w_{ij}$. Equation \eqref{eq:PXV_Data} can be simplified as
 \begin{equation}\label{eq:PXV_Data_Simplified}
-D(P_{X_V} || \prod_{C\in \P} P_{X_{C}}) = {\epsilon^2\over 2}\sum_{C \in \P} f(C)+ o(\epsilon^2)
+D(P_{Z_V} || \prod_{C\in \P} P_{Z_{C}}) = {\epsilon^2\over 2}\sum_{C \in \P} f(C)+ o(\epsilon^2)
 \end{equation}
 Combining Equation \eqref{eq:IZV} and \eqref{eq:PXV_Data_Simplified} we get the expression for the second order coefficient of multivariate mutual information (MMI):
 \begin{definition}[MMI of GBIC]\label{def:ms}
@@ -386,20 +390,20 @@ Based on our assumption, the tree leaf nodes are data samples and they are joine
 	\includegraphics[width=\textwidth]{GBIC.pdf}
 	\caption{hierarchical tree generation based on GBIC. There are 10 data samples and 4 underlining clusters. The cluster of triangles joins the cluster of circles and the cluster of squares joins the cluster of pentagons. Finally, the intermediate two super-clusters joins at the tree root}\label{fig:ta}
 \end{figure}
-Consider 10 data samples and their feature vectors are on Euclidean plane, as shown in Figure \ref{fig:ta}. The underlining graph with 10 nodes is weighted  by $w_{ij} = \exp(-\norm{x_i - x_j}^2)$. Let $X_1, X_2, X_3, X_4$ represents the square, pentagon, circle and triangle samples respectively. We can write the clustering solution \footnote{computed by Algorithm \ref{alg:psp_i_simplified} introduced in the next Section} as:
+Consider 10 data samples and their feature vectors are on Euclidean plane, as shown in Figure \ref{fig:ta}. The underlining graph with 10 nodes is weighted  by $w_{ij} = \exp(-\norm{z_i - z_j}^2)$. Let $Z_1, Z_2, Z_3, Z_4$ represents the square, pentagon, circle and triangle samples respectively. We can write the clustering solution \footnote{computed by Algorithm \ref{alg:psp_i_simplified} introduced in the next Section} as:
 \begin{equation*}
 \P = 
 \begin{cases}
-\{\{X_1,X_2,X_3,X_4\}\} & \lambda < 0.2 \\
-\{\{X_1,X_2\},\{X_3,X_4\}\} & 0.2 \leq \lambda < 0.22 \\
-\{\{X_1\},\{X_2\},\{X_3,X_4\}\} & 0.22 \leq \lambda < 0.59\\
-\{\{X_1\},\{X_2\},\{X_3\},\{X_4\}\} & 0.59 \leq \lambda \geq 0.98
+\{\{Z_1,Z_2,Z_3,Z_4\}\} & \lambda < 0.2 \\
+\{\{Z_1,Z_2\},\{Z_3,Z_4\}\} & 0.2 \leq \lambda < 0.22 \\
+\{\{Z_1\},\{Z_2\},\{Z_3,Z_4\}\} & 0.22 \leq \lambda < 0.59\\
+\{\{Z_1\},\{Z_2\},\{Z_3\},\{Z_4\}\} & 0.59 \leq \lambda \geq 0.98
 \end{cases}
 \end{equation*}
 When $\lambda > 0.98$, some clusters are split further to data samples.
 Although the clustering tree itself does not distinguish
-$\{\{X_1\},\{X_2\},\{X_3,X_4\}\}$ from $\{\{X_1,X_2\},\linebreak[2] \{X_3\}, \{X_4\}\}$,
-by threshold value constraints the partition $\{\{X_1,X_2\} \linebreak[2] ,\{X_3\}, \{X_4\}\}$ does not exist.
+$\{\{Z_1\},\{Z_2\},\{Z_3,Z_4\}\}$ from $\{\{Z_1,Z_2\},\linebreak[2] \{Z_3\}, \{Z_4\}\}$,
+by threshold value constraints the partition $\{\{Z_1,Z_2\} \linebreak[2] ,\{Z_3\}, \{Z_4\}\}$ does not exist.
 \end{example}
 
 Since GBIC is a special model of info-clustering, all theoretical properties of info-clustering apply to GBIC as well. Besides, we will give some extra properties (Proposition \ref{prop:triangle} to \ref{prop:main}), which are specific to GBIC model.
@@ -737,87 +741,87 @@ We need the following Lemma to prove Theorem \ref{thm:DPX}:
 	which implies $X$ is weakly dependent with $Z$.
 \end{proof}
 \begin{proof}[Proof of Theorem \ref{thm:DPX}]
-From the definition of weak dependence for more than 2 random variables, we can find a discrete distribution $U$ over $\{1, 2,\dots, K\}$, such that $X_1, \dots, X_n$ are independent conditioned on $U$. Since $(X_1, \dots, X_n)$ is weakly dependent with $U$, from Lemma \ref{lem:xyz}, it follows that $X_i$ is weakly dependent with $U$.  That is, 
+From the definition of weak dependence for more than 2 random variables, we can find a discrete distribution $U$ over $\{1, 2,\dots, K\}$, such that $Z_1, \dots, Z_n$ are independent conditioned on $U$. Since $(Z_1, \dots, Z_n)$ is weakly dependent with $U$, from Lemma \ref{lem:xyz}, it follows that $Z_i$ is weakly dependent with $U$.  That is, 
 \begin{equation}\label{XUk}
-P_{X_i | U=k}(x) = P_{X_i} (x)( 1 + \epsilon {\phi^{(k,i)}(x ) \over \sqrt{P_{X_i}(x)}} )
+P_{Z_i | U=k}(z) = P_{Z_i} (z)( 1 + \epsilon {\phi^{(k,i)}(z) \over \sqrt{P_{Z_i}(z)}} )
 \end{equation}
 We then have
 \begin{align}
-P_{X_i, X_j | U = k}(x_i, x_j)
-=& P_{X_i | U=k}(x_i)
-P_{X_j | U=k}(x_j) \notag \\
-=& P_{X_i}(x_i)P_{X_j}(x_j)
-(1 + \epsilon(\frac{\phi^{(k,i)}(x_i)}{\sqrt{P_{X_i}(x_i)}}
-+ \frac{\phi^{(k,j)}(x_j)}{\sqrt{P_{X_j}(x_j)}}) +
-\epsilon^2\frac{\phi^{(k,i)}(x_i)
-\phi^{(k,j)}(x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}})\label{eq:XiXj}
+P_{Z_i, Z_j | U = k}(z_i, z_j)
+=& P_{Z_i | U=k}(z_i)
+P_{Z_j | U=k}(z_j) \notag \\
+=& P_{Z_i}(z_i)P_{Z_j}(z_j)
+(1 + \epsilon(\frac{\phi^{(k,i)}(z_i)}{\sqrt{P_{Z_i}(z_i)}}
++ \frac{\phi^{(k,j)}(z_j)}{\sqrt{P_{Z_j}(z_j)}}) +
+\epsilon^2\frac{\phi^{(k,i)}(z_i)
+	\phi^{(k,j)}(z_j)}{\sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)}})\label{eq:XiXj}
 \end{align}
 Since 
 \begin{align*}
-P_{X_i}(x) &= \sum_{k=1}^{K} P_{X_i | U=k}(x) P_U(u_k) \\
-& =  \sum_{k=1}^{K}P_U(u_k)P_{X_i} (x)( 1 + \epsilon {\phi^{(k,i)}(x ) \over \sqrt{P_{X_i}(x)}} ) \textrm{ from } \eqref{XUk}\\
-\Rightarrow & \sum_{k=1}^{K} P_U(u_k){\phi^{(k, i)}(x) \over \sqrt{P_{X_i}(x)}} =0,\forall i, x\in \mathcal{X}
+P_{Z_i}(z) &= \sum_{k=1}^{K} P_{Z_i | U=k}(z) P_U(u_k) \\
+& =  \sum_{k=1}^{K}P_U(u_k)P_{Z_i} (z)( 1 + \epsilon {\phi^{(k,i)}(z) \over \sqrt{P_{Z_i}(z)}} ) \textrm{ from } \eqref{XUk}\\
+\Rightarrow & \sum_{k=1}^{K} P_U(u_k){\phi^{(k, i)}(z) \over \sqrt{P_{Z_i}(z)}} =0,\forall i, z\in \mathcal{Z}
 \end{align*}
 From \eqref{eq:XiXj} we have
 \begin{equation}\label{eq:PXiXj}
-P_{X_i, X_j}(x_i, x_j) = P_{X_i}(x_i)
-P_{X_j}(x_j) (1+\epsilon^2 \sum_{k=1}^K P_U(u_k)
-\frac{\phi^{(k,i)}(x_i)
-\phi^{(k,j)}(x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}})
+P_{Z_i, Z_j}(z_i, z_j) = P_{Z_i}(z_i)
+P_{Z_j}(z_j) (1+\epsilon^2 \sum_{k=1}^K P_U(u_k)
+\frac{\phi^{(k,i)}(z_i)
+	\phi^{(k,j)}(z_j)}{\sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)}})
 )
 \end{equation}
 For more than 2 random variables:
 \begin{align*}
-P_{X_1,\dots,X_n}(x_1,\dots,x_n)  &= \sum_{k=1}^{K} P_{X_1,\dots,X_n | U=k}(x_1,\dots,x_n) P_U(u_k) \\
-&=  \sum_{k=1}^{K}P_U(u_k) \prod_{i=1}^n P_{X_i|U=k}(x_i)\\
-&= \sum_{k=1}^{K} P_U(u_k)\prod_{i=1}^n \left(P_{X_i} (x_i)( 1 + \epsilon {\phi^{(k,i)}(x_i ) \over \sqrt{P_{X_i}(x_i)}} )\right)\\
-&=  \sum_{k=1}^{K}P_U(u_k) (\prod_{i=1}^n  P_{X_i} (x_i))
-\left( 1 + \epsilon\sum_{i=1}^n {\phi^{(k,i)}(x_i) \over \sqrt{P_{X_i}(x_i)}} + \epsilon^2\sum_{i\neq j}{\phi^{(k,i)}(x_i)\phi^{(k,j)}(x_j)\over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right)+o(\epsilon^2) \\
-&= (\prod_{i=1}^n  P_{X_i} (x_i))
-(1+\epsilon\sum_{i=1}^n \sum_{k=1}^{K} P_U(u_k){\phi^{(k,i)}(x_i) \over \sqrt{P_{X_i}(x_i)}} \\
-&+\epsilon^2 \sum_{k=1}^{K} P_U(u_k)\sum_{i\neq j}{\phi^{(k,i)}(x_i)\phi^{(k,j)}(x_j)\over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} } ) + o(\epsilon^2)\\
-&= (\prod_{i=1}^n  P_{X_i} (x_i))
-\left(1 +\epsilon^2\sum_{i\neq j} \sum_{k=1}^{K}P_U(u_k){\phi^{(k,i)}(x_i)\phi^{(k,j)}(x_j)\over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right) + o(\epsilon^2)
+P_{Z_1,\dots,Z_n}(z_1,\dots,z_n)  &= \sum_{k=1}^{K} P_{Z_1,\dots,Z_n | U=k}(z_1,\dots,z_n) P_U(u_k) \\
+&=  \sum_{k=1}^{K}P_U(u_k) \prod_{i=1}^n P_{Z_i|U=k}(z_i)\\
+&= \sum_{k=1}^{K} P_U(u_k)\prod_{i=1}^n \left(P_{Z_i} (z_i)( 1 + \epsilon {\phi^{(k,i)}(z_i ) \over \sqrt{P_{Z_i}(z_i)}} )\right)\\
+&=  \sum_{k=1}^{K}P_U(u_k) (\prod_{i=1}^n  P_{Z_i} (z_i))
+\left( 1 + \epsilon\sum_{i=1}^n {\phi^{(k,i)}(z_i) \over \sqrt{P_{Z_i}(z_i)}} + \epsilon^2\sum_{i\neq j}{\phi^{(k,i)}(z_i)\phi^{(k,j)}(z_j)\over \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)} }\right)+o(\epsilon^2) \\
+&= (\prod_{i=1}^n  P_{Z_i} (z_i))
+(1+\epsilon\sum_{i=1}^n \sum_{k=1}^{K} P_U(u_k){\phi^{(k,i)}(z_i) \over \sqrt{P_{Z_i}(z_i)}} \\
+&+\epsilon^2 \sum_{k=1}^{K} P_U(u_k)\sum_{i\neq j}{\phi^{(k,i)}(z_i)\phi^{(k,j)}(z_j)\over \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)} } ) + o(\epsilon^2)\\
+&= (\prod_{i=1}^n  P_{Z_i} (z_i))
+\left(1 +\epsilon^2\sum_{i\neq j} \sum_{k=1}^{K}P_U(u_k){\phi^{(k,i)}(z_i)\phi^{(k,j)}(z_j)\over \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)} }\right) + o(\epsilon^2)
 \end{align*}
 From \eqref{eq:PXiXj},
-let $B_{ij}(x_i, x_j)={P_{X_i, X_j}(x_i,x_j) - P_{X_i}(x_i)P_{X_j}(x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}} $, then we have:
+let $B_{ij}(z_i, z_j)={P_{Z_i, Z_j}(z_i,z_j) - P_{Z_i}(z_i)P_{Z_j}(z_j) \over \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)}} $, then we have:
 \begin{align}
 \epsilon^2\sum_{k=1}^{K}P_U(u_k)
-{\phi^{k,i}(x_i)\phi^{k,j}(x_j)\over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} } & = {P_{X_i, X_j}(x_i, x_j) - P_{X_i}(x_i)P_{X_j}(x_j) \over P_{X_i}(x_i)P_{X_j}(x_j)} \notag\\
-& = {B_{ij}(x_i, x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} } \label{eq:Bsecond}
+{\phi^{k,i}(z_i)\phi^{k,j}(z_j)\over \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)} } & = {P_{Z_i, Z_j}(z_i, z_j) - P_{Z_i}(z_i)P_{Z_j}(z_j) \over P_{Z_i}(z_i)P_{Z_j}(z_j)} \notag\\
+& = {B_{ij}(z_i, z_j) \over \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)} } \label{eq:Bsecond}
 \end{align}
 Therefore, we have 
 \begin{equation}\label{eq:sep}
-P_{X_1,\dots,X_n}(x_1,\dots,x_n) =  (\prod_{i=1}^n  P_{X_i} (x_i))\left ( 1 + \sum_{i\neq j}{B_{ij}(x_i, x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right) +o(\epsilon^2)
+P_{Z_1,\dots,Z_n}(z_1,\dots,z_n) =  (\prod_{i=1}^n  P_{Z_i} (z_i))\left ( 1 + \sum_{i\neq j}{B_{ij}(z_i, z_j) \over \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)} }\right) +o(\epsilon^2)
 \end{equation}
-Then $P_{X_1,\dots, X_n}$ is in the neighborhood of $P_{X_1}\dots P_{X_n}$ with $$\phi(x_1,\dots, x_n)=
-\sqrt{P_{X_1}(x_1)\dots P_{X_n}(x_n)}\left(\sum_{i\neq j}{B_{ij}(x_i, x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right)+o(\epsilon^2)$$
+Then $P_{Z_1,\dots, Z_n}$ is in the neighborhood of $P_{Z_1}\dots P_{Z_n}$ with $$\phi(z_1,\dots, z_n)=
+\sqrt{P_{Z_1}(z_1)\dots P_{Z_n}(z_n)}\left(\sum_{i\neq j}{B_{ij}(z_i, z_j) \over \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)} }\right)+o(\epsilon^2)$$
 
 Using Equation \eqref{eq:approx:ig} from information geometry:
 \begin{align*}
-D(P_{X_1,\dots, X_n}|| P_{X_1}\dots P_{X_n}) & ={1 \over 2} \sum_{x_1,\dots,x_n}\phi^2(x_1,\dots, x_n) \\
-& = {1\over 2}\sum_{x_1,\dots,x_n} (\prod_{i=1}^n  P_{X_i} (x_i)) \left(\sum_{i\neq j}{B_{ij}(x_i, x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right)^2 +o(\epsilon^2) 
+D(P_{Z_1,\dots, Z_n}|| P_{Z_1}\dots P_{Z_n}) & ={1 \over 2} \sum_{z_1,\dots,z_n}\phi^2(z_1,\dots, z_n) \\
+& = {1\over 2}\sum_{z_1,\dots,z_n} (\prod_{i=1}^n  P_{Z_i} (z_i)) \left(\sum_{i\neq j}{B_{ij}(z_i, z_j) \over \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)} }\right)^2 +o(\epsilon^2) 
 \end{align*}
 From the definition of $B_{ij}$, the above is the summation over $\norm{B_{ij}}^2_F$(the coupling term is zero).
 Therefore we get the second order approximation for the total partition:
 \begin{equation}
-D(P_{X_1,\dots, X_n}|| P_{X_1}\dots P_{X_n}) =   {1 \over 2} \sum_{i\neq j} \norm{B_{ij}}^2_F + o(\epsilon^2)
+D(P_{Z_1,\dots, Z_n}|| P_{Z_1}\dots P_{Z_n}) =   {1 \over 2} \sum_{i\neq j} \norm{B_{ij}}^2_F + o(\epsilon^2)
 \end{equation}
 For an arbitrary partition $\P$, using Equation \eqref{eq:sep} for each $C\in \P$, we have
 \begin{equation}
-P_{X_C}(x_C) = \prod_{i\in C} P_{X_i}(x_i)(1 + \epsilon^2 \sum_{i\neq j,i,j\in C} \frac{\tilde{B}_{ij}(x_i, x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}}) + o(\epsilon^2)
+P_{Z_C}(z_C) = \prod_{i\in C} P_{Z_i}(z_i)(1 + \epsilon^2 \sum_{i\neq j,i,j\in C} \frac{B_{ij}(z_i, z_j)}{\sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)}}) + o(\epsilon^2)
 \end{equation}
-Multiplying these equations and notice $\frac{\tilde{B}_{ij}(x_i, x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}}=O(\epsilon^2)$ from
+Multiplying these equations and notice $\frac{\tilde{B}_{ij}(z_i, z_j)}{\sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)}}=O(\epsilon^2)$ from
 Equation \eqref{eq:Bsecond} we have:
 \begin{equation}
-\prod_{C\in \P}P_{X_C}(x_C) = \prod_{i=1}^n P_{X_i}(x_i)(1+\epsilon^2 \sum_{C\in\P}\sum_{i\neq j,i,j\in C}\frac{\tilde{B}_{ij}(x_i, x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}}) + o(\epsilon^2)
+\prod_{C\in \P}P_{Z_C}(z_C) = \prod_{i=1}^n P_{Z_i}(z_i)(1+\epsilon^2 \sum_{C\in\P}\sum_{i\neq j,i,j\in C}\frac{B_{ij}(z_i, z_j)}{\sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)}}) + o(\epsilon^2)
 \end{equation}
-Then $\prod_{C\in \P}P_{X_C}$ is in the neighborhood of $P_{X_1}\dots P_{X_n}$ with $$\phi_{\P}(x_1,\dots, x_n)=
-\sqrt{P_{X_1}(x_1)\dots P_{X_n}(x_n)}\left(\sum_{C\in\P}\sum_{i\neq j,i,j\in C}\frac{\tilde{B}_{ij}(x_i, x_j)}{\sqrt{P_{X_i}(x_i)P_{X_j}(x_j)}}\right)+o(\epsilon^2)$$
+Then $\prod_{C\in \P}P_{Z_C}$ is in the neighborhood of $P_{Z_1}\dots P_{Z_n}$ with $$\phi_{\P}(z_1,\dots, z_n)=
+\sqrt{P_{Z_1}(z_1)\dots P_{Z_n}(z_n)}\left(\sum_{C\in\P}\sum_{i\neq j,i,j\in C}\frac{B_{ij}(z_i, z_j)}{\sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)}}\right)+o(\epsilon^2)$$
 Applying Equation  \eqref{eq:approx:ig} we have:
 \begin{align*}
-D(P_{X_1,\dots, X_n}|| \prod_{C\in \P}P_{X_C}) & ={1 \over 2} \sum_{x_1,\dots,x_n}(\phi(x_1,\dots, x_n)-\phi_{\P}(x_1, \dots, x_n))^2 \\
-& = {1\over 2}\sum_{x_1,\dots,x_n} (\prod_{i=1}^n  P_{X_i} (x_i)) \left(\sum_{\substack{(i,j) \not\in C\\ C\in \P}} {B_{ij}(x_i, x_j) \over \sqrt{P_{X_i}(x_i)P_{X_j}(x_j)} }\right)^2 +o(\epsilon^2) \\
+D(P_{Z_1,\dots, Z_n}|| \prod_{C\in \P}P_{Z_C}) & ={1 \over 2} \sum_{z_1,\dots,z_n}(\phi(z_1,\dots, z_n)-\phi_{\P}(z_1, \dots, z_n))^2 \\
+& = {1\over 2}\sum_{z_1,\dots,z_n} (\prod_{i=1}^n  P_{Z_i} (z_i)) \left(\sum_{\substack{(i,j) \not\in C\\ C\in \P}} {B_{ij}(z_i, z_j) \over \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)} }\right)^2 +o(\epsilon^2) \\
 & = \frac{1}{2} \sum_{\substack{(i,j) \not\in C\\ C\in \P}} \norm{B_{ij}}_F^2 + o(\epsilon^2)
 \end{align*}
 \end{proof}
