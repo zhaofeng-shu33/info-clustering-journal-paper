@@ -376,7 +376,7 @@ To apply GBIC on empirical experiment, $w_{ij}$ should be chosen properly. $w_{i
 and $X_{d(x_j)} = x_j$. 
 From its definition \eqref{eq:phi_w}, $w_{ij} \geq 0$. When $w_{ij} = 0$, the two events are independent and we say there is no edge between
 node $i$ and node $j$. The larger $w_{ij}$ takes, the more relevant the two events are. The relevance can be regarded as similarity of data samples 
-from engineering prospective. The choice of $w_{ij}$ is not unique. The rbf kernel $w_{ij} = \exp(-\gamma \norm{x_i - x_j}^2)$ is a not bad choice
+from engineering prospective. The choice of $w_{ij}$ is not unique. The rbf kernel $w_{ij} = \exp(-\gamma \norm{x_i - x_j}^2)$ is a common choice
 where $\gamma$ is a positive parameter to be tuned.
 
 To perform clustering tasks based on our GBIC model, we follow the same procedure as the general info-clustering model. That is, we proceed in a divisive way as Equation \eqref{eq:CZV}. Finally, we can get the cluster tree $\mathcal{T}$.
@@ -390,7 +390,7 @@ Based on our assumption, the tree leaf nodes are data samples and they are joine
 	\includegraphics[width=\textwidth]{GBIC.pdf}
 	\caption{hierarchical tree generation based on GBIC. There are 10 data samples and 4 underlining clusters. The cluster of triangles joins the cluster of circles and the cluster of squares joins the cluster of pentagons. Finally, the intermediate two super-clusters joins at the tree root}\label{fig:ta}
 \end{figure}
-Consider 10 data samples and their feature vectors are on Euclidean plane, as shown in Figure \ref{fig:ta}. The underlining graph with 10 nodes is weighted  by $w_{ij} = \exp(-\norm{z_i - z_j}^2)$. Let $Z_1, Z_2, Z_3, Z_4$ represents the square, pentagon, circle and triangle samples respectively. We can write the clustering solution \footnote{computed by Algorithm \ref{alg:psp_i_simplified} introduced in the next Section} as:
+Consider 10 data samples and their feature vectors are on Euclidean plane, as shown in Figure \ref{fig:ta}. The underlining graph with 10 nodes is weighted  by $w_{ij} = \exp(-\norm{z_i - z_j}^2)$. Let $Z_1, Z_2, Z_3, Z_4$ represents the square, pentagon, circle and triangle samples respectively. We can write the clustering solution \footnote{computed by Algorithm \ref{alg:psp} introduced in the next Section} as:
 \begin{equation*}
 \P = 
 \begin{cases}
