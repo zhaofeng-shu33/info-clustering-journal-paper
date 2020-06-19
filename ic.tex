@@ -342,16 +342,17 @@ Since $Z_i$ and $Z_j$ are weakly independent for $i\neq j$, we have
 \begin{equation}\label{eq:phi_w}
 P_{Z_i Z_j}(z_i, z_j) = P_{Z_i}(z_i)P_{Z_j}(z_j) + \epsilon \sqrt{P_{Z_i}(z_i)P_{Z_j}(z_j)} \phi_{Z_i Z_j}(z_i, z_j) + o(\epsilon)
 \end{equation}
-Therefore from Equation \eqref{eq:Ixy}, $\norm{B_{ij}}_F^2 = \epsilon^2 \sum_{z_i \in \mathcal{Z}_i, z_j \in \mathcal{Z}_j} \phi^2_{Z_i Z_j}(z_i, z_j)$ and Equation \eqref{eq:PXV} can be expanded as
+Therefore from Equation \eqref{eq:Ixy}, $\norm{B_{ij}}_F^2 = \epsilon^2 \sum_{z_r \in \mathcal{Z}_i, z_s \in \mathcal{Z}_j} \phi^2_{Z_i Z_j}(z_r, z_s)$ and Equation \eqref{eq:PXV} can be expanded as
 \begin{equation}\label{eq:PXV_Data}
 D(P_{Z_V} || \prod_{C\in \P} P_{Z_{C}}) =
 {\epsilon^2\over 2}\sum_{\substack{(i,j) \not\in C\\ C\in \P}}
-\sum_{z_i \in \mathcal{Z}_i, z_j \in \mathcal{Z}_j}  \phi^2_{Z_i Z_j}(z_i, z_j) + o(\epsilon^2)
+\sum_{z_r \in \mathcal{Z}_i, z_s \in \mathcal{Z}_j}  \phi^2_{Z_i Z_j}(z_r, z_s) + o(\epsilon^2)
 \end{equation}
 We can treat the term
-$\phi^2_{Z_i Z_j}(z_i, z_j)$ as the weight of an edge for a graph with $n$ nodes. Each vertex of the graph is corresponding to a data sample.
-To simplify the notation, let $w_{ij} = \phi^2_{Z_{d(z_i)}Z_{d(z_j)}}(z_i, z_j)$ \footnote{When $d(z_i) = d(z_j)$, we can still formally define $w_{ij}$ to be some value larger than $\phi^2_{Z_i Z_j}(z_i, z_j)$.} where $d(z_i)$ maps the vertex to its underlining random variable index, $1\leq i,j \leq \abs{V}$.
-We can also expand each $Z_i$ to its alphabet and treat the partition $\P$ as partition of the graph vertices.
+$\phi^2_{Z_i Z_j}(z_r, z_s)$ as the weight of an edge for a graph with $n$ nodes.
+Each vertex of the graph is corresponding to a data sample.
+To simplify the notation, let $w_{rs} = \phi^2_{Z_{d(z_r)}Z_{d(z_s)}}(z_r, z_s)$ \footnote{When $d(z_r) = d(z_s)$, we can still formally define $w_{rs}$ to be some value larger than $\phi^2_{Z_i Z_j}(z_r, z_s)$ for $i\neq j$.} where $d(z_r)$ maps the vertex to its underlining random variable index, $1\leq r,s \leq \abs{V}$.
+We can also expand each $Z_i$ to its alphabet and treat $\P$ as the partition of graph vertices.
 Suppose the graph $G(V, E)$ we considered is directed
 \footnote{Without loss of generality we only consider directly graph in this article to reduce computational cost in algorithm part},
 we can define the graph in-cut function $f(C)$ for $C\subseteq V$ as $f(C) = \sum_{i\not\in C, j\in C, (i,j) \in E} w_{ij}$, which is the total weight of edges coming
