@@ -146,9 +146,8 @@ is not suitable to use such a method.
 
 Besides the hierarchical methods mentioned above, there is a specific branch which brings information theory into clustering. This branch is based on the observation that metrics in hierarchical clustering
 are mostly empirically inspired and may not reflect the true underlining probabilistic model of the data.
-Either variants of mutual information or some other kind of information-theoretic metric is used in the past literature. For the former method, the metric of mutual information is used and an agglomerative scheme is adopted \citep{mim}. The mutual information between samples and cluster labels is estimated using Parzen's window, which is a kind of Gaussian mixture model. Such adoption
-has some theoretical benefits but suffers from sub-optimal result of mutual information cost in the agglomerative approximation.
-For the latter part, i.e., other information metrics, there has been some discussion about using Information Potential \citep{ic2002}. However, this metric replies on Gaussian kernels and there is only approximate greedy algorithms to compute this metric. It is until the proposal of multivariate mutual information metric in clustering that there is some breakthrough \citep{ic2016}.
+Either some other kind of information-theoretic metric \citep{ic2002} or variants of mutual information \citep{mim} is used in the past literature. There exists some shortcoming in such adoption. Firstly, the information metric is estimated from data using Parzen's window, which is a kind of Gaussian mixture model. For such parameterized approach it suffers from impreciseness if the underlining distribution is far from the assumption.
+Secondly there is only greedy algorithms to approximate the minimal value of the information theoretic cost. It is until the proposal of multivariate mutual information metric in clustering that there is some breakthrough \citep{ic2016}.
 
 Multivariate mutual information, as its name suggests, is an extension of mutual information for multiple
 random variables. Using such metric as the thresholds, \citet{ic2016} shows that we can get a clustering
@@ -462,7 +461,7 @@ To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first in
 		\FUNCTION{\texttt{Split}($\widetilde{G}, \widetilde{V}$)}
 		\STATE $w$ is the summation of all edge weights of $\widetilde{G}$ 
 		\STATE $\gamma' = \frac{w}{\abs{V(\widetilde{G})}-1}$ where $V(\widetilde{G})$ is the node set of graph $\widetilde{G}$ \label{alg:gamma_apostrophe}
-		\STATE $(\tilde{h}, P') = \texttt{DT}(\widetilde{G}, \gamma')$ where $\P'$ is minimizer of $h(\gamma')$ in equation \eqref{eq:hPLambda} and $\tilde{h}$ is the corresponding minimum value  \label{line:DT}
+		\STATE $(\tilde{h}, P') = \texttt{DT}(\widetilde{G}, \gamma')$ where $\P'$ is minimizer of $h(\gamma')$ in equation \eqref{eq:hPLambda} and $\tilde{h}$ is the corresponding minimal value  \label{line:DT}
 		\IF{$\tilde{h} = - \gamma'$}
 		\STATE add edge weight $\gamma'$ in $\mathcal{T}$ starting from $\widetilde{V}$ to its children
 		\ELSE
