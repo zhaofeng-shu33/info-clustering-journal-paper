@@ -158,17 +158,17 @@ are unable to estimate precisely the distribution from data. Parametric model is
 method to overcome this obstacle, and in this article we will use the graph model to overcome the similar problem for info-clustering.
 Therefore, we call our method graph-based info-clustering (GBIC).
 
-Restricting info-clustering from abstract probabilistic space to graph model can be theoretically formulated from the local regime assumption of distributions. It's known that estimation of mutual information between $X$ and $Y$ from data is a hard task but when $X$ and $Y$ are nearly independent, \citet{huang2017information} shows that the estimation can be simplified to do some kind of alternative conditional expectation, which can be computed efficiently from data. In this paper, we will extend this local regime result to multivariate case and show that under the local regime assumption info-clustering is equivalent to a graph model.
+Restricting info-clustering from abstract probabilistic space to graph model can be theoretically formulated from the local regime assumption of distributions. It's known that estimation of mutual information between $X$ and $Y$ from data is a hard task but when $X$ and $Y$ are nearly independent, \citet{huang2017information} shows that the estimation can be simplified to do some kind of alternative conditional expectation, which can be computed efficiently from data. In this paper, we will extend this local regime result to multivariate case and show that under the local regime assumption info-clustering is equivalent to a graph formulation. Within our model, some additional theoretical properties are analyzed specifically, which is absent from prior work. These properties inspires us to extend our method to many different data-mining problems.
 
-Many problems in graph model are NP-hard and only allows approximate solutions. Quite surprisingly, our proposed graph-based clustering method is can be solved exactly in polynomial time.
-This result has been established by using a special graph partition structure called Principal Sequence of Partition (PSP), which is equivalent to the info-clustering framework \citep{ic2016}. There is polynomial time algorithms to compute PSP.
-However, the original algorithm proposed by
-\citet{narayanan}, has a high time complexity to fit the practice. There has been some improvement
+
+Many problems in graph model are NP-hard and only allows approximate solutions. Quite surprisingly, our proposed graph-based clustering method can be solved exactly in polynomial time.
+This result has been established by using a special graph partition structure called Principal Sequence of Partition (PSP), which is equivalent to the info-clustering framework \citep{ic2016}. There is polynomial time algorithms to compute PSP. As far as we know, the mathematical expression of info-clustering on graph model is similar to that of the minimum average cost \citep{mac} and network information flow \citep{pin}. Therefore, the polynomial time algorithm can be applied for other problem formulations as well.
+
+The original algorithm to compute PSP is proposed by
+\citet{narayanan}, which has high time complexity and unsuitable for practical usage.
+There has been some improvement
 using parametric maximal flow techniques \citep{kolmogorov}. In this article, we will propose a new improvement to compute PSP, called PSPI. We will deduce the time complexity of PSPI under some mild assumptions. And we will also show that empirically our improvement runs almost an order of magnitude faster than other methods.
 
-As far as we know, the mathematical expression of info-clustering on graph model is similar to that of the minimum average cost \citep{mac} and network information flow \citep{pin}. Therefore, the algorithmic implementations, i.e., to compute PSP, are the same with these methods. We call them PSP-based methods. However, different methods
-are based on different assumptions and the theoretical discussion differs between these methods. Though our GBIC derived from info-clustering, some theoretical
-properties are analyzed specifically for our graph model, which is absent from prior work. These properties inspires us to extend our method to many different data-mining problems.
 
 There has been little prior work on applying PSP-based methods to data mining problems except for some proof-of-concept experiment \citep{mac}. In this paper, we will consider the application
 of our graph-based info-clustering to different unsupervised learning problems. Specifically
@@ -277,7 +277,7 @@ $h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$. Then we compute a partiti
 In Algorithm \ref{alg:psp}, a function \texttt{DT} (Dilworth truncation) is used to get the minimal value of Equation \eqref{eq:hPLambda}.
 One implementation of \texttt{DT} is described by \cite{mac} and we omit it here.
 
-\section{Formulation of Graph-based Info-clustering}\label{sec:GBIC}
+\section{Formulation of Graph-Based Info-Clustering}\label{sec:GBIC}
 
 In this section, we will extend info-clustering theory and focus specifically on graph model. We call our approach graph-based info-clustering (GBIC).
 We will also explore various theoretical
@@ -394,7 +394,7 @@ Based on our assumption, the tree leaf nodes are data samples and they are joine
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{GBIC.pdf}
-	\caption{hierarchical tree generation based on GBIC. There are 10 data samples and 4 underlining clusters. The cluster of triangles joins the cluster of circles and the cluster of squares joins the cluster of pentagons. Finally, the intermediate two super-clusters joins at the tree root}\label{fig:ta}
+	\caption{hierarchical clustering tree based on GBIC. There are 10 data samples and 4 underlining clusters. The cluster of triangles joins the cluster of circles while the cluster of squares joins the cluster of pentagons. Finally, the intermediate two super-clusters joins at the tree root.}\label{fig:ta}
 \end{figure}
 Consider 10 data samples and their feature vectors are on Euclidean plane, as shown in Figure \ref{fig:ta}. The underlining graph with 10 nodes is weighted  by $w_{ij} = \exp(-\norm{z_i - z_j}^2)$. Let $Z_1, Z_2, Z_3, Z_4$ represents the square, pentagon, circle and triangle samples respectively. We can write the clustering solution \footnote{computed by Algorithm \ref{alg:psp} introduced in the next Section} as:
 \begin{equation*}
