@@ -350,12 +350,18 @@ D(P_{Z_V} || \prod_{C\in \P} P_{Z_{C}}) =
 \end{equation}
 We can treat the term
 $\phi^2_{Z_i Z_j}(z_i, z_j)$ as the weight of an edge for a graph with $n$ nodes. Each vertex of the graph is corresponding to a data sample.
-To simplify the notation, let $w_{ij} = \phi^2_{Z_{d(z_i)}Z_{d(z_j)}}(z_i, z_j)$ where $d(z_i)$ maps the vertex to its underlining random variable index, $1\leq i,j \leq \abs{V}$.
+To simplify the notation, let $w_{ij} = \phi^2_{Z_{d(z_i)}Z_{d(z_j)}}(z_i, z_j)$ \footnote{When $d(z_i) = d(z_j)$, we can still formally define $w_{ij}$ to be some value larger than $\phi^2_{Z_i Z_j}(z_i, z_j)$.} where $d(z_i)$ maps the vertex to its underlining random variable index, $1\leq i,j \leq \abs{V}$.
 We can also expand each $Z_i$ to its alphabet and treat the partition $\P$ as partition of the graph vertices.
-Denote $f(C) = \sum_{i\not\in C, j\in C, (i,j) \in E} w_{ij}$. Equation \eqref{eq:PXV_Data} can be simplified as
+Suppose the graph $G(V, E)$ we considered is directed
+\footnote{Without loss of generality we only consider directly graph in this article to reduce computational cost in algorithm part},
+we can define the graph in-cut function $f(C)$ for $C\subseteq V$ as $f(C) = \sum_{i\not\in C, j\in C, (i,j) \in E} w_{ij}$, which is the total weight of edges coming
+into $C$.
+From Equation \eqref{eq:PXV_Data}, we can characterize the KL divergence by the total inter-cluster edge weight as
 \begin{equation}\label{eq:PXV_Data_Simplified}
-D(P_{Z_V} || \prod_{C\in \P} P_{Z_{C}}) = {\epsilon^2\over 2}\sum_{C \in \P} f(C)+ o(\epsilon^2)
+D(P_{Z_V} || \prod_{C\in \P} P_{Z_{C}}) = \epsilon^2 \sum_{C \in \P} f(C)+ o(\epsilon^2)
 \end{equation}
+Notice that for directed graph, each edge weight is counted only once in the summation. Therefore there is no need to divide 2 in
+Equation \eqref{eq:PXV_Data_Simplified}.
 Combining Equation \eqref{eq:IZV} and \eqref{eq:PXV_Data_Simplified} we get the expression for the second order coefficient of multivariate mutual information (MMI):
 \begin{definition}[MMI of GBIC]\label{def:ms}
 	\begin{align}
@@ -366,22 +372,21 @@ Combining Equation \eqref{eq:IZV} and \eqref{eq:PXV_Data_Simplified} we get the 
 
 With a little abuse of terminology and notation, we use $I_{\P}(Z_V)$ to represent the second order coefficient of MMI and call it the MMI of graph-based mutual clustering (GBIC). 
 
-The graph considered in this article is directed graph $G(V, E)$
-\footnote{without loss of generality we only consider directly graph to reduce computational cost in algorithm part}
-. For a subset $C$ of $V$, $f(\cdot)$ can be seen as graph cut function. We can also compute MMI of GBIC for subgraph $G'(V',E')$ of $G$, denoted by $I(Z_{V'})$. When $V'=\{i,j\}$, we have $I(Z_{V'})=w_{ij}$ from the above definition.
 
-To reduce the general model of info-clustering to GBIC, we not only use the weak dependency assumption, but also assume that each random variable $X_i$ only takes discrete values from the observed samples $\mathcal{X}_i$. The second assumption is also plausible, since it can be seen as an non-parametric approach restricted to discrete distribution. When the number of observed samples is large, it is approximating a continuous distribution.
+We can also compute MMI of GBIC for subgraph $G'(V',E')$ of $G$, denoted by $I(Z_{V'})$. When $V'=\{i,j\}$, we have $I(Z_{V'})=w_{ij}$ from the above definition.
 
-To apply GBIC on empirical experiment, $w_{ij}$ should be chosen properly. $w_{ij}$ measures the relevance of events $X_{d(x_i)} = x_i$
-and $X_{d(x_j)} = x_j$. 
+To reduce the general model of info-clustering to GBIC, we not only use the weak dependency assumption, but also assume that each random variable $Z_i$ only takes discrete values from the observed samples $\mathcal{Z}_i$. The second assumption is also plausible, since it can be seen as an non-parametric approach restricted to discrete distribution. When the number of observed samples is large, it is approximating a continuous distribution.
+
+To apply GBIC on empirical experiment, $w_{ij}$ should be chosen properly. $w_{ij}$ measures the relevance of events $Z_{d(z_i)} = z_i$
+and $Z_{d(z_j)} = z_j$. 
 From its definition \eqref{eq:phi_w}, $w_{ij} \geq 0$. When $w_{ij} = 0$, the two events are independent and we say there is no edge between
 node $i$ and node $j$. The larger $w_{ij}$ takes, the more relevant the two events are. The relevance can be regarded as similarity of data samples 
-from engineering prospective. The choice of $w_{ij}$ is not unique. The rbf kernel $w_{ij} = \exp(-\gamma \norm{x_i - x_j}^2)$ is a common choice
+from engineering prospective. The choice of $w_{ij}$ is not unique. The rbf kernel $w_{ij} = \exp(-\gamma \norm{z_i - z_j}^2)$ is a common choice
 where $\gamma$ is a positive parameter to be tuned.
 
 To perform clustering tasks based on our GBIC model, we follow the same procedure as the general info-clustering model. That is, we proceed in a divisive way as Equation \eqref{eq:CZV}. Finally, we can get the cluster tree $\mathcal{T}$.
 
-Based on our assumption, the tree leaf nodes are data samples and they are joined together at a stem node $\mathcal{X}_i$. It is also possible that $\abs{\mathcal{X}_i} = 1$. In such case, we say $X_i$ is an outlier.
+Based on our assumption, the tree leaf nodes are data samples and they are joined together at a stem node $\mathcal{Z}_i$. It is also possible that $\abs{\mathcal{Z}_i} = 1$. In such case, we say $Z_i$ is an outlier.
 
 
 \begin{example}
