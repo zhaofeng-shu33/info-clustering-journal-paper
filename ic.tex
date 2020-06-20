@@ -213,7 +213,7 @@ $Z_V=\{Z_i | i \in V\}$ and we use $\Pi'(V)$ to represent all partitions of $Z_V
 I_{\P}(Z_V) &:= \frac{1}{|\P| - 1}D(P_{Z_V} || \prod_{C\in \P} P_{Z_C}) \\
 I(Z_V) &:= \min_{\P \in \Pi'(V)} I_{\P}(Z_V)  \label{eq:IZV}
 \end{align}
-Based on the definition of MMI, the cluster can be obtained by considering all maximal subsets $B$ such that $I(Z_B) > \lambda$ for a certain threshold $\lambda$. All such $B$ consists of the cluster set $\mathcal{C}_{\lambda}(Z_V)$. We call $\gamma$ is a threshold value for info-clustering if $C_{\lambda}(Z_V)$ changes at $\lambda=\gamma$.
+Based on the definition of MMI, the cluster can be obtained by considering all maximal subsets $B$ such that $I(Z_B) > \lambda$ for a certain threshold $\lambda$. All such $B$ consists of the cluster set $\mathcal{C}_{\lambda}(Z_V)$. We call $\gamma$ a threshold value for info-clustering if $C_{\lambda}(Z_V)$ changes at $\lambda=\gamma$.
 This theoretical definition of clusters is also equivalent to the algorithmic one:
 
 \begin{equation}\label{eq:CZV}
@@ -238,6 +238,12 @@ h_{\P_i}(\lambda) & \lambda_i \leq \lambda < \lambda_{i+1} \textrm{ for } i = 1,
 h_{\P_k}(\lambda) & \lambda \geq \lambda_k
 \end{cases}
 \end{equation}
+and $h(\lambda)$ is illustrated in Figure \ref{fig:psp}.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.4\textwidth]{psp.eps}
+	\caption{piecewise linear function $h(\lambda)$ for $k=2$ where the think blue line represents $h(\lambda)$ }\label{fig:psp}
+\end{figure}
 Furthermore, we have $\P_0 \succeq \P_1 \dots \succeq \P_k$ \citep{narayanan}. That is, partition $\P_{i+1}$ is a refinement of $\P_i$.
 And the cluster set $C_{\lambda_i} =\{C | C\in \P_i, \abs{C} > 1\}$.
 
@@ -248,9 +254,10 @@ A relationship between MMI and the largest threshold value is established by \ci
 \subsection{Efficient Algorithm to solve PSP structure}
 We call $\P_0, \dots, \P_k$ the Principal Sequence of Partition (PSP) related with $f[\P]$.
 \cite{narayanan} proposes a divide and conquer approach to solve the PSP structure from equation \eqref{eq:hPLambda} for a general function $f[\P]$.
-Since the optimal partition is $P_0 = \{V\}$ when $\lambda=0$ and the partition is $P_k=\{\{1\}, \{2\}, \dots, \{|V|\}\}$ when $\lambda$ is quite large,
+Since the optimal partition is $\P_0 = \{V\}$ when $\lambda=0$ and the partition is $\P_k=\{\{1\}, \{2\}, \dots, \{|V|\}\}$ when $\lambda$ is quite large,
 his method starts from two endpoints $\lambda_i = 0, \lambda_j = +\infty$ and find the intersection of 
-$h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$. Then we compute a partition $P'$ such that $h(\lambda') = h_{P'}(\lambda')$. By definition $h(\lambda') \leq h'$ and when the strict inequality is taken we can repeat the process within $(\lambda_i, \lambda')$ and $(\lambda', \lambda_j)$ respectively. The above procedure is summarized in Algorithm \ref{alg:psp}.
+$h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$, which is shown in Figure \ref{fig:psp}. Then we compute a partition $\P'$ such that $h(\lambda') = h_{\P'}(\lambda')$. By definition $h(\lambda') \leq h'$ and when the strict inequality is taken we can repeat the process within $(\lambda_i, \lambda')$ and $(\lambda', \lambda_j)$ respectively. The above procedure is summarized in Algorithm \ref{alg:psp}.
+
 \begin{algorithm}
 \caption{PSP algorithm}\label{alg:psp}
 \begin{algorithmic}[1]
@@ -275,7 +282,6 @@ $h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$. Then we compute a partiti
 \ENDFUNCTION
 \end{algorithmic}
 \end{algorithm}
-
 In Algorithm \ref{alg:psp}, a function \texttt{DT} (Dilworth truncation) is used to get the minimal value of Equation \eqref{eq:hPLambda}.
 One implementation of \texttt{DT} is described by \cite{mac} and we omit it here.
 
