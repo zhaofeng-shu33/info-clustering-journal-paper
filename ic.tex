@@ -557,7 +557,7 @@ In some problems we need to extend GBIC and give the corresponding decision crit
 These decision criteria are empirically inspired and performs well in our experiment. Our experiments
 include synthetic and real-world dataset and we will compare GBIC with classical methods and Bayesian inference.
 
-\subsection{Clutering Analysis Scenario}\label{subsec:dc}
+\subsection{Clustering Analysis Scenario}\label{subsec:dc}
 For clustering analysis task, we are given $n$ data, each with a feature vector of length $m$.
 To use GBIC on such scenario, we need to construct a similarity matrix from the feature vectors. Each element of the similarity matrix corresponds a weight value of the underlining graph. Some classical clustering methods like Spectral Clustering also follow the similarity matrix approach. Practical study shows that rbf kernel and Laplacian kernel are good choice to construct the matrix.
 For these type of similarity, the graph is quite dense and to reduce the computational cost we can treat very small weights as zero. That is, we set a threshold for the weights to remove some edges in the graph. We can also use k-nearest neighbors to generate discrete similarities. It is hard to say which similarity metric is better than others and it depends on specific problems. Besides, the hyper-parameters of the metric can be tuned as well.
@@ -602,7 +602,7 @@ To apply GBIC on community detection problems, we can not treat each edge with e
 \begin{equation}\label{eq:wij_scheme}
     w_{ij} = 1 + \abs{\{k | (i,k),(j,k) \in E \}} \textrm{ for } (i,j) \in E
 \end{equation}
-This weight assignment scheme for $w_{ij}$ is the number of one and two hop paths between $i$ and $j$. For edges in a complete graph, it is equivalent to take $r=n$ in the model problem of Proposition \ref{prop:triangle}. Then approximately it needs
+This weight assignment scheme for $w_{ij}$ is the number of one and two hop paths between $i$ and $j$. For edges in a complete graph, it is equivalent to take $r=n$ in the model problem of Proposition \ref{prop:reweight}. Then approximately it needs
 at least $\frac{n^2}{2}$ edges to make the two subgraphs unrecoverable.
 Beyond the theoretical analysis of two community model, now we consider a more complex structure and empirically justify the weighting scheme of Equation 
 \eqref{eq:wij_scheme}.
