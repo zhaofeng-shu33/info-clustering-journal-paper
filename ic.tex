@@ -146,7 +146,7 @@ is not suitable to use such a method.
 
 Besides the hierarchical methods mentioned above, there is a specific branch which brings information theory into clustering. This branch is based on the observation that metrics in hierarchical clustering
 are mostly empirically inspired and may not reflect the true underlining probabilistic model of the data.
-Either some other kind of information-theoretic metric \citep{ic2002} or variants of mutual information \citep{mim} is used in the past literature. There exists some shortcoming in such adoption. Firstly, the information metric is estimated from data using Parzen's window, which is a kind of Gaussian mixture model. For such parameterized approach it suffers from impreciseness if the underlining distribution is far from the assumption.
+Either some other kind of information-theoretic metric \citep{ic2002} or variants of mutual information \citep{mim} is used in the past literature. There exists some shortcomings in these existing studies. Firstly, the information metric is estimated from data using Parzen's window, which is a kind of Gaussian mixture model. For such parameterized approach it suffers from impreciseness if the underlining distribution is far from the assumption.
 Secondly there is only greedy algorithms to approximate the minimal value of the information theoretic cost. It is until the proposal of multivariate mutual information metric in clustering that there is some breakthrough \citep{ic2016}.
 
 Multivariate mutual information, as its name suggests, is an extension of mutual information for multiple
@@ -154,19 +154,19 @@ random variables. Using such metric as the thresholds, \citet{ic2016} shows that
 tree for random variables. The theory sounds good but it is nearly impossible to compute such metric
 in practice. Similar issues exist for the Bayesian approach. For these probabilistic methods, we
 are unable to estimate precisely the distribution from data. Parametric model is used in Bayesian
-method to overcome this obstacle, and in this article we will use the graph model to overcome the similar problem for info-clustering.
+method to overcome this obstacle, and in this article we will use the graph model to overcome the incalculable problem for info-clustering.
 Therefore, we call our method graph-based info-clustering (GBIC).
 
 Restricting info-clustering from abstract probabilistic space to graph model can be theoretically formulated from the local regime assumption of distributions. It's known that estimation of mutual information between $X$ and $Y$ from data is a hard task but when $X$ and $Y$ are nearly independent, \citet{huang2017information} shows that the estimation can be simplified to do some kind of alternative conditional expectation, which can be computed efficiently from data. In this paper, we will extend this local regime result to multivariate case and show that under the local regime assumption info-clustering is equivalent to a graph formulation. Within our model, some additional theoretical properties are analyzed specifically, which is absent from prior work. These properties inspires us to extend our method to many different data-mining problems.
 
 
 Many problems in graph model are NP-hard and only allows approximate solutions. Quite surprisingly, our proposed graph-based clustering method can be solved exactly in polynomial time.
-This result has been established by using a special graph partition structure called Principal Sequence of Partition (PSP), which is equivalent to the info-clustering framework \citep{ic2016}. There is polynomial time algorithms to compute PSP. As far as we know, the mathematical expression of info-clustering on graph model is similar to that of the minimum average cost \citep{mac} and network information flow \citep{pin}. Therefore, the polynomial time algorithm can be applied for other problem formulations as well.
+This result has been established by using a special graph partition structure called Principal Sequence of Partition (PSP), which is equivalent to the info-clustering framework \citep{ic2016}. There is polynomial time algorithms to compute PSP. As far as we know, the polynomial time algorithm can also be used to solve the minimum average cost \citep{mac} and network information flow \citep{pin} problems.
 
 The original algorithm to compute PSP is proposed by
-\citet{narayanan}, which has high time complexity and unsuitable for practical usage.
+\citet{narayanan}, which has high time complexity and is unsuitable for practical usage.
 There has been some improvement
-using parametric maximal flow techniques \citep{kolmogorov}. In this article, we will propose a new improvement to compute PSP, called PSPI. We will deduce the time complexity of PSPI under some mild assumptions. And we will also show that empirically our improvement runs almost an order of magnitude faster than other methods.
+using parametric maximal flow techniques \citep{kolmogorov}. In this article, we will propose a new algorithm to compute PSP. We call our algorithm PSP Improved (PSPI). We will deduce the time complexity of PSPI under some mild assumptions. And we will also show that empirically our improvement runs almost an order of magnitude faster than other methods.
 
 
 There has been little prior work on applying PSP-based methods to data mining problems except for some proof-of-concept experiment \citep{mac}. In this paper, we will consider the application
@@ -206,10 +206,12 @@ To simplify the notation, the term $\sum_{x\in \mathcal{X}, y\in \mathcal{Y}} B^
 of the mutual information when the random variables are weakly dependent.
 
 \subsection{Theoretical Info-Clustering}
-There are many ways to extend mutual information for multiple random variables. \cite{ic2016} gives one extension based on partition of set $V$. We use $\Pi'(V)$ to represent all partitions of $V$ except for $\{V\}$. The multivariate mutual information (MMI) of random variables $Z_V=\{Z_i | i \in V\}$ is defined as:
+There are many ways to extend mutual information for multiple random variables. \cite{ic2016} gives one extension based on the partition of set. Let 
+$V$ be index set of random variables,
+$Z_V=\{Z_i | i \in V\}$ and we use $\Pi'(V)$ to represent all partitions of $Z_V$ except for $\{Z_V\}$. The multivariate mutual information (MMI) of random variable set $Z_V$ is defined as:
 \begin{align}
-I_P(Z_V) &:= \frac{1}{|P| - 1}D(P_{Z_V} || \prod_{C\in P} P_{Z_C}) \\
-I(Z_V) &:= \min_{P \in \Pi'(V)} I_{P}(Z_V)  \label{eq:IZV}
+I_{\P}(Z_V) &:= \frac{1}{|\P| - 1}D(P_{Z_V} || \prod_{C\in \P} P_{Z_C}) \\
+I(Z_V) &:= \min_{\P \in \Pi'(V)} I_{\P}(Z_V)  \label{eq:IZV}
 \end{align}
 Based on the definition of MMI, the cluster can be obtained by considering all maximal subsets $B$ such that $I(Z_B) > \lambda$ for a certain threshold $\lambda$. All such $B$ consists of the cluster set $\mathcal{C}_{\lambda}(Z_V)$. We call $\gamma$ is a threshold value for info-clustering if $C_{\lambda}(Z_V)$ changes at $\lambda=\gamma$.
 This theoretical definition of clusters is also equivalent to the algorithmic one:
@@ -222,21 +224,21 @@ Equation \eqref{eq:CZV} gives a divisive approach to obtain all clusters $C(Z_V)
 the largest set $V$ and the smallest threshold value $\lambda_1$. However, we cannot get a feasible algorithm
 to compute the clusters since it is unknown how to compute $I(Z_V)$.
 To get over this difficulty a relationship between $I(Z_V)$ and
-a special kind of submodular function minimization problem is established \citep{mac}. All threshold values of info-clustering are the same as those of
+a special kind of function minimization problem is established \citep{mac}. All threshold values of info-clustering are the same as those of
 the following optimization problem with:
 \begin{align}\label{eq:hPLambda}
 h_{\mathcal{P}}(\lambda) &= f[\mathcal{P}] - |\mathcal{P}| \lambda \notag\\
 h(\lambda) &= \min_{\mathcal{P} \in \Pi'(V)}h_{\mathcal{P}}(\lambda)
 \end{align}
-In the above equation, $f[\mathcal{P}]=D(P_{Z_V} || \prod_{C\in P}P_{Z_C})$. We can see that $h(\lambda)$ is a piecewise linear function about $\lambda$ with turning points
+In the above equation, $f[\mathcal{P}]=D(P_{Z_V} || \prod_{C\in \P}P_{Z_C})$. We can see that $h(\lambda)$ is a piecewise linear function about $\lambda$ with turning points
 $\lambda_1, \dots, \lambda_{k}$. The general solution for \eqref{eq:hPLambda} can be written as
 \begin{equation}\label{eq:PSP_structure}
-h(\lambda) = \begin{cases} h_{P_0}(\lambda) & \lambda < \lambda_1 \\
-h_{P_i}(\lambda) & \lambda_i \leq \lambda < \lambda_{i+1} \textrm{ for } i = 1, \dots, k-1 \\
-h_{P_k}(\lambda) & \lambda \geq \lambda_k
+h(\lambda) = \begin{cases} h_{\P_0}(\lambda) & \lambda < \lambda_1 \\
+h_{\P_i}(\lambda) & \lambda_i \leq \lambda < \lambda_{i+1} \textrm{ for } i = 1, \dots, k-1 \\
+h_{\P_k}(\lambda) & \lambda \geq \lambda_k
 \end{cases}
 \end{equation}
-Furthermore, we have $P_0 \succeq P_1 \dots \succeq P_k$ \citep{narayanan}. That is, partition $P_{i+1}$ is a refinement of $P_i$.
+Furthermore, we have $\P_0 \succeq \P_1 \dots \succeq \P_k$ \citep{narayanan}. That is, partition $\P_{i+1}$ is a refinement of $\P_i$.
 And the cluster set $C_{\lambda_i} =\{C | C\in \P_i, \abs{C} > 1\}$.
 
 A relationship between MMI and the largest threshold value is established by \citet{agg_ic} as 
@@ -244,7 +246,8 @@ A relationship between MMI and the largest threshold value is established by \ci
 \lambda_k = \max_{B\subseteq V} I(Z_B)
 \end{equation}
 \subsection{Efficient Algorithm to solve PSP structure}
-\cite{narayanan} proposes a divide and conquer approach to solve the PSP structure from equation \eqref{eq:hPLambda} for a general submodular function $f[\P]$.
+We call $\P_0, \dots, \P_k$ the Principal Sequence of Partition (PSP) related with $f[\P]$.
+\cite{narayanan} proposes a divide and conquer approach to solve the PSP structure from equation \eqref{eq:hPLambda} for a general function $f[\P]$.
 Since the optimal partition is $P_0 = \{V\}$ when $\lambda=0$ and the partition is $P_k=\{\{1\}, \{2\}, \dots, \{|V|\}\}$ when $\lambda$ is quite large,
 his method starts from two endpoints $\lambda_i = 0, \lambda_j = +\infty$ and find the intersection of 
 $h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$. Then we compute a partition $P'$ such that $h(\lambda') = h_{P'}(\lambda')$. By definition $h(\lambda') \leq h'$ and when the strict inequality is taken we can repeat the process within $(\lambda_i, \lambda')$ and $(\lambda', \lambda_j)$ respectively. The above procedure is summarized in Algorithm \ref{alg:psp}.
@@ -275,6 +278,7 @@ $h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$. Then we compute a partiti
 
 In Algorithm \ref{alg:psp}, a function \texttt{DT} (Dilworth truncation) is used to get the minimal value of Equation \eqref{eq:hPLambda}.
 One implementation of \texttt{DT} is described by \cite{mac} and we omit it here.
+
 
 \section{Formulation of Graph-Based Info-Clustering}\label{sec:GBIC}
 
@@ -461,7 +465,7 @@ To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first in
 		\FUNCTION{\texttt{Split}($\widetilde{G}, \widetilde{V}$)}
 		\STATE $w$ is the summation of all edge weights of $\widetilde{G}$ 
 		\STATE $\gamma' = \frac{w}{\abs{V(\widetilde{G})}-1}$ where $V(\widetilde{G})$ is the node set of graph $\widetilde{G}$ \label{alg:gamma_apostrophe}
-		\STATE $(\tilde{h}, P') = \texttt{DT}(\widetilde{G}, \gamma')$ where $\P'$ is minimizer of $h(\gamma')$ in equation \eqref{eq:hPLambda} and $\tilde{h}$ is the corresponding minimal value  \label{line:DT}
+		\STATE $(\tilde{h}, P') = \texttt{DT}(\widetilde{G}, \gamma')$ where $\P'$ is the minimizer of $h(\gamma')$ in equation \eqref{eq:hPLambda} and $\tilde{h}$ is the corresponding minimal value  \label{line:DT}
 		\IF{$\tilde{h} = - \gamma'$}
 		\STATE add edge weight $\gamma'$ in $\mathcal{T}$ starting from $\widetilde{V}$ to its children
 		\ELSE
