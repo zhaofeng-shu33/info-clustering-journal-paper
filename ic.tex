@@ -242,7 +242,7 @@ and $h(\lambda)$ is illustrated in Figure \ref{fig:psp}.
 \begin{figure}
 	\centering
 	\includegraphics[width=0.4\textwidth]{psp.eps}
-	\caption{piecewise linear function $h(\lambda)$ for $k=2$ where the think blue line represents $h(\lambda)$ }\label{fig:psp}
+	\caption{piecewise linear function $h(\lambda)$ for $k=2$ where the solid blue line represents $h(\lambda)$ }\label{fig:psp}
 \end{figure}
 Furthermore, we have $\P_0 \succeq \P_1 \dots \succeq \P_k$ \citep{narayanan}. That is, partition $\P_{i+1}$ is a refinement of $\P_i$.
 And the cluster set $C_{\lambda_i} =\{C | C\in \P_i, \abs{C} > 1\}$.
@@ -256,7 +256,7 @@ We call $\P_0, \dots, \P_k$ the Principal Sequence of Partition (PSP) related wi
 \cite{narayanan} proposes a divide and conquer approach to solve the PSP structure from equation \eqref{eq:hPLambda} for a general function $f[\P]$.
 Since the optimal partition is $\P_0 = \{V\}$ when $\lambda=0$ and the partition is $\P_k=\{\{1\}, \{2\}, \dots, \{|V|\}\}$ when $\lambda$ is quite large,
 his method starts from two endpoints $\lambda_i = 0, \lambda_j = +\infty$ and find the intersection of 
-$h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$, which is shown in Figure \ref{fig:psp}. Then we compute a partition $\P'$ such that $h(\lambda') = h_{\P'}(\lambda')$. By definition $h(\lambda') \leq h'$ and when the strict inequality is taken we can repeat the process within $(\lambda_i, \lambda')$ and $(\lambda', \lambda_j)$ respectively. The above procedure is summarized in Algorithm \ref{alg:psp}.
+$h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$, which is shown in Figure \ref{fig:psp}. Then we compute a partition $\P'$ such that $h(\lambda') = h_{\P'}(\lambda')$. By Equation \eqref{eq:hPLambda}, $h(\lambda') \leq h'$ and when the strict inequality is taken we can repeat the process within $(\lambda_i, \lambda')$ and $(\lambda', \lambda_j)$ respectively. The above procedure is summarized in Algorithm \ref{alg:psp}.
 
 \begin{algorithm}
 \caption{PSP algorithm}\label{alg:psp}
@@ -457,7 +457,7 @@ To compute the clusters in GBIC, we first compute the PSP structure defined in E
 clustering results are obtained. This procedure is the same with the general model of info-clustering and the algorithm to computing PSP structures is not limited to GBIC. In this section, we will give a faster algorithm to compute PSP structures for a general directed graph.
 
 \subsection{Formulation of PSPI}
-Our improved algorithm will use the same \texttt{DT} routine as mentioned Algorithm \ref{alg:psp}. We notice that different invocation of \texttt{DT} is independent and does not utilize the intrinsic hierarchical structure in Algorithm \ref{alg:psp}. If the hierarchical tree structure is used, we can invoke \texttt{DT} on smaller graph in later computation and make the total computation one order of magnitude faster than previous.
+Our improved algorithm will use the same \texttt{DT} routine as mentioned Algorithm \ref{alg:psp}. We notice that different invocation of \texttt{DT} is independent and does not utilize the intrinsic hierarchical structure in Algorithm \ref{alg:psp}. If the hierarchical tree structure is used, we can invoke \texttt{DT} on subgraphs in later computation and make the total computation one order of magnitude faster than previous.
 
 To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first invocation of DT. Then we can compute PSP for each $C_i(i=1,\dots, t)$ respectively and construct those $P_j(j>i)$ from the subgraph computation. For $P_j(j<i)$, we can contract the graph $G$  to $G^t$ which has $t$ nodes by contracting each $C_i$ to a single node. By applying DT to $G^t$ can we get $P_j(j<i)$. We summarize our improved version (PSPI) in Algorithm \ref{alg:psp_i_simplified} and illustrate the algorithm by Figure \ref{fig:pspi}.
 
@@ -489,7 +489,7 @@ To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first in
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{improved_alg.png}
+\includegraphics[width=0.9\textwidth]{improved_alg.eps}
 \caption{Illustration of PSPI: The intermediate state is achieved first by Line \ref{line:DT} in Algorithm \ref{alg:psp_i_simplified};
 Then the tree ellipses are divided further in Line \ref{line:SplitDown} and are also clustered upwards to formal the final state in Line \ref{line:SplitUp}.}\label{fig:pspi}
 \end{figure}
