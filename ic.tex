@@ -401,7 +401,7 @@ Based on our assumption, the tree leaf nodes are data samples and they are joine
 \begin{example}
 \begin{figure}
 	\centering
-	\includegraphics[width=\textwidth]{GBIC.pdf}
+	\includegraphics[width=\textwidth]{GBIC.eps}
 	\caption{hierarchical clustering tree based on GBIC. There are 10 data samples and 4 underlining clusters. The cluster of triangles joins the cluster of circles while the cluster of squares joins the cluster of pentagons. Finally, the intermediate two super-clusters joins at the tree root.}\label{fig:ta}
 \end{figure}
 Consider 10 data samples and their feature vectors are on Euclidean plane, as shown in Figure \ref{fig:ta}. The underlining graph with 10 nodes is weighted  by $w_{ij} = \exp(-\norm{z_i - z_j}^2)$. Let $Z_1, Z_2, Z_3, Z_4$ represents the square, pentagon, circle and triangle samples respectively. We can write the clustering solution \footnote{computed by Algorithm \ref{alg:psp} introduced in the next Section} as:
