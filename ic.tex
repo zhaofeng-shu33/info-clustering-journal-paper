@@ -118,8 +118,8 @@ other hierarchical clustering techniques and is competent for more difficult uns
 \label{intro}
 % background information goes here
 Clustering analysis is an important research topic in machine learning.
-It has wide applications in many areas. For example, to track the epidemic
-sources within a community \citep{epidemic2020} and assist for the model of natural disasters with observed data \citep{earthquake2016}.
+It has wide applications in many areas, such as epidemic
+sources tracking \citep{epidemic2020} and natural disasters modeling \citep{earthquake2016}.
 
 Hierarchical clustering is one of many different methods for clustering analysis.
 The classical method of hierarchical clustering uses the Euclidean distance between samples
@@ -140,8 +140,7 @@ Practitioners need to choose the proper method according to the specific problem
 For example, an extension of Bayesian clustering, called Bayesian Rose Trees 
 can produce non-binary hierarchical tree
 under a given probabilistic model \citep{blundell2011discovering}.
-But Bayesian model has many hyper-parameters to tune and the clustering results between different runs may vary greatly because of its intrinsic randomness. For problems with stable requirement it
-is not suitable to use such a method.
+But Bayesian model has many hyper-parameters to tune and the clustering results between different runs may vary greatly because of its intrinsic randomness. Therefore it is not suitable to use Bayesian-based model to solve problems with stable requirement.
 
 
 Besides the hierarchical methods mentioned above, there is a specific branch which brings information theory into clustering. This branch is based on the observation that metrics in hierarchical clustering
@@ -166,12 +165,11 @@ This result has been established by using a special graph partition structure ca
 The original algorithm to compute PSP is proposed by
 \citet{narayanan}, which has high time complexity and is unsuitable for practical usage.
 There has been some improvement
-using parametric maximal flow techniques \citep{kolmogorov}. In this article, we will propose a new algorithm to compute PSP. We call our algorithm PSP Improved (PSPI). We will deduce the time complexity of PSPI under some mild assumptions. And we will also empirically show that our improvement runs almost an order of magnitude faster than other methods.
+by using parametric maximal flow techniques \citep{kolmogorov}. In this article, to compute PSP, we will propose a new algorithm, which is called PSP Improved (PSPI). We will deduce the time complexity of PSPI under some mild assumptions in Section \ref{sec:alg}. And we will also empirically show that our improvement runs almost an order of magnitude faster than other methods.
 
 
 There has been little prior work on applying PSP-based methods to data mining problems except for some proof-of-concept experiment \citep{mac}. In this paper, we will consider the application
-of our graph-based info-clustering to different unsupervised learning problems. Specifically
-we will not only consider clustering analysis problems, in which our proposed method can be directly applied. We will also consider link prediction, outlier detection and community discovery problems, in which we will propose new promising
+of our graph-based info-clustering to different unsupervised learning problems. Specifically, not only clustering analysis problems will be considered, in which our proposed method can be directly applied, but also for link prediction, outlier detection and community discovery problems, we will propose new promising
 method adopted from graph-based info-clustering. We will conduct empirical experiments on both artificially generated data and some real-world dataset and show the feasibility of our method in
 these problems.
 
@@ -181,10 +179,11 @@ The paper is organized as follows: In Section \ref{sec:bk}, we introduce the bac
 
 
 \section{Background}\label{sec:bk}
-Before proceeding to introduce our theoretical and algorithmic results, it is necessary to review some prior results from minimal technical aspect. We split this section into three parts, first we introduce
+Before proceeding to introduce our theoretical and algorithmic results, it is necessary to review some prior results from minimal technical aspect. In this section, firstly we will introduce
 the local information geometry theory and the concept of weak dependency of two random variables;
-next are the general info-clustering model and its relationship with principal sequence of partitions (PSP) of submodular function;
-the final part is about the original algorithm used to solve PSP problem.
+next an overview of existing work on info-clustering will be given;
+Lastly the original algorithm used to solve PSP problem will be introduced.
+
 \subsection{Local Information Geometry}\label{subsec:lig}
 It is well known that KL-Divergence can be used to measure the distance of two probabilistic distributions. When the two distributions are quite "near", that is, both of them are within a neighborhood of a distribution $P$, we can approximate the expression of KL-Divergence with "Euclidean distance" \citep{huang2017information}. To be more specific, let $P_0$ represent a probability mass function (PMF) of a discrete distribution on alphabet $\mathcal{X}$. We say $P$ is in a $\epsilon$-Neighborhood $N^{(\epsilon)}(P_0)$ of $P_0$ if
 \begin{equation}
