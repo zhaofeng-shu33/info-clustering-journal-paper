@@ -118,17 +118,17 @@ other hierarchical clustering techniques and is competent for more difficult uns
 \label{intro}
 % background information goes here
 Clustering analysis is an important research topic in machine learning.
-It has wide applications in many areas. For example, to track the epidemic
-sources within a community \citep{epidemic2020} and assist for the model of natural disasters with observed data \citep{earthquake2016}.
+It has wide applications in many areas, such as epidemic
+sources tracking \citep{epidemic2020} and natural disasters modeling \citep{earthquake2016}.
 
 Hierarchical clustering is one of many different methods for clustering analysis.
 The classical method of hierarchical clustering uses the Euclidean distance between samples
 as the metric to merge the most similar pairs until all the samples are merged into a clustering
-tree \citep{slink}. Compared with other clustering method, hierarchical clustering can better describe the relationship between different clusters. Still, the classical hierarchical clustering method has some
+tree \citep{slink}. Compared with other clustering method, hierarchical clustering can better describe the relationship between different clusters. However, the classical hierarchical clustering method has some
 drawbacks. For example, classical hierarchical clustering uses pairwise merging, which is not theoretically motivated since it does not consider information shared among more than two clusters in each step. Besides, the criterion to transform the clustering tree to a flat clustering structure is arbitrary and lacks explanations, which bring some mysteries in practical
 usage.
 
-In the last 2 decades, there are many emerging hierarchical clustering methods which brought new insights into this area. These new methods arise from the combination of different domain knowledge and
+In the last two decades, there are many emerging hierarchical clustering methods which brought new insights into this area. These new methods arise from the combination of different domain knowledge and
 subject branch. To name but a few, 
 Bayesian hierarchical clustering \citep{bhc},
 clusterpath based on convex optimization \citep{hocking2011clusterpath},
@@ -140,14 +140,13 @@ Practitioners need to choose the proper method according to the specific problem
 For example, an extension of Bayesian clustering, called Bayesian Rose Trees 
 can produce non-binary hierarchical tree
 under a given probabilistic model \citep{blundell2011discovering}.
-But Bayesian model has many hyper-parameters to tune and the clustering results between different runs may vary greatly because of its intrinsic randomness. For problems with stable requirement it
-is not suitable to use such a method.
+But Bayesian model has many hyper-parameters to tune and the clustering results between different runs may vary greatly because of its intrinsic randomness. Therefore it is not suitable to use Bayesian-based model to solve problems with stable requirement.
 
 
 Besides the hierarchical methods mentioned above, there is a specific branch which brings information theory into clustering. This branch is based on the observation that metrics in hierarchical clustering
 are mostly empirically inspired and may not reflect the true underlining probabilistic model of the data.
-Either some other kind of information-theoretic metric \citep{ic2002} or variants of mutual information \citep{mim} is used in the past literature. There exists some shortcomings in these existing studies. Firstly, the information metric is estimated from data using Parzen's window, which is a kind of Gaussian mixture model. For such parameterized approach it suffers from impreciseness if the underlining distribution is far from the assumption.
-Secondly there is only greedy algorithms to approximate the minimal value of the information theoretic cost. It is until the proposal of multivariate mutual information metric in clustering that there is some breakthrough \citep{ic2016}.
+Either some other kind of information-theoretic metric \citep{ic2002} or variants of mutual information \citep{mim} is used in the past literature. There exists some disadvantages in these existing studies. Firstly, the information metric is estimated from data using Parzen's window, which is a kind of Gaussian mixture model. For such parameterized approach it suffers from impreciseness if the underlining distribution is far from the assumption.
+Secondly there is only greedy algorithms to approximate the minimal value of the information theoretic cost. It is not until the proposal of multivariate mutual information metric in clustering that there is some breakthrough \citep{ic2016}.
 
 Multivariate mutual information, as its name suggests, is an extension of mutual information for multiple
 random variables. Using such metric as the thresholds, \citet{ic2016} shows that we can get a clustering
@@ -157,7 +156,7 @@ are unable to estimate precisely the distribution from data. Parametric model is
 method to overcome this obstacle, and in this article we will use the graph model to overcome the incalculable problem for info-clustering.
 Therefore, we call our method graph-based info-clustering (GBIC).
 
-Restricting info-clustering from abstract probabilistic space to graph model can be theoretically formulated from the local regime assumption of distributions. It's known that estimation of mutual information between $X$ and $Y$ from data is a hard task but when $X$ and $Y$ are nearly independent, \citet{huang2017information} shows that the estimation can be simplified to do some kind of alternative conditional expectation, which can be computed efficiently from data. In this paper, we will extend this local regime result to multivariate case and show that under the local regime assumption info-clustering is equivalent to a graph formulation. Within our model, some additional theoretical properties are analyzed specifically, which is absent from prior work. These properties inspires us to extend our method to many different data-mining problems.
+Restricting info-clustering from abstract probabilistic space to graph model can be theoretically formulated from the local regime assumption of distributions. It's known that estimation of mutual information between $X$ and $Y$ from data is a hard task but when random variables $X$ and $Y$ are nearly independent, \citet{huang2017information} shows that the estimation can be simplified to do some kind of alternative conditional expectation, which can be computed efficiently from data. In this paper, we will extend this local regime result to multivariate case and show that under the local regime assumption info-clustering is equivalent to a graph formulation. Within our model, some additional theoretical properties are analyzed specifically, which is absent from prior work. These properties inspires us to extend our method to many different data-mining problems.
 
 
 Many problems in graph model are NP-hard and only allows approximate solutions. Quite surprisingly, our proposed graph-based clustering method can be solved exactly in polynomial time.
@@ -166,25 +165,25 @@ This result has been established by using a special graph partition structure ca
 The original algorithm to compute PSP is proposed by
 \citet{narayanan}, which has high time complexity and is unsuitable for practical usage.
 There has been some improvement
-using parametric maximal flow techniques \citep{kolmogorov}. In this article, we will propose a new algorithm to compute PSP. We call our algorithm PSP Improved (PSPI). We will deduce the time complexity of PSPI under some mild assumptions. And we will also show that empirically our improvement runs almost an order of magnitude faster than other methods.
+by using parametric maximal flow techniques \citep{kolmogorov}. In this article, to compute PSP, we will propose a new algorithm, which is called PSP Improved (PSPI). We will deduce the time complexity of PSPI under some mild assumptions in Section \ref{sec:alg}. And we will also empirically show that our improvement runs almost an order of magnitude faster than other methods.
 
 
 There has been little prior work on applying PSP-based methods to data mining problems except for some proof-of-concept experiment \citep{mac}. In this paper, we will consider the application
-of our graph-based info-clustering to different unsupervised learning problems. Specifically
-we will not only consider clustering analysis problems, in which our proposed method can be directly applied. We will also consider link prediction, outlier detection and community discovery problems, in which we will propose new promising
+of our graph-based info-clustering to different unsupervised learning problems. Specifically, not only clustering analysis problems will be considered, in which our proposed method can be directly applied, but also for link prediction, outlier detection and community discovery problems, we will propose new promising
 method adopted from graph-based info-clustering. We will conduct empirical experiments on both artificially generated data and some real-world dataset and show the feasibility of our method in
 these problems.
 
 Our contribution is summarized as follows: Firstly we extend the theory of info-clustering. We show that info-clustering is a graph model under local information geometry assumption. We propose GBIC and analyze some novel theoretical properties of it. Secondly, we give the fastest implementation to compute PSP of a graph. Thirdly, from empirical prospective, we demonstrate how GBIC can be applied to community detection, link prediction and outlier detection fields.
  
-The paper is organized as follows: In Section \ref{sec:bk} we introduce the background knowledge, which are most relevant with our work. In Section \ref{sec:GBIC} our formulation of GBIC and important properties of our model are given. In Section \ref{sec:alg}, we propose an improved algorithm to compute the PSP structure of graph. Then in Section \ref{sec:es} we conduct empirical study of GBIC on data clustering and extend the method to other fields. Finally we give the conclusion in Section \ref{sec:conc}.
+The paper is organized as follows: In Section \ref{sec:bk}, we introduce the background knowledge, which are most relevant with our work. In Section \ref{sec:GBIC}, our formulation of GBIC and important properties of our model are given. In Section \ref{sec:alg}, we propose an improved algorithm to compute the PSP structure of graph. Then in Section \ref{sec:es}, we conduct empirical study of GBIC on data clustering and extend the method to other fields. Finally we give the conclusion in Section \ref{sec:conc}.
 
 
 \section{Background}\label{sec:bk}
-Before proceeding to introduce our theoretical and algorithmic results, it is necessary to review some prior results from minimal technical aspect. We split this section into three parts, first we introduce
+Before proceeding to introduce our theoretical and algorithmic results, it is necessary to review some prior results from minimal technical aspect. In this section, firstly we will introduce
 the local information geometry theory and the concept of weak dependency of two random variables;
-next are the general info-clustering model and its relationship with principal sequence of partitions (PSP) of submodular function;
-the final part is about the original algorithm used to solve PSP problem.
+next an overview of existing work on info-clustering will be given;
+Lastly the original algorithm used to solve PSP problem will be introduced.
+
 \subsection{Local Information Geometry}\label{subsec:lig}
 It is well known that KL-Divergence can be used to measure the distance of two probabilistic distributions. When the two distributions are quite "near", that is, both of them are within a neighborhood of a distribution $P$, we can approximate the expression of KL-Divergence with "Euclidean distance" \citep{huang2017information}. To be more specific, let $P_0$ represent a probability mass function (PMF) of a discrete distribution on alphabet $\mathcal{X}$. We say $P$ is in a $\epsilon$-Neighborhood $N^{(\epsilon)}(P_0)$ of $P_0$ if
 \begin{equation}
@@ -251,12 +250,12 @@ A relationship between MMI and the largest threshold value is established by \ci
 \begin{equation}\label{eq:largest_threshold}
 \lambda_k = \max_{B\subseteq V} I(Z_B)
 \end{equation}
-\subsection{Efficient Algorithm to solve PSP structure}
+\subsection{Efficient Algorithm to solve PSP problems}
 We call $\P_0, \dots, \P_k$ the Principal Sequence of Partition (PSP) related with $f[\P]$.
 \cite{narayanan} proposes a divide and conquer approach to solve the PSP structure from equation \eqref{eq:hPLambda} for a general function $f[\P]$.
 Since the optimal partition is $\P_0 = \{V\}$ when $\lambda=0$ and the partition is $\P_k=\{\{1\}, \{2\}, \dots, \{|V|\}\}$ when $\lambda$ is quite large,
 his method starts from two endpoints $\lambda_i = 0, \lambda_j = +\infty$ and find the intersection of 
-$h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$, which is shown in Figure \ref{fig:psp}. Then we compute a partition $\P'$ such that $h(\lambda') = h_{\P'}(\lambda')$. By Equation \eqref{eq:hPLambda}, $h(\lambda') \leq h'$ and when the strict inequality is taken we can repeat the process within $(\lambda_i, \lambda')$ and $(\lambda', \lambda_j)$ respectively. The above procedure is summarized in Algorithm \ref{alg:psp}.
+$h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$, which is shown in Figure \ref{fig:psp}. Then we compute a partition $\P'$ such that $h(\lambda') = h_{\P'}(\lambda')$. By Equation \eqref{eq:hPLambda}, $h(\lambda') \leq h'$ and when the strict inequality is taken, we can repeat the process within $(\lambda_i, \lambda')$ and $(\lambda', \lambda_j)$ respectively. The above procedure is summarized in Algorithm \ref{alg:psp}.
 
 \begin{algorithm}
 \caption{PSP algorithm}\label{alg:psp}
@@ -271,7 +270,7 @@ $h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$, which is shown in Figure 
 \FUNCTION{\texttt{Split}$(Q,P)$}
  \STATE\label{alg:gamma} $\gamma' = {1 \over \abs{P} - \abs{Q}} (f[P]-f[Q])$
  \STATE $h' = {1 \over \abs{P} - \abs{Q}}(\abs{P} f[Q] - \abs{Q} f[P])$
- \STATE $(\tilde{h}, P') = \texttt{DT}(f,\gamma')$ \footnotemark
+ \STATE $(\tilde{h}, P') = \texttt{DT}(f,\gamma')$
  \IF{$\tilde{h} = h'$}
  	\STATE\label{line:11} insert $\gamma'$ to $\mathbf{L}$
  \ELSE
