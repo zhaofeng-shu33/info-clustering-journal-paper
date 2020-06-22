@@ -165,7 +165,7 @@ This result has been established by using a special graph partition structure ca
 The original algorithm to compute PSP is proposed by
 \citet{narayanan}, which has high time complexity and is unsuitable for practical usage.
 There has been some improvement
-by using parametric maximal flow techniques \citep{kolmogorov}. In this article, to compute PSP, we will propose a new algorithm, which is called PSP Improved (PSPI). We will deduce the time complexity of PSPI under some mild assumptions in Section \ref{sec:alg}. And we will also empirically show that our improvement runs almost an order of magnitude faster than other methods.
+by using parametric maximal flow techniques \citep{kolmogorov}. In this article, to compute PSP, we will propose a new algorithm, which is called hierarchical PSP (HPSP). We will deduce the time complexity of HPSP under some mild assumptions in Section \ref{sec:alg}. And we will also empirically show that our improvement runs almost an order of magnitude faster than other methods.
 
 
 There has been little prior work on applying PSP-based methods to data mining problems except for some proof-of-concept experiment \citep{mac}. In this paper, we will consider the application
@@ -268,11 +268,11 @@ $h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$, which is shown in Figure 
 \STATE \texttt{Split}$(Q,P)$
 \STATE sort $L$ and sort $\mathbf{PSP}$ with respect to $\succeq$ 
 \FUNCTION{\texttt{Split}$(Q,P)$}
- \STATE\label{alg:gamma} $\gamma' = {1 \over \abs{P} - \abs{Q}} (f[P]-f[Q])$
+ \STATE\label{alg:gamma} $ \lambda' = {1 \over \abs{P} - \abs{Q}} (f[P]-f[Q])$
  \STATE $h' = {1 \over \abs{P} - \abs{Q}}(\abs{P} f[Q] - \abs{Q} f[P])$
- \STATE $(\tilde{h}, P') = \texttt{DT}(f,\gamma')$
+ \STATE $(\tilde{h}, P') = \texttt{DT}(f, \lambda')$
  \IF{$\tilde{h} = h'$}
- 	\STATE\label{line:11} insert $\gamma'$ to $\mathbf{L}$
+ 	\STATE\label{line:11} insert $\lambda'$ to $\mathbf{L}$
  \ELSE
  	\STATE insert $P'$ to $\mathbf{PSP}$
  	\STATE \texttt{Split}$(Q, P')$
@@ -281,7 +281,7 @@ $h(\lambda_i)$ and $h(\lambda_j)$ at $(\lambda', h')$, which is shown in Figure 
 \ENDFUNCTION
 \end{algorithmic}
 \end{algorithm}
-In Algorithm \ref{alg:psp}, a function \texttt{DT} (Dilworth truncation) is used to get the minimal value of Equation \eqref{eq:hPLambda}.
+In Algorithm \ref{alg:psp}, a function \texttt{DT} (Dilworth truncation) is used to get the minimal value and corresponding partition of Equation \eqref{eq:hPLambda}.
 One implementation of \texttt{DT} is described by \cite{mac} and we omit it here.
 
 
@@ -455,10 +455,10 @@ Proposition \ref{prop:main} gives a method to check whether the newly added node
 To compute the clusters in GBIC, we first compute the PSP structure defined in Equation \eqref{eq:PSP_structure}. Then from the established equivalence of the nested partition and the clustering tree, the hierarchical
 clustering results are obtained. This procedure is the same with the general model of info-clustering and the algorithm to computing PSP structures is not limited to GBIC. In this section, we will give a faster algorithm to compute PSP structures for a general directed graph.
 
-\subsection{Formulation of PSPI}
+\subsection{Formulation of HPSP}
 Our improved algorithm will use the same \texttt{DT} routine as mentioned Algorithm \ref{alg:psp}. We notice that different invocation of \texttt{DT} is independent and does not utilize the intrinsic hierarchical structure in Algorithm \ref{alg:psp}. If the hierarchical tree structure is used, we can invoke \texttt{DT} on subgraphs in later computation and make the total computation one order of magnitude faster than previous.
 
-To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first invocation of DT. Then we can compute PSP for each $C_i(i=1,\dots, t)$ respectively and construct those $P_j(j>i)$ from the subgraph computation. For $P_j(j<i)$, we can contract the graph $G$  to $G^t$ which has $t$ nodes by contracting each $C_i$ to a single node. By applying DT to $G^t$ can we get $P_j(j<i)$. We summarize our improved version (PSPI) in Algorithm \ref{alg:psp_i_simplified} and illustrate the algorithm by Figure \ref{fig:pspi}.
+To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first invocation of DT. Then we can compute PSP for each $C_i(i=1,\dots, t)$ respectively and construct those $P_j(j>i)$ from the subgraph computation. For $P_j(j<i)$, we can contract the graph $G$  to $G^t$ which has $t$ nodes by contracting each $C_i$ to a single node. By applying DT to $G^t$ can we get $P_j(j<i)$. We summarize our improved version (HPSP) in Algorithm \ref{alg:psp_i_simplified} and illustrate the algorithm by Figure \ref{fig:HPSP}.
 
 \begin{algorithm}
 	\caption{An Improved Principal Sequence of Partition Algorithm}\label{alg:psp_i_simplified}
@@ -489,8 +489,8 @@ To be more specific, suppose we get $P_i = \{C_1, \dots, C_t\}$ for the first in
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{improved_alg.eps}
-\caption{Illustration of PSPI: The intermediate state is achieved first by Line \ref{line:DT} in Algorithm \ref{alg:psp_i_simplified};
-Then the tree ellipses are divided further in Line \ref{line:SplitDown} and are also clustered upwards to formal the final state in Line \ref{line:SplitUp}.}\label{fig:pspi}
+\caption{Illustration of HPSP: The intermediate state is achieved first by Line \ref{line:DT} in Algorithm \ref{alg:psp_i_simplified};
+Then each ellipse is divided further in Line \ref{line:SplitDown} and they are also clustered upwards to formal the final state in Line \ref{line:SplitUp}.}\label{fig:HPSP}
 \end{figure}
 
 We analyze the time complexity of Algorithm \ref{alg:psp_i_simplified} for dense graphs. That is, we suppose $\abs{V} = n, \abs{E} = O(n^2)$. For sparse graphs the bound can be improved. We use a conclusion that \texttt{DT} routine has $O(n^4)$ time complexity and the time complexity for Algorithm \ref{alg:psp} is $O(n^5)$ \citep{pin}.
@@ -507,7 +507,7 @@ In \eqref{eq:Tn}, $Cn^4$ is the time complexity of \texttt{DT}. $\delta_{k<n} = 
 
 The condition in Proposition \ref{prop:alg_complexity} restricts the shape of the clustering tree. For each non-leaf node, its children and the number of samples in each children are limited. However, the limitation is not so strict and
 many near-balanced trees satisfied the condition. Therefore, we can say that under this mild condition of Proposition \ref{prop:alg_complexity},
-our PSPI has time complexity $O(n^4)$, which is one order of magnitude faster than $O(n^5)$ of Algorithm \ref{alg:psp}.
+our HPSP has time complexity $O(n^4)$, which is one order of magnitude faster than $O(n^5)$ of Algorithm \ref{alg:psp}.
 
 If the worst case scenario is considered, that is, the depth of the hierarchical tree is of order $O(n)$. Then it is inevitable to invoke \texttt{DT} $O(n)$ times.
 In this scenario, the complexity bound for $T(n)$ is $C(3^4+4^4 + \dots + n^4) \sim \frac{1}{5}Cn^5$, which is $5$ times faster than $Cn^5$ of Algorithm \ref{alg:psp}.
@@ -515,7 +515,7 @@ In this scenario, the complexity bound for $T(n)$ is $C(3^4+4^4 + \dots + n^4) \
 \subsection{Empirical Comparison of Different PSP Algorithms}
 Another improvement to compute PSP is formulated by \cite{kolmogorov} using parametric maximum flow.
 This improvement can also achieve $O(n^4)$ time complexity theoretically. 
-In this section, we compare our PSPI with Algorithm \ref{alg:psp} and Kolmogorov's algorithm
+In this section, we compare our HPSP with Algorithm \ref{alg:psp} and Kolmogorov's algorithm
 using two datasets with different edge density.
 
 The first dataset is four Gaussian blobs with equal size and we can vary the number of points in each blob. The dataset with 100 points in total is the same with that used in 
@@ -574,7 +574,7 @@ It can be seen from the table that GBIC is better than other clustering algorith
 \begin{table}[!ht]
 \centering
 \InputIfFileExists{compare_3.tex}{}{}
-\caption{ accuracy for different clustering algorithms }\label{tb:e1}
+\caption{ Accuracy for different clustering algorithms }\label{tb:e1}
 \end{table}
 
 To compare different hierarchical clustering method, it is better to compare the clustering tree directly.
