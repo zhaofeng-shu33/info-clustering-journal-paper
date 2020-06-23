@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="179.28896"
-     inkscape:cy="148.52883"
+     inkscape:cx="225.53554"
+     inkscape:cy="115.13598"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -251,20 +251,20 @@
        ry="1.6730204" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:3.22151804px;line-height:0.85000002;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.15100865"
-       x="35.677658"
-       y="81.230186"
+       style="font-style:normal;font-weight:normal;font-size:2.81846356px;line-height:0.85000002;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.13211548"
+       x="35.05138"
+       y="82.409752"
        id="text852"
-       transform="scale(0.96609125,1.0350989)"><tspan
+       transform="scale(0.98409671,1.0161603)"><tspan
          sodipodi:role="line"
          id="tspan850"
-         x="35.677658"
-         y="81.230186"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.85000002;font-family:'Latin Modern Sans';-inkscape-font-specification:'Latin Modern Sans Italic';stroke-width:0.15100865">clustering tree</tspan><tspan
+         x="35.05138"
+         y="82.409752"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.85000002;font-family:'CMU Sans Serif';-inkscape-font-specification:'CMU Sans Serif Italic';stroke-width:0.13211548">clustering tree</tspan><tspan
          sodipodi:role="line"
-         x="35.677658"
-         y="84.117424"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.85000002;font-family:'Latin Modern Sans';-inkscape-font-specification:'Latin Modern Sans Italic';stroke-width:0.15100865"
+         x="35.05138"
+         y="84.918846"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.85000002;font-family:'CMU Sans Serif';-inkscape-font-specification:'CMU Sans Serif Italic';stroke-width:0.13211548"
          id="tspan869">relationship</tspan></text>
     <ellipse
        style="fill:#4496dd;fill-opacity:1;stroke:none;stroke-width:0.56500006;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -281,19 +281,19 @@
        sodipodi:nodetypes="cc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:3.22151804px;line-height:0.75;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.15100865"
-       x="36.0382"
-       y="75.856651"
+       style="font-style:normal;font-weight:normal;font-size:2.90381408px;line-height:0.75;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.13611628"
+       x="36.915398"
+       y="73.929817"
        id="text852-5"
-       transform="scale(0.96609126,1.0350989)"><tspan
+       transform="scale(0.94378912,1.0595587)"><tspan
          sodipodi:role="line"
-         x="36.0382"
-         y="75.856651"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.75;font-family:'Latin Modern Sans';-inkscape-font-specification:'Latin Modern Sans Italic';stroke-width:0.15100865"
+         x="36.915398"
+         y="73.929817"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.75;font-family:'CMU Sans Serif';-inkscape-font-specification:'CMU Sans Serif Italic';stroke-width:0.13611628"
          id="tspan869-7">a cluster</tspan></text>
     <g
        id="g1448"
-       transform="matrix(0.89735567,0,0,0.84065701,35.454092,28.83282)">
+       transform="matrix(0.64074484,0,0,0.57508537,38.468264,42.783464)">
       <g
          word-spacing="normal"
          letter-spacing="normal"
@@ -321,19 +321,19 @@
            style="fill:#000000;stroke-width:0" /></g>    </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:3.22151804px;line-height:0.75;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.15100865"
-       x="35.930294"
-       y="70.002968"
+       style="font-style:normal;font-weight:normal;font-size:2.88093328px;line-height:0.75;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.13504374"
+       x="37.107323"
+       y="68.169289"
        id="text852-5-3"
-       transform="scale(0.96609126,1.0350989)"><tspan
+       transform="scale(0.93635248,1.0679739)"><tspan
          sodipodi:role="line"
-         x="35.930294"
-         y="70.002968"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.75;font-family:'Latin Modern Sans';-inkscape-font-specification:'Latin Modern Sans Italic';stroke-width:0.15100865"
+         x="37.107323"
+         y="68.169289"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0.75;font-family:'CMU Sans Serif';-inkscape-font-specification:'CMU Sans Serif Italic';stroke-width:0.13504374"
          id="tspan869-7-6">random variable</tspan></text>
     <g
        id="g1522"
-       transform="translate(87.501488,31.466518)">
+       transform="matrix(0.64973027,0,0,0.67870122,97.367024,48.439534)">
       <g
          word-spacing="normal"
          letter-spacing="normal"
@@ -357,7 +357,7 @@
            style="fill:#000000;stroke-width:0" /></g>    </g>
     <g
        id="g1581"
-       transform="translate(93.171131,51.234673)">
+       transform="matrix(0.72617632,0,0,0.75902591,99.775461,63.113989)">
       <g
          word-spacing="normal"
          letter-spacing="normal"
@@ -381,7 +381,7 @@
            style="fill:#000000;stroke-width:0" /></g>    </g>
     <g
        id="g1644"
-       transform="translate(21.922619,61.988095)">
+       transform="matrix(0.70529572,0,0,0.76302596,30.258989,74.520667)">
       <g
          word-spacing="normal"
          letter-spacing="normal"
@@ -405,7 +405,7 @@
            style="fill:#000000;stroke-width:0" /></g>    </g>
     <g
        id="g1711"
-       transform="translate(3.9561865,70.2332)">
+       transform="matrix(0.73087739,0,0,0.78580081,11.58106,81.548544)">
       <g
          word-spacing="normal"
          letter-spacing="normal"
@@ -429,7 +429,7 @@
            style="fill:#000000;stroke-width:0" /></g>    </g>
     <g
        id="g1792"
-       transform="matrix(0.59971428,0,0,0.66562285,38.166776,57.45959)">
+       transform="matrix(0.55988398,0,0,0.64045515,39.858933,58.719793)">
       <g
          word-spacing="normal"
          letter-spacing="normal"
@@ -473,7 +473,7 @@
            style="fill:#000000;stroke-width:0" /></g>    </g>
     <g
        id="g1887"
-       transform="matrix(0.54967857,0,0,0.62103923,68.215779,65.065469)">
+       transform="matrix(0.54967857,0,0,0.62103923,69.160719,65.443445)">
       <g
          word-spacing="normal"
          letter-spacing="normal"
@@ -517,7 +517,7 @@
            style="fill:#000000;stroke-width:0" /></g>    </g>
     <g
        id="g2003"
-       transform="matrix(0.51866578,0,0,0.53187199,55.686103,44.284214)">
+       transform="matrix(0.49210941,0,0,0.59874737,52.118951,40.224603)">
       <g
          word-spacing="normal"
          letter-spacing="normal"
