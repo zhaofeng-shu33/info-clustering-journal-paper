@@ -3,19 +3,56 @@
 \begin{enumerate}
 \item What is the main claim of the paper? Why is this an important contribution to the machine learning literature?
 
-    ["We are the first to have done X" is not an acceptable answer without stating the importance of X.]
+    We propose a graph-based info-clustering method based on a multivariate information metric.
+   
+    The hierarchical tree can be computed efficiently using
+    our improved algorithm, which is one order of magnitude faster than previous methods.
+    Besides clustering analysis, our method can be adopted and
+    used in many other unsupervised data mining tasks including community discovery, link prediction and outlier detection.
+    
+	There are few existing hierarchical clustering methods with non-binary tree structure. Our proposed hierarchical clustering method can generate non-binary hierarchical tree that can reveal the intrinsic structures in the data, and is robust against outliers. Our method enriches the existing
+	hierarchical clustering method galleries.
 
 \item What is the evidence you provide to support your claim? Be precise.
 
-    ["The evidence is provided by experiments and/or theoretical analysis" is not an acceptable answer without a summary of the main results and their implications.]
+	By theoretical analysis we show that graph-based info-clustering is a special and useful model of info-clustering.
+	By both the theoretical analysis and experiments we show that our proposed improvement of principal sequence of partition algorithm is
+	much faster than existing ones. By empirical study we show that graph-based info-clustering can be applied to solve outlier detection, community detection,
+	link prediction and clustering analysis problems.
 
 \item What papers by other authors make the most closely related contributions, and how is your paper related to them?
 
+    My paper is closed related with \cite{ic2016}, \cite{huang2017information}, \cite{narayanan} and \cite{mac}.
+    The theoretical part of my paper is derived from the combination of \cite{ic2016} and \cite{huang2017information}.
+    The improved algorithm proposed in this manuscript is based on \cite{narayanan} and \cite{mac}.
+    The empirical study borrows some ideas from \cite{mac} to use rbf kernel as weight for clustering analysis.
+ 
 \item Have you published parts of your paper before, for instance in a conference? If so, give details of your previous paper(s) and a precise statement detailing how your paper provides a significant contribution beyond the previous paper(s).
 
-Yes, I have published parts of this submitted manuscript in International Conference on Neural Information Processing 2019.
-The conference paper focuses on how to apply graph-based info-clustering to outlier detection problems and propose an improved algorithm for principal
+Yes, I have published parts of this submitted manuscript in \cite{zhao2019info}.
+This previous conference paper focuses on how to apply graph-based info-clustering to outlier detection problems and propose an improved algorithm for principal
 sequence of partition. In this journal manuscript, we have extended the results of graph-based info-clustering for other problems including community
 detection, link prediction and clustering analysis. Besides, we have given a solid theoretical analysis for graph-based info-clustering.
 \end{enumerate}
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+	\bibitem{ic2016} Chan C, Al-Bashabsheh A, Zhou Q, Kaced T, Liu T (2016) Info-clustering: A
+	mathematical theory for data clustering. IEEE Transactions on Molecular,
+	Biological and Multi-Scale Communications 2(1):64--91,
+\bibitem{huang2017information}
+Huang SL, Makur A, Zheng L, Wornell GW (2017) An information-theoretic approach
+to universal feature selection in high-dimensional inference. In: 2017 IEEE
+International Symposium on Information Theory (ISIT), IEEE, pp 1336--1340	
+	\bibitem{narayanan}
+	Narayanan H (1991) The principal lattice of partitions of a submodular
+	function. Linear Algebra and its Applications 144:179--216
+	\bibitem{mac}
+	Nagano K, Kawahara Y, Iwata S (2010) Minimum average cost clustering. In: NIPS
+	23, Curran Associates, Inc., pp 1759--1767
+	\bibitem{zhao2019info}
+	Zhao F, Ma F, Li Y, Huang SL, Zhang L (2019) Info-detection: An
+	information-theoretic approach to detect outlier. In: International
+	Conference on Neural Information Processing, Springer, pp 489--496
+	
+\end{thebibliography}
 \end{document}
