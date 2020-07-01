@@ -12,7 +12,7 @@ jobs:
     - name: Run a one-line script
       uses: docker://zhaofengshu33/debian-latex:latest
       with:
-        entrypoint: latexmk -output-directory=build ic.tex
+        entrypoint: /usr/bin/latexmk -output-directory=build ic.tex
     - name: Archive paper pdf
       uses: actions/upload-artifact@v1
       with:
