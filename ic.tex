@@ -208,7 +208,7 @@ of the mutual information when the random variables are weakly dependent.
 
 \subsection{Theoretical Info-Clustering}
 There are many ways to extend mutual information for multiple random variables. \cite{ic2016} gives one extension based on the partition of set. Let 
-$V$ be index set of random variables,
+$V$ be the index set of random variables,
 $Z_V=\{Z_i | i \in V\}$ and we use $\Pi'(V)$ to represent all partitions of $Z_V$ except for $\{Z_V\}$. The multivariate mutual information (MMI) of random variable set $Z_V$ is defined as:
 \begin{align}
 I_{\P}(Z_V) &:= \frac{1}{|\P| - 1}D(P_{Z_V} || \prod_{C\in \P} P_{Z_C}) \\
@@ -318,7 +318,7 @@ In the following section we will use local information geometry to reduce the ge
 First we introduce the concept of weak dependency for multiple random variables.
 
 \begin{definition}\label{def:general}
-$Z_1, \dots, Z_n (n\geq 3)$ are weakly dependent if there exist a random variable $U$ such that
+$Z_1, \dots, Z_n (n\geq 3)$ are weakly dependent if there exists a random variable $U$ such that
 $(Z_1, \dots, Z_n)$ is weakly dependent with $U$ and $Z_1, \dots Z_n$ are independent conditioned
 on $U$.
 \end{definition}
