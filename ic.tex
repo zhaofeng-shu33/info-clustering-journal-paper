@@ -209,7 +209,7 @@ of the mutual information when the random variables are weakly dependent.
 \subsection{Theoretical Info-Clustering}
 There are many ways to extend mutual information for multiple random variables. \cite{ic2016} gives one extension based on the partition of set. Let 
 $V$ be the index set of random variables,
-$Z_V=\{Z_i | i \in V\}$ and we use $\Pi'(V)$ to represent all partitions of $Z_V$ except for $\{Z_V\}$. The multivariate mutual information (MMI) of random variable set $Z_V$ is defined as:
+$Z_V=\{Z_i | i \in V\}$ and we use $\Pi'(V)$ to represent all partitions of $V$ except for $\{V\}$. The multivariate mutual information (MMI) of random variable set $Z_V$ is defined as:
 \begin{align}
 I_{\P}(Z_V) &:= \frac{1}{|\P| - 1}D(P_{Z_V} || \prod_{C\in \P} P_{Z_C}) \\
 I(Z_V) &:= \min_{\P \in \Pi'(V)} I_{\P}(Z_V)  \label{eq:IZV}
