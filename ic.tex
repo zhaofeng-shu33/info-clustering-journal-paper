@@ -192,7 +192,7 @@ It is well known that KL-Divergence can be used to measure the distance of two p
 P \in N^{(\epsilon)}(P_0) \iff \sum_{x \in \mathcal{X}} \frac{(P(x) - P_0(x))^2}{P(x)} < \epsilon^2
 \end{equation}
 The above equation can be expressed in concise form if we write $P(x) = P_0(x) + \epsilon
-\sqrt{P_0(x)} \phi(x)$, in which $\phi(x)$ is treated as the feature vector. Then the euclidean norm $||\phi || < 1$.
+\sqrt{P_0(x)} \phi(x)$, in which $\phi(x)$ is treated as the feature vector. Then the Euclidean norm $||\phi || < 1$.
 If both $P_1, P_2 \in N^{(\epsilon)}(P_0)$ we have
 \begin{equation}\label{eq:approx:ig}
 D(P_1 || P_2) = \frac{\epsilon^2}{2} ||\phi_1 - \phi_2||^2 + o(\epsilon^2)
