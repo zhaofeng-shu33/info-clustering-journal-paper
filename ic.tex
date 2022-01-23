@@ -189,7 +189,7 @@ Lastly the original algorithm used to solve PSP problem will be introduced.
 \subsection{Local Information Geometry}\label{subsec:lig}
 It is well known that KL-Divergence can be used to measure the distance of two probabilistic distributions. When the two distributions are quite "near", that is, both of them are within a neighborhood of a distribution $P$, we can approximate the expression of KL-Divergence with "Euclidean distance" \citep{huang2017information}. To be more specific, let $P_0$ represent a probability mass function (PMF) of a discrete distribution on alphabet $\mathcal{X}$. We say $P$ is in a $\epsilon$-Neighborhood $N^{(\epsilon)}(P_0)$ of $P_0$ if
 \begin{equation}
-P \in N^{(\epsilon)}(P_0) \iff \sum_{x \in \mathcal{X}} \frac{(P(x) - P_0(x))^2}{P(x)} < \epsilon^2
+P \in N^{(\epsilon)}(P_0) \iff \sum_{x \in \mathcal{X}} \frac{(P(x) - P_0(x))^2}{P_0(x)} \leq \epsilon^2
 \end{equation}
 The above equation can be expressed in concise form if we write $P(x) = P_0(x) + \epsilon
 \sqrt{P_0(x)} \phi(x)$, in which $\phi(x)$ is treated as the feature vector. Then the Euclidean norm $||\phi || < 1$.
@@ -327,7 +327,7 @@ This definition is an extension of weak dependence for two random variables ment
 For example, suppose $(Z_1, \dots, Z_n)$ are joint Gaussian and its covariance matrix concentrates on the diagonal lines.
 Intuitively $Z_1, \dots, Z_n$ are near independent since the non-diagonal value of covariance matrix is very small. 
 And actually we can find another $n$ dimensional Gaussian random vector $U$ such that the correlation of $Z$ and $U$ are small
-and $\mathrm{Cov}(X|U)$ is diagonal matrix. Then by Definition \ref{def:general} we say $Z_1, \dots, Z_n$ are weakly dependent.
+and $\mathrm{Cov}(Z|U)$ is a diagonal matrix. Then by Definition \ref{def:general} we say $Z_1, \dots, Z_n$ are weakly dependent.
 For clustering tasks, it is impossible to compute the joint distribution from limited data and it is better to make some
 assumptions on the distribution. And in this article, we make the assumption of weak dependency, which is indeed better than totally
 independence and competitive to parametric Bayesian assumption.
